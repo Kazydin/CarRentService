@@ -1,10 +1,14 @@
-﻿namespace CarRentService.DAL.Entities;
+﻿using CarRentService.DAL.Abstract;
+
+namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Филиал
 /// </summary>
-public class Branch
+public class Branch : IPersistable
 {
+    public int Id { get; set; }
+
     /// <summary>
     /// Уникальный идентификатор филиала.
     /// </summary>

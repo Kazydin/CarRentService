@@ -37,7 +37,6 @@ namespace CarRentService.Home
             };
 
             loginPage.Dialog = dialog;
-            loginPage.ViewModel.XamlRoot = this.XamlRoot;
 
             dialog.Content = loginPage;
             dialog.PrimaryButtonClick += loginPage.LoginButtonClick;

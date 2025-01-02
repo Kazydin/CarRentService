@@ -1,6 +1,4 @@
-﻿using CarRentService.DAL.Contracs;
-
-namespace CarRentService.DAL.Entities;
+﻿namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Клиент

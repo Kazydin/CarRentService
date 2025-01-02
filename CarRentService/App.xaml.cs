@@ -40,7 +40,10 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
-        services.AddServicesWithAttribute(AssemblyHelper.GetAllAssemblies());
+        services.AddServicesWithAttribute(Assembly.Load("CarRentService.Common"),
+            Assembly.Load("CarRentService.BLL"),
+            Assembly.Load("CarRentService.DAL"),
+            Assembly.Load("CarRentService.UI"));
 
         // services.AddSingleton<AppState>();
         // services.AddSingleton<MainWindow>();

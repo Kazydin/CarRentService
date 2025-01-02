@@ -1,12 +1,14 @@
-﻿using CarRentService.DAL.Entities;
+﻿using CarRentService.DAL.Abstract;
 
-namespace CarRentService.DAL.Contracs;
+namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Страховка
 /// </summary>
-public class Insurance
+public class Insurance : IPersistable
 {
+    public int Id { get; set; }
+
     /// <summary>
     /// Уникальный идентификатор страховки.
     /// </summary>

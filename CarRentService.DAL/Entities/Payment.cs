@@ -1,12 +1,14 @@
-﻿using CarRentService.DAL.Contracs;
+﻿using CarRentService.DAL.Abstract;
 
 namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Платеж
 /// </summary>
-public class Payment
+public class Payment : IPersistable
 {
+    public int Id { get; set; }
+
     /// <summary>
     /// Уникальный идентификатор платежа.
     /// </summary>

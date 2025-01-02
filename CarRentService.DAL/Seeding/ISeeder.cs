@@ -1,4 +1,5 @@
 ﻿using CarRentService.Common.Attributes;
+using CarRentService.DAL.Abstract;
 
 namespace CarRentService.DAL.Seeding;
 

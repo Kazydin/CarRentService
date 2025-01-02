@@ -1,10 +1,14 @@
-﻿namespace CarRentService.DAL.Entities;
+﻿using CarRentService.DAL.Abstract;
+
+namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Транспортное средство
 /// </summary>
-public abstract class Vehicle
+public abstract class Vehicle : IPersistable
 {
+    public int Id { get; set; }
+
     /// <summary>
     /// Марка транспортного средства.
     /// </summary>

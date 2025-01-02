@@ -11,4 +11,8 @@
     <Folder Include="Validators\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CarRentService.Common\CarRentService.Common.csproj" />
+  </ItemGroup>
+
 </Project>

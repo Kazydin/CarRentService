@@ -1,5 +1,4 @@
 ﻿using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Contracs;
 using CarRentService.DAL.Entities;
 
 namespace CarRentService.DAL.Store
@@ -7,19 +6,19 @@ namespace CarRentService.DAL.Store
     public class DataStoreContext : IDataStoreContext
     {
         // Коллекции, имитирующие таблицы данных
-        public List<Client> Clients { get; set; } = [];
+        public List<Client> Client { get; set; } = [];
 
-        public List<Admin> Admins { get; set; } = [];
+        public List<Admin> Admin { get; set; } = [];
 
-        public List<Branch> Branches { get; set; } = [];
+        public List<Branch> Branch { get; set; } = [];
 
-        public List<Car> Cars { get; set; } = [];
+        public List<Car> Car { get; set; } = [];
 
-        public List<Insurance> Insurances { get; set; } = [];
+        public List<Insurance> Insurance { get; set; } = [];
 
-        public List<Payment> Payments { get; set; } = [];
+        public List<Payment> Payment { get; set; } = [];
 
-        public List<Rental> Rentals { get; set; } = [];
+        public List<Rental> Rental { get; set; } = [];
 
         public List<T> GetTable<T>() where T : IEntity
         {

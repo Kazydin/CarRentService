@@ -1,10 +1,14 @@
-﻿namespace CarRentService.DAL.Entities;
+﻿using CarRentService.DAL.Abstract;
+
+namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Аренда
 /// </summary>
-public class Rental
+public class Rental : IPersistable
 {
+    public int Id { get; set; }
+
     /// <summary>
     /// Уникальный идентификатор аренды.
     /// </summary>

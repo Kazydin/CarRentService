@@ -1,9 +1,9 @@
-﻿using CarRentService.DAL.Entities;
-using CarRentService.DAL.Store;
+﻿using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Entities;
 
 namespace CarRentService.DAL.Seeding;
 
-public class AdminSeeder(StoreContext context) : ISeeder
+public class AdminSeeder(IDataStoreContext context) : ISeeder
 {
     public void Seed()
     {
@@ -15,6 +15,6 @@ public class AdminSeeder(StoreContext context) : ISeeder
         admin.SetLogin("admin");
         admin.SetPassword("admin123");
         
-        context.Admins.Add(admin);
+        context.Add(admin);
     }
 }

@@ -1,10 +1,14 @@
-﻿namespace CarRentService.DAL.Entities;
+﻿using CarRentService.DAL.Abstract;
+
+namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Человек
 /// </summary>
-public abstract class Person
+public abstract class Person : IPersistable
 {
+    public int Id { get; set; }
+
     /// <summary>
     /// ФИО человека.
     /// </summary>

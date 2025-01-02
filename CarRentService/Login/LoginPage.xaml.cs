@@ -10,10 +10,9 @@ namespace CarRentService.Login
 
         public ContentDialog Dialog;
 
-        public LoginPage(ContentDialog dialog, LoginViewModel viewModel)
+        public LoginPage(LoginViewModel viewModel)
         {
             this.InitializeComponent();
-
 
             ViewModel = viewModel;
             DataContext = ViewModel;
