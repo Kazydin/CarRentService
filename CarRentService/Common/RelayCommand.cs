@@ -5,29 +5,25 @@ namespace CarRentService.Common;
 
 public class RelayCommand : ICommand
 {
-    private readonly Action<object> _execute;
-    private readonly Predicate<object> _canExecute;
+    private readonly Action _execute;
+    private readonly Func<bool> _canExecute;
 
-    public event EventHandler? CanExecuteChanged;
-
-    public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
+    // Конструктор для команды с возможностью проверки выполнения
+    public RelayCommand(Action execute, Func<bool> canExecute = null)
     {
         _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-        _canExecute = canExecute;
+        _canExecute = canExecute ?? (() => true); // Если не передан canExecute, команда всегда доступна для выполнения
     }
 
-    public bool CanExecute(object parameter)
-    {
-        return _canExecute == null || _canExecute(parameter);
-    }
+    // Событие, которое UI будет использовать для обновления доступности команды (например, активация/деактивация кнопки)
+    public event EventHandler CanExecuteChanged;
 
-    public void Execute(object parameter)
-    {
-        _execute(parameter);
-    }
+    // Проверка, можно ли выполнить команду (например, кнопка будет активной, если эта функция возвращает true)
+    public bool CanExecute(object parameter) => _canExecute();
 
-    public void RaiseCanExecuteChanged()
-    {
-        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-    }
+    // Выполнение команды
+    public void Execute(object parameter) => _execute();
+
+    // Метод для вызова события CanExecuteChanged вручную (например, когда меняются условия, при которых команда может быть выполнена)
+    public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 }

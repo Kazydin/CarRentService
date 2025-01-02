@@ -17,14 +17,11 @@ public partial class App : Application
         this.InitializeComponent();
     }
 
-    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         // Настроим DI контейнер
         var services = new ServiceCollection();
         ConfigureServices(services);
-
-        services.AddStore();
-        services.AddSeeders();
 
         ServiceProvider = services.BuildServiceProvider();
 
@@ -43,9 +40,9 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
-        services.AddServicesEndingWithService(Assembly.GetExecutingAssembly());
+        services.AddServicesWithAttribute(AssemblyHelper.GetAllAssemblies());
 
-        services.AddSingleton<AppState>();
-        services.AddSingleton<MainWindow>();
+        // services.AddSingleton<AppState>();
+        // services.AddSingleton<MainWindow>();
     }
 }

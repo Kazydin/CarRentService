@@ -1,9 +1,10 @@
+using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Login
 {
-    public sealed partial class LoginPage : Page
+    public sealed partial class LoginPage : InjectedPage
     {
         public LoginViewModel ViewModel { get; }
 

@@ -1,46 +1,25 @@
 using System;
-using CarRentService.Login;
-using Microsoft.Extensions.DependencyInjection;
+using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 
 
 namespace CarRentService.Home;
 
-public sealed partial class HomePage : Page
+public sealed partial class HomePage : InjectedPage
 {
     private IServiceProvider _serviceProvider;
 
-    public HomePage(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
+    private HomeViewModel viewModel;
 
+    public HomePage(HomeViewModel viewModel)
+    {
         this.InitializeComponent();
 
-        this.Loaded += HomePage_Loaded;
+        DataContext = viewModel;
     }
 
-    private async void HomePage_Loaded(object sender, RoutedEventArgs e)
+    private void HomePage_OnLoaded(object sender, RoutedEventArgs e)
     {
-        // Ожидаем, пока окно отобразится
-        var dialog = new ContentDialog
-        {
-            Title = "Авторизация",
-            PrimaryButtonText = "Войти",
-            DefaultButton = ContentDialogButton.Primary,
-            IsPrimaryButtonEnabled = false,
-            CloseButtonText = null,
-            XamlRoot = XamlRoot,
-        };
-
-        var loginPage = _serviceProvider.GetRequiredService<LoginPage>();
-        loginPage.Dialog = dialog;
-        loginPage.ViewModel.XamlRoot = this.XamlRoot;
-
-        dialog.Content = loginPage;
-        dialog.PrimaryButtonClick += loginPage.LoginButtonClick;
-
-        // Открываем ContentDialog
-        await dialog.ShowAsync();
+        viewModel.ShowLoginDialogCommand.Execute(null);
     }
 }

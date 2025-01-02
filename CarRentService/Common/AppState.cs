@@ -1,8 +1,11 @@
 ﻿using System;
 using Windows.System;
+using CarRentService.Common.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRentService.Common;
 
+[InjectDI(ServiceLifetime.Singleton)]
 public class AppState
 {
     private User? _currentUser;
