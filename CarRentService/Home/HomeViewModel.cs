@@ -13,13 +13,13 @@ namespace CarRentService.Home
     {
         public ICommand ShowLoginDialogCommand;
 
-        private LoginPage loginPage;
+        private readonly LoginPage _loginPage;
 
         public XamlRoot XamlRoot = null!;
 
         public HomeViewModel(LoginPage loginPage)
         {
-            this.loginPage = loginPage;
+            _loginPage = loginPage;
             ShowLoginDialogCommand = new RelayCommand(ShowLoginDialog);
         }
 
@@ -36,10 +36,10 @@ namespace CarRentService.Home
                 XamlRoot = XamlRoot,
             };
 
-            loginPage.Dialog = dialog;
+            _loginPage.Dialog = dialog;
 
-            dialog.Content = loginPage;
-            dialog.PrimaryButtonClick += loginPage.LoginButtonClick;
+            dialog.Content = _loginPage;
+            dialog.PrimaryButtonClick += _loginPage.LoginButtonClick;
 
             // Открываем ContentDialog
             await dialog.ShowAsync();

@@ -49,6 +49,7 @@
             Grid.Row="3"
             x:Name="PasswordBox"
             PasswordChanging="PasswordBox_OnPasswordChanging"
+            PasswordRevealMode="Peek"
             PlaceholderText="Введите пароль"
             PasswordChanged="PasswordBox_PasswordChanged" />
 

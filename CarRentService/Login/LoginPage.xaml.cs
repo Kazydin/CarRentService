@@ -12,7 +12,7 @@ namespace CarRentService.Login
 
         public LoginPage(LoginViewModel viewModel)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             ViewModel = viewModel;
             DataContext = ViewModel;

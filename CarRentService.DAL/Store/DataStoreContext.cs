@@ -5,10 +5,7 @@ namespace CarRentService.DAL.Store
 {
     public class DataStoreContext : IDataStoreContext
     {
-        // Коллекции, имитирующие таблицы данных
         public List<Client> Client { get; set; } = [];
-
-        public List<Admin> Admin { get; set; } = [];
 
         public List<Branch> Branch { get; set; } = [];
 

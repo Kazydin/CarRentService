@@ -53,10 +53,12 @@ public static class InjectDIExtensions
             throw new InvalidOperationException($"No implementations found for {baseType.FullName}");
         }
 
+        var baseTypeAttribute = baseType.GetCustomAttribute<InjectDIAttribute>();
+
         // Если несколько реализаций, регистрируем все
         foreach (var implementation in implementations)
         {
-            var attribute = implementation.GetCustomAttribute<InjectDIAttribute>();
+            var attribute = implementation.GetCustomAttribute<InjectDIAttribute>() ?? baseTypeAttribute;
             RegisterService(services, baseType, implementation, attribute?.Lifetime ?? ServiceLifetime.Transient);
         }
     }

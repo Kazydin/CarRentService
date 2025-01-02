@@ -1,4 +1,6 @@
-﻿namespace CarRentService.DAL.Entities;
+﻿using CarRentService.DAL.Enum;
+
+namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Клиент
@@ -14,6 +16,16 @@ public class Client : Person
     /// История аренд клиента
     /// </summary>
     private List<Rental> _rentalHistory = new List<Rental>();
+
+    /// <summary>
+    /// Роль
+    /// </summary>
+    public ClientRoleEnum Role { get; set; }
+
+    /// <summary>
+    /// ИД филиала, если есть привязка
+    /// </summary>
+    public int BranchId { get; set; }
 
     /// <summary>
     /// Возвращает информацию о клиенте, включая ФИО, возраст, телефон и номер водительского удостоверения.

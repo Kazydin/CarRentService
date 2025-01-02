@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarRentService.Common\CarRentService.Common.csproj" />
+    <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
 
 </Project>

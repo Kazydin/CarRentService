@@ -38,7 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Common\Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CarRentService.BLL\CarRentService.BLL.csproj" />

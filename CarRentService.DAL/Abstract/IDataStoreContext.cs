@@ -1,8 +1,9 @@
 ﻿using CarRentService.Common.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRentService.DAL.Abstract;
 
-[InjectDI]
+[InjectDI(ServiceLifetime.Singleton)]
 public interface IDataStoreContext
 {
     /// <summary>
