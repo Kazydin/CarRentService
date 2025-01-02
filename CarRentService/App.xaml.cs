@@ -1,20 +1,51 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
+using System;
+using CarRentService.DAL.Seeding;
+using CarRentService.Extensions;
+using System.Reflection;
+using CarRentService.Common;
 
-namespace CarRentService
+namespace CarRentService;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public static IServiceProvider ServiceProvider { get; private set; }
+
+    public App()
     {
-        public App()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
+    }
 
-        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
-        {
-            m_window = new MainWindow();
-            m_window.Activate();
-        }
+    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    {
+        // Настроим DI контейнер
+        var services = new ServiceCollection();
+        ConfigureServices(services);
 
-        private Window? m_window;
+        services.AddStore();
+        services.AddSeeders();
+
+        ServiceProvider = services.BuildServiceProvider();
+
+        SeedData();
+
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        mainWindow.Activate();
+    }
+
+    private static void SeedData()
+    {
+        using var scope = ServiceProvider.CreateScope();
+        var seeder = scope.ServiceProvider.GetRequiredService<StartupSeeder>();
+        seeder.Run();
+    }
+
+    private void ConfigureServices(IServiceCollection services)
+    {
+        services.AddServicesEndingWithService(Assembly.GetExecutingAssembly());
+
+        services.AddSingleton<AppState>();
+        services.AddSingleton<MainWindow>();
     }
 }

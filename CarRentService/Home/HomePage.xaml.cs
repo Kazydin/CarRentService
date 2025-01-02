@@ -1,5 +1,6 @@
 using System;
 using CarRentService.Login;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -8,8 +9,12 @@ namespace CarRentService.Home;
 
 public sealed partial class HomePage : Page
 {
-    public HomePage()
+    private IServiceProvider _serviceProvider;
+
+    public HomePage(IServiceProvider serviceProvider)
     {
+        _serviceProvider = serviceProvider;
+
         this.InitializeComponent();
 
         this.Loaded += HomePage_Loaded;
@@ -28,7 +33,10 @@ public sealed partial class HomePage : Page
             XamlRoot = XamlRoot,
         };
 
-        var loginPage = new LoginPage(this.XamlRoot, dialog);
+        var loginPage = _serviceProvider.GetRequiredService<LoginPage>();
+        loginPage.Dialog = dialog;
+        loginPage.ViewModel.XamlRoot = this.XamlRoot;
+
         dialog.Content = loginPage;
         dialog.PrimaryButtonClick += loginPage.LoginButtonClick;
 

@@ -40,6 +40,10 @@
     <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CarRentService.BLL\CarRentService.BLL.csproj" />
+    <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Home\HomePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

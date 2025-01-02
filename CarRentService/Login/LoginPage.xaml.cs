@@ -7,18 +7,14 @@ namespace CarRentService.Login
     {
         public LoginViewModel ViewModel { get; }
 
-        private ContentDialog _dialog;
+        public ContentDialog Dialog;
 
-        public LoginPage(XamlRoot xamlRoot, ContentDialog dialog)
+        public LoginPage(ContentDialog dialog, LoginViewModel viewModel)
         {
             this.InitializeComponent();
 
-            _dialog = dialog;
 
-            ViewModel = new LoginViewModel()
-            {
-                XamlRoot = xamlRoot
-            };
+            ViewModel = viewModel;
             DataContext = ViewModel;
         }
 
@@ -34,7 +30,7 @@ namespace CarRentService.Login
         {
             args.Cancel = true;
 
-            if (ViewModel.ExecuteLogin())
+            if (ViewModel.Authenticate())
             {
                 sender.Hide();
             }
@@ -49,13 +45,13 @@ namespace CarRentService.Login
             if (!string.IsNullOrWhiteSpace(Login.Text) && !string.IsNullOrWhiteSpace(PasswordBox.Password))
             {
                 // Если логин и пароль заполнены, то можем разрешать авторизоваться
-                _dialog.IsPrimaryButtonEnabled = true;
+                Dialog.IsPrimaryButtonEnabled = true;
                 ViewModel.IsErrorVisible = false;
             }
             else
             {
                 ViewModel.IsErrorVisible = false;
-                _dialog.IsPrimaryButtonEnabled = false;
+                Dialog.IsPrimaryButtonEnabled = false;
             }
         }
 

@@ -1,16 +1,15 @@
-﻿using System.ComponentModel;
+﻿using CarRentService.BLL.Services.Abstract;
+using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
 
 namespace CarRentService.Login;
 
-public class LoginViewModel : INotifyPropertyChanged
+public class LoginViewModel(IAuthenticationService authenticationService) : IViewModel
 {
     private string _login;
 
     private string _password;
-    
-    public event PropertyChangedEventHandler PropertyChanged;
-    
+
     public string Login
     {
         get => _login;
@@ -20,7 +19,7 @@ public class LoginViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Login));
         }
     }
-    
+
     public string Password
     {
         get => _password;
@@ -61,26 +60,14 @@ public class LoginViewModel : INotifyPropertyChanged
         }
     }
 
-    public bool ExecuteLogin()
+    public bool Authenticate()
     {
-        if (Login == "admin" && Password == "1234")
+        if (authenticationService.Authenticate(Login, Password))
         {
             return true;
         }
-        else
-        {
-            IsErrorVisible = true;
-            return false;
-        }
-    }
-    
-    private bool CanExecuteLogin(object parameter)
-    {
-        return !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password);
-    }
-    
-    protected void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        IsErrorVisible = true;
+        return false;
     }
 }
