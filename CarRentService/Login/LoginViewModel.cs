@@ -1,13 +1,4 @@
-﻿using Microsoft.UI.Xaml.Controls;
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using CarRentService.Common;
+﻿using System.ComponentModel;
 using Microsoft.UI.Xaml;
 
 namespace CarRentService.Login;
@@ -27,7 +18,6 @@ public class LoginViewModel : INotifyPropertyChanged
         {
             _login = value;
             OnPropertyChanged(nameof(Login));
-            ((RelayCommand)LoginCommand).RaiseCanExecuteChanged();
         }
     }
     
@@ -38,7 +28,6 @@ public class LoginViewModel : INotifyPropertyChanged
         {
             _password = value;
             OnPropertyChanged(nameof(Password));
-            ((RelayCommand)LoginCommand).RaiseCanExecuteChanged();
         }
     }
 
@@ -57,36 +46,31 @@ public class LoginViewModel : INotifyPropertyChanged
         }
     }
 
-    public ICommand LoginCommand { get; }
+    private bool _isErrorVisible;
 
-    public LoginViewModel()
+    public bool IsErrorVisible
     {
-        LoginCommand = new RelayCommand(ExecuteLogin, CanExecuteLogin);
+        get => _isErrorVisible;
+        set
+        {
+            if (_isErrorVisible != value)
+            {
+                _isErrorVisible = value;
+                OnPropertyChanged(nameof(IsErrorVisible));
+            }
+        }
     }
-    
-    private void ExecuteLogin(object parameter)
+
+    public bool ExecuteLogin()
     {
         if (Login == "admin" && Password == "1234")
         {
-            var dialog = new ContentDialog
-            {
-                Title = "Успех",
-                Content = "Добро пожаловать!",
-                CloseButtonText = "ОК",
-                XamlRoot = XamlRoot
-            };
-            dialog.ShowAsync();
+            return true;
         }
         else
         {
-            var dialog = new ContentDialog
-            {
-                Title = "Ошибка",
-                Content = "Неверный логин или пароль.",
-                CloseButtonText = "ОК",
-                XamlRoot = XamlRoot
-            };
-            dialog.ShowAsync();
+            IsErrorVisible = true;
+            return false;
         }
     }
     

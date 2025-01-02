@@ -6,13 +6,13 @@
     xmlns:local="using:CarRentService.Login"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Width="350"
-    Height="220"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:converters="using:CarRentService.Common.Converters"
+    mc:Ignorable="d">
 
-    <Grid
-        Padding="10">
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="Auto" />
@@ -23,15 +23,19 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition />
+            <RowDefinition
+                Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Логин -->
         <TextBlock
             Grid.Row="0"
             Text="Логин:"
-            Margin="0,0,0,5" />
+            Margin="0,0,0,10" />
         <TextBox
             Grid.Row="1"
+            x:Name="Login"
+            TextChanged="Login_OnTextChanged"
             Text="{Binding Login, Mode=TwoWay}"
             PlaceholderText="Введите логин" />
 
@@ -39,19 +43,27 @@
         <TextBlock
             Grid.Row="2"
             Text="Пароль:"
-            Margin="0,10,0,5" />
+            Margin="0,15,0,10" />
         <PasswordBox
             Grid.Row="3"
-            x:Name="PassowrdBox"
+            x:Name="PasswordBox"
+            PasswordChanging="PasswordBox_OnPasswordChanging"
             PlaceholderText="Введите пароль"
             PasswordChanged="PasswordBox_PasswordChanged" />
 
-        <!-- Кнопка Войти -->
-        <Button
-            Grid.Row="4"
-            Content="Войти"
-            Command="{Binding LoginCommand}"
-            HorizontalAlignment="Stretch"
-            Margin="0,10,0,0" />
+        <Border
+            x:Name="ErrorBorder"
+            Background="Red"
+            CornerRadius="5"
+            Grid.Row="5"
+            Visibility="{Binding IsErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+            Padding="10"
+            Margin="0,20,0,0">
+            <TextBlock
+                Text="Неправильный логин или пароль."
+                Foreground="White"
+                FontWeight="Bold"
+                HorizontalAlignment="Center" />
+        </Border>
     </Grid>
 </Page>

@@ -7,29 +7,66 @@ namespace CarRentService.Login
     {
         public LoginViewModel ViewModel { get; }
 
-        public LoginPage()
+        private ContentDialog _dialog;
+
+        public LoginPage(XamlRoot xamlRoot, ContentDialog dialog)
         {
             this.InitializeComponent();
 
-            ViewModel = new LoginViewModel
+            _dialog = dialog;
+
+            ViewModel = new LoginViewModel()
             {
-                XamlRoot = XamlRoot
+                XamlRoot = xamlRoot
             };
             DataContext = ViewModel;
-
-            this.Loaded += (sender, args) =>
-            {
-                ViewModel.XamlRoot = this.XamlRoot;
-            };
         }
 
-        // ќбработка событи€ PasswordChanged дл€ PasswordBox
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is LoginViewModel viewModel)
             {
-                viewModel.Password = PassowrdBox.Password;
+                viewModel.Password = PasswordBox.Password;
             }
+        }
+
+        public void LoginButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            args.Cancel = true;
+
+            if (ViewModel.ExecuteLogin())
+            {
+                sender.Hide();
+            }
+            else
+            {
+                ViewModel.IsErrorVisible = true;
+            }
+        }
+
+        private void CheckCredentialsChanged()
+        {
+            if (!string.IsNullOrWhiteSpace(Login.Text) && !string.IsNullOrWhiteSpace(PasswordBox.Password))
+            {
+                // ≈сли логин и пароль заполнены, то можем разрешать авторизоватьс€
+                _dialog.IsPrimaryButtonEnabled = true;
+                ViewModel.IsErrorVisible = false;
+            }
+            else
+            {
+                ViewModel.IsErrorVisible = false;
+                _dialog.IsPrimaryButtonEnabled = false;
+            }
+        }
+
+        private void PasswordBox_OnPasswordChanging(PasswordBox sender, PasswordBoxPasswordChangingEventArgs args)
+        {
+            CheckCredentialsChanged();
+        }
+
+        private void Login_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckCredentialsChanged();
         }
     }
 }
