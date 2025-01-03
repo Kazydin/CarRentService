@@ -1,6 +1,5 @@
 ﻿using CarRentService.BLL.Services.Abstract;
 using CarRentService.Common.Abstract;
-using Microsoft.UI.Xaml;
 
 namespace CarRentService.Login;
 
@@ -13,36 +12,13 @@ public class LoginViewModel(IAuthenticationService authenticationService) : IVie
     public string Login
     {
         get => _login;
-        set
-        {
-            _login = value;
-            OnPropertyChanged(nameof(Login));
-        }
+        set => SetProperty(ref _login, value);
     }
 
     public string Password
     {
         get => _password;
-        set
-        {
-            _password = value;
-            OnPropertyChanged(nameof(Password));
-        }
-    }
-
-    private XamlRoot _xamlRoot;
-
-    public XamlRoot XamlRoot
-    {
-        get => _xamlRoot;
-        set
-        {
-            if (_xamlRoot != value)
-            {
-                _xamlRoot = value;
-                OnPropertyChanged(nameof(XamlRoot));
-            }
-        }
+        set => SetProperty(ref _password, value);
     }
 
     private bool _isErrorVisible;
@@ -50,14 +26,7 @@ public class LoginViewModel(IAuthenticationService authenticationService) : IVie
     public bool IsErrorVisible
     {
         get => _isErrorVisible;
-        set
-        {
-            if (_isErrorVisible != value)
-            {
-                _isErrorVisible = value;
-                OnPropertyChanged(nameof(IsErrorVisible));
-            }
-        }
+        set => SetProperty(ref _isErrorVisible, value);
     }
 
     public bool Authenticate()

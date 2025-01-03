@@ -1,13 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <abstract:InjectedPage
     x:Class="CarRentService.Home.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:CarRentService.Home"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
+    xmlns:domain="using:CarRentService.Home.Pages.Domain"
+    xmlns:home="using:CarRentService.Home"
+    d:DataContext="{d:DesignInstance Type=home:HomeViewModel}"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="HomePage_OnLoaded">
+
+    <NavigationView
+        x:Name="Navi"
+        IsSettingsVisible="False"
+        IsBackButtonVisible="Collapsed"
+        IsBackEnabled="False"
+        Header="{Binding Header}"
+        SelectionChanged="Navi_OnSelectionChanged">
+        <NavigationView.MenuItems>
+            <NavigationViewItemHeader
+                Content="Обслуживание" />
+
+            <NavigationViewItem
+                Content="Клиенты"
+                Tag="{x:Bind domain:HomePageTypeEnum.Clients, Converter={StaticResource EnumToStringConverter}}">
+                <NavigationViewItem.Icon>
+                    <BitmapIcon
+                        UriSource="ms-appx:///Assets/clients.png" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem
+                Content="Автомобили"
+                Tag="{x:Bind domain:HomePageTypeEnum.Cars, Converter={StaticResource EnumToStringConverter}}">
+                <NavigationViewItem.Icon>
+                    <BitmapIcon
+                        UriSource="ms-appx:///Assets/car.png" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+
+            <NavigationViewItemHeader
+                Content="Сделки" />
+
+            <NavigationViewItem
+                Content="Договора"
+                Tag="{x:Bind domain:HomePageTypeEnum.Contracts, Converter={StaticResource EnumToStringConverter}}">
+                <NavigationViewItem.Icon>
+                    <BitmapIcon
+                        UriSource="ms-appx:///Assets/contract.png" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem
+                Content="Платежи"
+                Tag="{x:Bind domain:HomePageTypeEnum.Payments, Converter={StaticResource EnumToStringConverter}}">
+                <NavigationViewItem.Icon>
+                    <BitmapIcon
+                        UriSource="ms-appx:///Assets/payment.png" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem
+                Content="Страховки"
+                Tag="{x:Bind domain:HomePageTypeEnum.Insurances, Converter={StaticResource EnumToStringConverter}}">
+                <NavigationViewItem.Icon>
+                    <BitmapIcon
+                        UriSource="ms-appx:///Assets/insurance.png" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+
+            <NavigationViewItemHeader
+                Content="Администрирование" />
+
+            <NavigationViewItem
+                Content="Филиалы"
+                Tag="{x:Bind domain:HomePageTypeEnum.Branches, Converter={StaticResource EnumToStringConverter}}">
+                <NavigationViewItem.Icon>
+                    <BitmapIcon
+                        UriSource="ms-appx:///Assets/branch.png" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem
+                Content="Управление персоналом"
+                Tag="{x:Bind domain:HomePageTypeEnum.ManageAdmins, Converter={StaticResource EnumToStringConverter}}"
+                Icon="Contact" />
+
+        </NavigationView.MenuItems>
+        <NavigationView.FooterMenuItems>
+            <NavigationViewItem
+                Content="Иванов Иван Иванович"
+                Tag="{x:Bind domain:HomePageTypeEnum.Account, Converter={StaticResource EnumToStringConverter}}">
+                <NavigationViewItem.Icon>
+                    <BitmapIcon
+                        UriSource="ms-appx:///Assets/user.png" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem
+                Content="Выйти"
+                Tag="{x:Bind domain:HomePageTypeEnum.Exit, Converter={StaticResource EnumToStringConverter}}">
+                <NavigationViewItem.Icon>
+                    <BitmapIcon
+                        UriSource="ms-appx:///Assets/switch.png" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.FooterMenuItems>
+
+        <Frame
+            x:Name="ContentFrame"
+            Content="{Binding Path=CurrentPage}" />
+    </NavigationView>
 </abstract:InjectedPage>

@@ -13,7 +13,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Home\Pages\Welcom\**" />
+    <EmbeddedResource Remove="Home\Pages\Welcom\**" />
+    <None Remove="Home\Pages\Welcom\**" />
+    <Page Remove="Home\Pages\Welcom\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\logout.png" />
     <None Remove="Home\HomePage.xaml" />
+    <None Remove="Home\Pages\CarsPage.xaml" />
+    <None Remove="Home\Pages\ClientsPage.xaml" />
+    <None Remove="Home\Pages\WelcomeHomePage.xaml" />
     <None Remove="Login\LoginPage.xaml" />
   </ItemGroup>
 
@@ -31,18 +41,27 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
+    <PackageReference Include="Guard.Net" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CarRentService.BLL\CarRentService.BLL.csproj" />
     <ProjectReference Include="..\CarRentService.Common\CarRentService.Common.csproj" />
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Home\Pages\WelcomeHomePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Home\Pages\CarsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Home\HomePage.xaml">
@@ -53,6 +72,15 @@
     <Page Update="Login\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Home\Pages\ClientsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Home\Pages\Clients\" />
+    <Folder Include="Home\Pages\Cars\" />
   </ItemGroup>
 
   <!--
@@ -71,4 +99,7 @@
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
   </PropertyGroup>
+  <ItemGroup>
+    <PRIResource Remove="Home\Pages\Welcom\**" />
+  </ItemGroup>
 </Project>

@@ -1,12 +1,7 @@
 ﻿namespace CarRentService.DAL.Enum;
 
-public enum ClientRoleEnum
+public enum ManagerRoleEnum
 {
-    /// <summary>
-    /// Обычный пользователь (клиент сервиса)
-    /// </summary>
-    User,
-
     /// <summary>
     /// Главный администратор
     /// </summary>

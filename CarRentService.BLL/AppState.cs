@@ -7,9 +7,9 @@ namespace CarRentService.BLL;
 [InjectDI(ServiceLifetime.Singleton)]
 public class AppState
 {
-    private Client _currentUser = null!;
+    private Manager _currentUser = null!;
 
-    public Client? CurrentUser
+    public Manager? CurrentUser
     {
         get => _currentUser;
         set

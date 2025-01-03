@@ -1,36 +1,26 @@
-﻿using CarRentService.Common.Attributes;
+﻿using System.Collections.ObjectModel;
+
+using CarRentService.Common.Attributes;
+using CarRentService.DAL.Entities;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRentService.DAL.Abstract;
 
 [InjectDI(ServiceLifetime.Singleton)]
-public interface IDataStoreContext
+public interface IDataStoreContext : ICommonDataStoreContext
 {
-    /// <summary>
-    /// Получить таблицу данных по типу
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    List<T> GetTable<T>() where T : IEntity;
+    public ObservableCollection<Client> Client { get; set; }
 
-    /// <summary>
-    /// Добавить запись в таблицу
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="entity"></param>
-    void Add<T>(T entity) where T : IEntity;
+    public ObservableCollection<Manager> Manager { get; set; }
 
-    /// <summary>
-    /// Удалить запись из таблицы
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="entity"></param>
-    void Remove<T>(T entity) where T : IEntity;
+    public ObservableCollection<Branch> Branch { get; set; }
 
-    /// <summary>
-    /// Удалить запись по условию
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="predicate"></param>
-    void Remove<T>(Predicate<T> predicate) where T : IEntity;
+    public ObservableCollection<Car> Car { get; set; }
+
+    public ObservableCollection<Insurance> Insurance { get; set; }
+
+    public ObservableCollection<Payment> Payment { get; set; }
+
+    public ObservableCollection<Rental> Rental { get; set; }
 }

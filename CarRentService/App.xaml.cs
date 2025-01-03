@@ -4,13 +4,12 @@ using System;
 using CarRentService.DAL.Seeding;
 using CarRentService.Extensions;
 using System.Reflection;
-using CarRentService.Common;
 
 namespace CarRentService;
 
 public partial class App : Application
 {
-    public static IServiceProvider ServiceProvider { get; private set; }
+    public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
     public App()
     {
@@ -44,8 +43,5 @@ public partial class App : Application
             Assembly.Load("CarRentService.BLL"),
             Assembly.Load("CarRentService.DAL"),
             Assembly.Load("CarRentService.UI"));
-
-        // services.AddSingleton<AppState>();
-        // services.AddSingleton<MainWindow>();
     }
 }

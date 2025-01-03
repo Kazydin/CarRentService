@@ -1,6 +1,5 @@
 ﻿using CarRentService.BLL.Services.Abstract;
 using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Entities;
 
 namespace CarRentService.BLL.Services
 {
@@ -18,12 +17,9 @@ namespace CarRentService.BLL.Services
 
         public bool Authenticate(string login, string password)
         {
-            var d = _store.GetTable<Client>();
-
-            var user = _store
-                .GetTable<Client>()
-                .FirstOrDefault(p => p.GetLogin() == login
-                                     && p.GetPassword() == password);
+            var user = _store.Manager
+                .FirstOrDefault(p => p.Login == login
+                                     && p.Password == password);
 
             if (user != null)
             {
