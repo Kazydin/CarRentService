@@ -1,33 +1,19 @@
 ﻿using CarRentService.BLL.Services.Abstract;
 using CarRentService.Common.Abstract;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.Login;
 
-public class LoginViewModel(IAuthenticationService authenticationService) : IViewModel
+public partial class LoginViewModel(IAuthenticationService authenticationService) : IViewModel
 {
+    [ObservableProperty]
     private string _login;
 
+    [ObservableProperty]
     private string _password;
 
-    public string Login
-    {
-        get => _login;
-        set => SetProperty(ref _login, value);
-    }
-
-    public string Password
-    {
-        get => _password;
-        set => SetProperty(ref _password, value);
-    }
-
+    [ObservableProperty]
     private bool _isErrorVisible;
-
-    public bool IsErrorVisible
-    {
-        get => _isErrorVisible;
-        set => SetProperty(ref _isErrorVisible, value);
-    }
 
     public bool Authenticate()
     {

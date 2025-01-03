@@ -1,45 +1,34 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using CarRentService.Login;
 using Microsoft.UI.Xaml.Controls;
 
 using Microsoft.UI.Xaml;
 using CarRentService.Home.Pages.Domain;
 using System.Collections.Generic;
-using System.Linq;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace CarRentService.Home
 {
-    public class HomeViewModel : IViewModel
+    public partial class HomeViewModel : IViewModel
     {
         public ICommand ShowLoginDialogCommand { get; }
 
         public ICommand NavigateCommand { get; }
 
-        private string _header;
-
-        public string Header
-        {
-            get => _header;
-            set => SetProperty(ref _header, value);
-        }
-
-        private InjectedHomePage _currentPage;
-
-        public InjectedHomePage CurrentPage
-        {
-            get => _currentPage;
-            set => SetProperty(ref _currentPage, value);
-        }
-
-        private readonly LoginPage _loginPage;
-
         public XamlRoot XamlRoot = null!;
 
         public readonly Dictionary<HomePageTypeEnum, InjectedHomePage> _pages;
+
+        [ObservableProperty]
+        private string _header;
+
+        [ObservableProperty]
+        private InjectedHomePage _currentPage;
+
+        private readonly LoginPage _loginPage;
 
         public HomeViewModel(LoginPage loginPage, HomePageFactory factory)
         {

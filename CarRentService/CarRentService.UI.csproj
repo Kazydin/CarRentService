@@ -79,7 +79,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Home\Pages\Clients\" />
     <Folder Include="Home\Pages\Cars\" />
   </ItemGroup>
 

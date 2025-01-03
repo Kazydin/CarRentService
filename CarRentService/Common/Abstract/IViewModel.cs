@@ -5,4 +5,5 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace CarRentService.Common.Abstract;
 
 [InjectDI]
-public abstract class IViewModel : ObservableObject;
+[ObservableObject]
+public abstract partial class IViewModel;
