@@ -11,11 +11,29 @@
     xmlns:clients="using:CarRentService.Home.Pages.Clients"
     xmlns:system="using:System"
     xmlns:entities="using:CarRentService.DAL.Entities"
+    xmlns:primitives="using:CommunityToolkit.WinUI.UI.Controls.Primitives"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=clients:ClientsViewModel}">
+    <ScrollViewer
+        VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Auto">
+        <StackPanel
+        Margin="47, 20, 47, 20" Orientation="Vertical">
+        <CommandBar
+            Background="Transparent"
+            IsOpen="False"
+            DefaultLabelPosition="Right">
+            <AppBarButton
+                Icon="Add"
+                Label="Add" />
+            <AppBarButton
+                Icon="Edit"
+                Label="Edit" />
+            <AppBarButton
+                Icon="Share"
+                Label="Share" />
+        </CommandBar>
 
-    <Grid
-        Margin="47, 20, 47, 0">
         <controls:DataGrid
             x:Name="DataGrid"
             Margin="10"
@@ -26,8 +44,76 @@
             ItemsSource="{Binding Path=Clients}"
             AutoGenerateColumns="False">
             <controls:DataGrid.Columns>
-                <controls:DataGridTemplateColumn
-                    Header="ID клиента">
+                <controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn.HeaderStyle>
+                        <Style
+                            TargetType="primitives:DataGridColumnHeader">
+                            <Setter
+                                Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Padding="5">
+                                            <TextBlock
+                                                Text="ID"
+                                                VerticalAlignment="Center" />
+                                            <Button
+                                                Margin="15, 0, 0, 0">
+                                                <Button.Flyout>
+                                                    <Flyout>
+                                                        <Flyout.Content>
+                                                            <StackPanel
+                                                                MinWidth="200"
+                                                                Orientation="Vertical">
+
+                                                                <MenuFlyoutItem
+                                                                    Text="Сортировка по возрастанию" />
+                                                                <MenuFlyoutItem
+                                                                    Text="Сортировка по убыванию" />
+                                                                <MenuFlyoutItem
+                                                                    Text="Очистить сортировку" />
+
+                                                                <MenuFlyoutSeparator />
+
+                                                                <MenuFlyoutItem
+                                                                    Text="Очистить фильтрацию" />
+
+                                                                <TextBox
+                                                                    PlaceholderText="Введите текст для поиска"
+                                                                    Margin="0,0,0,10"
+                                                                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                <ScrollViewer
+                                                                    VerticalScrollBarVisibility="Auto"
+                                                                    Height="200">
+                                                                    <ItemsControl
+                                                                        ItemsSource="{Binding FilteredOptions}">
+                                                                        <ItemsControl.ItemTemplate>
+                                                                            <DataTemplate>
+                                                                                <CheckBox
+                                                                                    Content="{Binding Name}"
+                                                                                    IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                                                            </DataTemplate>
+                                                                        </ItemsControl.ItemTemplate>
+                                                                    </ItemsControl>
+                                                                </ScrollViewer>
+                                                            </StackPanel>
+                                                        </Flyout.Content>
+                                                    </Flyout>
+                                                </Button.Flyout>
+                                                <Viewbox
+                                                    MaxHeight="15"
+                                                    MaxWidth="15">
+                                                    <SymbolIcon
+                                                        Symbol="Filter" />
+                                                </Viewbox>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </controls:DataGridTemplateColumn.HeaderStyle>
                     <controls:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -38,8 +124,76 @@
                         </DataTemplate>
                     </controls:DataGridTemplateColumn.CellTemplate>
                 </controls:DataGridTemplateColumn>
-                <controls:DataGridTemplateColumn
-                    Header="Имя клиента">
+                <controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn.HeaderStyle>
+                        <Style
+                            TargetType="primitives:DataGridColumnHeader">
+                            <Setter
+                                Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Padding="5">
+                                            <TextBlock
+                                                Text="ФИО"
+                                                VerticalAlignment="Center" />
+                                            <Button
+                                                Margin="15, 0, 0, 0">
+                                                <Button.Flyout>
+                                                    <Flyout>
+                                                        <Flyout.Content>
+                                                            <StackPanel
+                                                                MinWidth="200"
+                                                                Orientation="Vertical">
+
+                                                                <MenuFlyoutItem
+                                                                    Text="Сортировка по возрастанию" />
+                                                                <MenuFlyoutItem
+                                                                    Text="Сортировка по убыванию" />
+                                                                <MenuFlyoutItem
+                                                                    Text="Очистить сортировку" />
+
+                                                                <MenuFlyoutSeparator />
+
+                                                                <MenuFlyoutItem
+                                                                    Text="Очистить фильтрацию" />
+
+                                                                <TextBox
+                                                                    PlaceholderText="Введите текст для поиска"
+                                                                    Margin="0,0,0,10"
+                                                                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                <ScrollViewer
+                                                                    VerticalScrollBarVisibility="Auto"
+                                                                    Height="200">
+                                                                    <ItemsControl
+                                                                        ItemsSource="{Binding FilteredOptions}">
+                                                                        <ItemsControl.ItemTemplate>
+                                                                            <DataTemplate>
+                                                                                <CheckBox
+                                                                                    Content="{Binding Name}"
+                                                                                    IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                                                            </DataTemplate>
+                                                                        </ItemsControl.ItemTemplate>
+                                                                    </ItemsControl>
+                                                                </ScrollViewer>
+                                                            </StackPanel>
+                                                        </Flyout.Content>
+                                                    </Flyout>
+                                                </Button.Flyout>
+                                                <Viewbox
+                                                    MaxHeight="15"
+                                                    MaxWidth="15">
+                                                    <SymbolIcon
+                                                        Symbol="Filter" />
+                                                </Viewbox>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </controls:DataGridTemplateColumn.HeaderStyle>
                     <controls:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -108,5 +262,6 @@
                 </controls:DataGridTemplateColumn>
             </controls:DataGrid.Columns>
         </controls:DataGrid>
-    </Grid>
+    </StackPanel>
+    </ScrollViewer>
 </domain:InjectedHomePage>
