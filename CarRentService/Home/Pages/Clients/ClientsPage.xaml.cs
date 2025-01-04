@@ -1,17 +1,36 @@
+using CarRentService.DAL.Entities;
 using CarRentService.Home.Pages.Domain;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Home.Pages.Clients
 {
     public sealed partial class ClientsPage : InjectedHomePage
     {
-        private ClientsViewModel _viewModel;
+        public ClientsViewModel ViewModel { get; }
 
         public ClientsPage(ClientsViewModel viewModel) : base(HomePageTypeEnum.Clients)
         {
             InitializeComponent();
 
-            _viewModel = viewModel;
+            ViewModel = viewModel;
             DataContext = viewModel;
+        }
+
+        private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var client = (Client)button.Tag;
+
+            ViewModel.RemoveClientCommand.Execute(client);
+        }
+
+        private void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var client = (Client)button.Tag;
+
+            ViewModel.EditClientCommand.Execute(client);
         }
     }
 }

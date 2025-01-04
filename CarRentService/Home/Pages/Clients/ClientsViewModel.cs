@@ -11,7 +11,10 @@ public partial class ClientsViewModel : IViewModel
 {
     public RelayCommand AddClientCommand { get; }
 
-    public RelayCommand RemoveClientCommand { get; }
+
+    public RelayCommand<Client> EditClientCommand { get; }
+
+    public RelayCommand<Client> RemoveClientCommand { get; }
 
     public ObservableCollection<Client> Clients => _dataStore.Client;
 
@@ -26,7 +29,8 @@ public partial class ClientsViewModel : IViewModel
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
-        RemoveClientCommand = new RelayCommand(RemoveClient, CanRemoveClient);
+        EditClientCommand = new RelayCommand<Client>(EditClient);
+        RemoveClientCommand = new RelayCommand<Client>(RemoveClient);
     }
 
     private void AddClient()
@@ -39,16 +43,13 @@ public partial class ClientsViewModel : IViewModel
         Clients.Add(newClient);
     }
 
-    private bool CanRemoveClient()
+    private void RemoveClient(Client? client)
     {
-        return SelectedClient != null;
+        Clients.Remove(client!);
     }
 
-    private void RemoveClient()
+    private void EditClient(Client? client)
     {
-        if (SelectedClient != null)
-        {
-            Clients.Remove(SelectedClient);
-        }
+
     }
 }

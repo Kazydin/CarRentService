@@ -7,7 +7,7 @@ namespace CarRentService.DAL.Entities;
 /// Транспортное средство
 /// </summary>
 [ObservableObject]
-public abstract partial class Vehicle : IPersistable
+public abstract partial class Vehicle : IEntity
 {
     [ObservableProperty]
     private int _id;

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <domain:InjectedHomePage
     x:Class="CarRentService.Home.Pages.Clients.ClientsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,17 +9,104 @@
     xmlns:domain="using:CarRentService.Home.Pages.Domain"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:clients="using:CarRentService.Home.Pages.Clients"
-    mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=clients:ClientsViewModel}">
+    xmlns:system="using:System"
+    xmlns:entities="using:CarRentService.DAL.Entities"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=clients:ClientsViewModel}">
 
-    <Grid Margin="47, 20, 47, 0">
-        <Grid>
-            <controls:DataGrid
-                x:Name="DataGrid"
-                Margin="10"
-                CanUserSortColumns="True"
-                GridLinesVisibility="All"
-                ItemsSource="{Binding Path=Clients}"
-                AutoGenerateColumns="True" />
-        </Grid>
+    <Grid
+        Margin="47, 20, 47, 0">
+        <controls:DataGrid
+            x:Name="DataGrid"
+            Margin="10"
+            CanUserSortColumns="True"
+            GridLinesVisibility="All"
+            IsReadOnly="True"
+            SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
+            ItemsSource="{Binding Path=Clients}"
+            AutoGenerateColumns="False">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTemplateColumn
+                    Header="ID клиента">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Padding="10"
+                                VerticalAlignment="Center"
+                                d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                Text="{Binding Id}" />
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+                <controls:DataGridTemplateColumn
+                    Header="Имя клиента">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Padding="10"
+                                VerticalAlignment="Center"
+                                d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                Text="{Binding Fio}" />
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+                <controls:DataGridTemplateColumn
+                    Header="Возраст">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Padding="10"
+                                VerticalAlignment="Center"
+                                d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                Text="{Binding Age}" />
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+                <controls:DataGridTemplateColumn
+                    Header="Телефон">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Padding="10"
+                                VerticalAlignment="Center"
+                                d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                Text="{Binding Phone}" />
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+                <controls:DataGridTemplateColumn
+                    Header="Номер водительского удостоверения">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Padding="10"
+                                VerticalAlignment="Center"
+                                d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                Text="{Binding DriverLicenseNumber}" />
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+
+                <!-- Кнопка "Удалить" -->
+                <controls:DataGridTemplateColumn
+                    Header="Удалить">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Padding="10">
+                                <Button
+                                    Content="Изменить"
+                                    Tag="{Binding}"
+                                    Click="ButtonEdit_OnClick"
+                                    Margin="0, 0, 10, 0" />
+                                <Button
+                                    Content="Удалить"
+                                    Tag="{Binding}"
+                                    Click="ButtonRemove_OnClick" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
     </Grid>
 </domain:InjectedHomePage>

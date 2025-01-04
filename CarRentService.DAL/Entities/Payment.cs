@@ -7,7 +7,7 @@ namespace CarRentService.DAL.Entities;
 /// Платеж
 /// </summary>
 [ObservableObject]
-public partial class Payment : IPersistable
+public partial class Payment : IEntity
 {
     [ObservableProperty]
     private int _id;

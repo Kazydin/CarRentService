@@ -7,7 +7,7 @@ namespace CarRentService.DAL.Entities;
 /// Человек
 /// </summary>
 [ObservableObject]
-public abstract partial class Person : IPersistable
+public abstract partial class Person : IEntity
 {
     [ObservableProperty]
     private int _id;

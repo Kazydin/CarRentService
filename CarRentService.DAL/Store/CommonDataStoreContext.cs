@@ -32,6 +32,12 @@ namespace CarRentService.DAL.Store
         public void Add<T>(T entity) where T : IEntity
         {
             var table = GetTable<T>();
+
+            if (entity.Id == 0)
+            {
+                entity.Id = table.Any() ? table.Max(p => p.Id) + 1 : 1;
+            }
+
             table.Add(entity);
         }
 

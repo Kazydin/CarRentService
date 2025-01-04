@@ -7,7 +7,7 @@ namespace CarRentService.DAL.Entities;
 /// Филиал
 /// </summary>
 [ObservableObject]
-public partial class Branch : IPersistable
+public partial class Branch : IEntity
 {
     [ObservableProperty]
     private int _id;

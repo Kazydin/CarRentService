@@ -1,3 +1,9 @@
 ﻿namespace CarRentService.DAL.Abstract;
 
-public interface IEntity;
+public interface IEntity
+{
+    /// <summary>
+    /// ID записи
+    /// </summary>
+    public int Id { get; set; }
+}

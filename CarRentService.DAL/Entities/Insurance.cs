@@ -7,7 +7,7 @@ namespace CarRentService.DAL.Entities;
 /// Страховка
 /// </summary>
 [ObservableObject]
-public partial class Insurance : IPersistable
+public partial class Insurance : IEntity
 {
     [ObservableProperty]
     private int _id;
