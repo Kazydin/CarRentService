@@ -203,7 +203,7 @@
                                                     VerticalAlignment="Center" />
                                                 <Button
                                                     Margin="15, 0, 0, 0"
-                                                    Background="{Binding SearchAge, Converter={StaticResource BooleanToBackgroundConverter}}">
+                                                    Background="{Binding AgeColumnFilteredOrSorted, Converter={StaticResource BooleanToBackgroundConverter}}">
                                                     <Button.Flyout>
                                                         <Flyout>
                                                             <Flyout.Content>
@@ -212,10 +212,18 @@
                                                                     Orientation="Vertical">
 
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="Age.ASC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='Age.ASC'}"
                                                                         Text="Сортировка по возрастанию" />
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="Age.DESC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='Age.DESC'}"
                                                                         Text="Сортировка по убыванию" />
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding ClearSortColumnCommand}"
+                                                                        CommandParameter="Age.CLR"
                                                                         Text="Очистить сортировку" />
 
                                                                     <MenuFlyoutSeparator />
@@ -267,7 +275,7 @@
                                                     VerticalAlignment="Center" />
                                                 <Button
                                                     Margin="15, 0, 0, 0"
-                                                    Background="{Binding SearchPhone, Converter={StaticResource BooleanToBackgroundConverter}}">
+                                                    Background="{Binding PhoneColumnFilteredOrSorted, Converter={StaticResource BooleanToBackgroundConverter}}">
                                                     <Button.Flyout>
                                                         <Flyout>
                                                             <Flyout.Content>
@@ -276,10 +284,18 @@
                                                                     Orientation="Vertical">
 
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="Phone.ASC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='Phone.ASC'}"
                                                                         Text="Сортировка по возрастанию" />
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="Phone.DESC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='Phone.DESC'}"
                                                                         Text="Сортировка по убыванию" />
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding ClearSortColumnCommand}"
+                                                                        CommandParameter="Phone.CLR"
                                                                         Text="Очистить сортировку" />
 
                                                                     <MenuFlyoutSeparator />
@@ -331,7 +347,7 @@
                                                     VerticalAlignment="Center" />
                                                 <Button
                                                     Margin="15, 0, 0, 0"
-                                                    Background="{Binding SearchDriverLicenseNumber, Converter={StaticResource BooleanToBackgroundConverter}}">
+                                                    Background="{Binding DriverLicenseNumberColumnFilteredOrSorted, Converter={StaticResource BooleanToBackgroundConverter}}">
                                                     <Button.Flyout>
                                                         <Flyout>
                                                             <Flyout.Content>
@@ -340,10 +356,18 @@
                                                                     Orientation="Vertical">
 
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="DriverLicenseNumber.ASC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='DriverLicenseNumber.ASC'}"
                                                                         Text="Сортировка по возрастанию" />
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="DriverLicenseNumber.DESC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='DriverLicenseNumber.DESC'}"
                                                                         Text="Сортировка по убыванию" />
                                                                     <MenuFlyoutItem
+                                                                        Command="{Binding ClearSortColumnCommand}"
+                                                                        CommandParameter="DriverLicenseNumber.CLR"
                                                                         Text="Очистить сортировку" />
 
                                                                     <MenuFlyoutSeparator />

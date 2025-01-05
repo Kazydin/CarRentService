@@ -49,6 +49,9 @@ public partial class ClientsViewModel : IViewModel
     private string _searchAge;
 
     [ObservableProperty]
+    private string _searchPhone;
+
+    [ObservableProperty]
     private string _searchDriverLicenseNumber;
 
     [ObservableProperty]
@@ -63,11 +66,21 @@ public partial class ClientsViewModel : IViewModel
     [ObservableProperty]
     private bool _fioColumnFilteredOrSorted;
 
+    [ObservableProperty]
+    private bool _ageColumnFilteredOrSorted;
+
+    [ObservableProperty]
+    private bool _phoneColumnFilteredOrSorted;
+
+    [ObservableProperty]
+    private bool _driverLicenseNumberColumnFilteredOrSorted;
+
     private readonly string[] _searchFieldNames =
     [
         nameof(SearchId),
         nameof(SearchFio),
         nameof(SearchAge),
+        nameof(SearchPhone),
         nameof(SearchDriverLicenseNumber)
     ];
 
@@ -76,6 +89,7 @@ public partial class ClientsViewModel : IViewModel
         "ID",
         "Fio",
         "Age",
+        "Phone",
         "DriverLicenseNumber"
     ];
 
@@ -107,17 +121,19 @@ public partial class ClientsViewModel : IViewModel
     {
         var filtered = Clients
             .Where(o =>
-                (string.IsNullOrEmpty(SearchId) || o.Id.ToString().Contains(SearchId))
-                && (string.IsNullOrEmpty(SearchFio) || o.Fio.Contains(SearchFio))
-                && (string.IsNullOrEmpty(SearchAge) || o.Age.ToString().Contains(SearchAge))
+                (string.IsNullOrEmpty(SearchId) || !string.IsNullOrEmpty(o.Id.ToString()) && o.Id.ToString().Contains(SearchId))
+                && (string.IsNullOrEmpty(SearchFio) || !string.IsNullOrEmpty(o.Fio) && o.Fio.Contains(SearchFio))
+                && (string.IsNullOrEmpty(SearchAge) || !string.IsNullOrEmpty(o.Age.ToString()) && o.Age.ToString().Contains(SearchAge))
+                && (string.IsNullOrEmpty(SearchPhone) || !string.IsNullOrEmpty(o.Phone) && o.Phone.Contains(SearchPhone))
                 && (string.IsNullOrEmpty(SearchDriverLicenseNumber) ||
-                    o.DriverLicenseNumber.Contains(SearchDriverLicenseNumber)))
+                    !string.IsNullOrEmpty(o.DriverLicenseNumber) && o.DriverLicenseNumber.Contains(SearchDriverLicenseNumber)))
             .ToList();
 
         if (filtered.Count == 0
             && string.IsNullOrEmpty(SearchId)
             && string.IsNullOrEmpty(SearchFio)
             && string.IsNullOrEmpty(SearchAge)
+            && string.IsNullOrEmpty(SearchPhone)
             && string.IsNullOrEmpty(SearchDriverLicenseNumber))
         {
             FilteredClients = new ObservableCollection<ClientDto>(Clients);
@@ -140,6 +156,9 @@ public partial class ClientsViewModel : IViewModel
     {
         IdColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchId) || (SortOrder?.Contains("ID") ?? false);
         FioColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchFio) || (SortOrder?.Contains("Fio") ?? false);
+        AgeColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchAge) || (SortOrder?.Contains("Age") ?? false);
+        PhoneColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchPhone) || (SortOrder?.Contains("Phone") ?? false);
+        DriverLicenseNumberColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchDriverLicenseNumber) || (SortOrder?.Contains("DriverLicenseNumber") ?? false);
     }
 
     private void AddClient()
@@ -150,7 +169,7 @@ public partial class ClientsViewModel : IViewModel
     {
         Guard.NotNull(client, nameof(client), "Клиент не может быть пустым");
 
-        Clients.Remove(client);
+        Clients.Remove(client!);
     }
 
     private void EditClient(Client? client)
@@ -192,6 +211,7 @@ public partial class ClientsViewModel : IViewModel
             "ID" => client => client.Id,
             "Fio" => client => client.Fio,
             "Age" => client => client.Age,
+            "Phone" => client => client.Phone,
             "DriverLicenseNumber" => client => client.DriverLicenseNumber,
             _ => throw new ArgumentException("Некорректный параметр фильтра")
         };
@@ -217,6 +237,7 @@ public partial class ClientsViewModel : IViewModel
     {
         SortOrder = null!;
         FilteredClients = FilteredClients.OrderBy(p => p.Id).ToObservableCollection();
+        
         UpdateSortAndFilterIcons();
         ClearSortColumnCommand.NotifyCanExecuteChanged();
     }
@@ -233,6 +254,7 @@ public partial class ClientsViewModel : IViewModel
         SearchId = string.Empty;
         SearchFio = string.Empty;
         SearchAge = string.Empty;
+        SearchPhone = string.Empty;
         SearchDriverLicenseNumber = string.Empty;
 
         SortOrder = null!;
