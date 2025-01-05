@@ -39,6 +39,11 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
+        services.AddAutoMapper(Assembly.Load("CarRentService.Common"),
+            Assembly.Load("CarRentService.BLL"),
+            Assembly.Load("CarRentService.DAL"),
+            Assembly.Load("CarRentService.UI"));
+
         services.AddServicesWithAttribute(Assembly.Load("CarRentService.Common"),
             Assembly.Load("CarRentService.BLL"),
             Assembly.Load("CarRentService.DAL"),

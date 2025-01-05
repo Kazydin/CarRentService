@@ -18,250 +18,389 @@
         VerticalScrollBarVisibility="Auto"
         HorizontalScrollBarVisibility="Auto">
         <StackPanel
-        Margin="47, 20, 47, 20" Orientation="Vertical">
-        <CommandBar
-            Background="Transparent"
-            IsOpen="False"
-            DefaultLabelPosition="Right">
-            <AppBarButton
-                Icon="Add"
-                Label="Add" />
-            <AppBarButton
-                Icon="Edit"
-                Label="Edit" />
-            <AppBarButton
-                Icon="Share"
-                Label="Share" />
-        </CommandBar>
+            Margin="47, 20, 47, 20" Orientation="Vertical">
+            <CommandBar
+                Background="Transparent"
+                IsOpen="False"
+                DefaultLabelPosition="Right">
+                <AppBarButton
+                    Icon="Add"
+                    Command="{Binding AddClientCommand}"
+                    Label="Добавить" />
+                <AppBarButton
+                    Icon="Clear"
+                    Command="{Binding ClearFiltersAndSortCommand}"
+                    Label="Сбросить фильтры и сортировку" />
+            </CommandBar>
 
-        <controls:DataGrid
-            x:Name="DataGrid"
-            Margin="10"
-            CanUserSortColumns="True"
-            GridLinesVisibility="All"
-            IsReadOnly="True"
-            SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
-            ItemsSource="{Binding Path=Clients}"
-            AutoGenerateColumns="False">
-            <controls:DataGrid.Columns>
-                <controls:DataGridTemplateColumn>
-                    <controls:DataGridTemplateColumn.HeaderStyle>
-                        <Style
-                            TargetType="primitives:DataGridColumnHeader">
-                            <Setter
-                                Property="ContentTemplate">
-                                <Setter.Value>
-                                    <DataTemplate>
-                                        <StackPanel
-                                            Orientation="Horizontal"
-                                            Padding="5">
-                                            <TextBlock
-                                                Text="ID"
-                                                VerticalAlignment="Center" />
-                                            <Button
-                                                Margin="15, 0, 0, 0">
-                                                <Button.Flyout>
-                                                    <Flyout>
-                                                        <Flyout.Content>
-                                                            <StackPanel
-                                                                MinWidth="200"
-                                                                Orientation="Vertical">
+            <controls:DataGrid
+                x:Name="DataGrid"
+                Margin="10"
+                CanUserSortColumns="True"
+                GridLinesVisibility="All"
+                IsReadOnly="True"
+                SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
+                ItemsSource="{Binding Path=FilteredClients}"
+                AutoGenerateColumns="False">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn.HeaderStyle>
+                            <Style
+                                TargetType="primitives:DataGridColumnHeader">
+                                <Setter
+                                    Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Orientation="Horizontal"
+                                                Padding="5">
+                                                <TextBlock
+                                                    Text="ID"
+                                                    VerticalAlignment="Center" />
+                                                <Button
+                                                    Margin="15, 0, 0, 0"
+                                                    Background="{Binding IdColumnFilteredOrSorted, Converter={StaticResource BooleanToBackgroundConverter}}">
+                                                    <Button.Flyout>
+                                                        <Flyout>
+                                                            <Flyout.Content>
+                                                                <StackPanel
+                                                                    MinWidth="200"
+                                                                    Orientation="Vertical">
 
-                                                                <MenuFlyoutItem
-                                                                    Text="Сортировка по возрастанию" />
-                                                                <MenuFlyoutItem
-                                                                    Text="Сортировка по убыванию" />
-                                                                <MenuFlyoutItem
-                                                                    Text="Очистить сортировку" />
+                                                                    <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="ID.ASC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='ID.ASC'}"
+                                                                        Text="Сортировка по возрастанию" />
+                                                                    <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="ID.DESC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='ID.DESC'}"
+                                                                        Text="Сортировка по убыванию" />
+                                                                    <MenuFlyoutItem
+                                                                        Command="{Binding ClearSortColumnCommand}"
+                                                                        CommandParameter="ID.CLR"
+                                                                        Text="Очистить сортировку" />
 
-                                                                <MenuFlyoutSeparator />
+                                                                    <MenuFlyoutSeparator />
 
-                                                                <MenuFlyoutItem
-                                                                    Text="Очистить фильтрацию" />
+                                                                    <TextBox
+                                                                        PlaceholderText="Введите текст для поиска"
+                                                                        Margin="0,10,0,10"
+                                                                        Text="{Binding SearchId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                </StackPanel>
+                                                            </Flyout.Content>
+                                                        </Flyout>
+                                                    </Button.Flyout>
+                                                    <Viewbox
+                                                        MaxHeight="15"
+                                                        MaxWidth="15">
+                                                        <SymbolIcon
+                                                            Symbol="Filter" />
+                                                    </Viewbox>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </controls:DataGridTemplateColumn.HeaderStyle>
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="10"
+                                    VerticalAlignment="Center"
+                                    d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                    Text="{Binding Path=Id}" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn.HeaderStyle>
+                            <Style
+                                TargetType="primitives:DataGridColumnHeader">
+                                <Setter
+                                    Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Orientation="Horizontal"
+                                                Padding="5">
+                                                <TextBlock
+                                                    Text="ФИО"
+                                                    VerticalAlignment="Center" />
+                                                <Button
+                                                    Margin="15, 0, 0, 0"
+                                                    Background="{Binding FioColumnFilteredOrSorted, Converter={StaticResource BooleanToBackgroundConverter}}">
+                                                    <Button.Flyout>
+                                                        <Flyout>
+                                                            <Flyout.Content>
+                                                                <StackPanel
+                                                                    MinWidth="200"
+                                                                    Orientation="Vertical">
 
-                                                                <TextBox
-                                                                    PlaceholderText="Введите текст для поиска"
-                                                                    Margin="0,0,0,10"
-                                                                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                                                <ScrollViewer
-                                                                    VerticalScrollBarVisibility="Auto"
-                                                                    Height="200">
-                                                                    <ItemsControl
-                                                                        ItemsSource="{Binding FilteredOptions}">
-                                                                        <ItemsControl.ItemTemplate>
-                                                                            <DataTemplate>
-                                                                                <CheckBox
-                                                                                    Content="{Binding Name}"
-                                                                                    IsChecked="{Binding IsSelected, Mode=TwoWay}" />
-                                                                            </DataTemplate>
-                                                                        </ItemsControl.ItemTemplate>
-                                                                    </ItemsControl>
-                                                                </ScrollViewer>
-                                                            </StackPanel>
-                                                        </Flyout.Content>
-                                                    </Flyout>
-                                                </Button.Flyout>
-                                                <Viewbox
-                                                    MaxHeight="15"
-                                                    MaxWidth="15">
-                                                    <SymbolIcon
-                                                        Symbol="Filter" />
-                                                </Viewbox>
-                                            </Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </controls:DataGridTemplateColumn.HeaderStyle>
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Padding="10"
-                                VerticalAlignment="Center"
-                                d:DataContext="{d:DesignInstance Type=entities:Client}"
-                                Text="{Binding Id}" />
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
-                <controls:DataGridTemplateColumn>
-                    <controls:DataGridTemplateColumn.HeaderStyle>
-                        <Style
-                            TargetType="primitives:DataGridColumnHeader">
-                            <Setter
-                                Property="ContentTemplate">
-                                <Setter.Value>
-                                    <DataTemplate>
-                                        <StackPanel
-                                            Orientation="Horizontal"
-                                            Padding="5">
-                                            <TextBlock
-                                                Text="ФИО"
-                                                VerticalAlignment="Center" />
-                                            <Button
-                                                Margin="15, 0, 0, 0">
-                                                <Button.Flyout>
-                                                    <Flyout>
-                                                        <Flyout.Content>
-                                                            <StackPanel
-                                                                MinWidth="200"
-                                                                Orientation="Vertical">
+                                                                    <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="Fio.ASC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='Fio.ASC'}"
+                                                                        Text="Сортировка по возрастанию" />
+                                                                    <MenuFlyoutItem
+                                                                        Command="{Binding SortColumnCommand}"
+                                                                        CommandParameter="Fio.DESC"
+                                                                        Background="{Binding SortOrder, Converter={StaticResource MatchValuesBackgroundConverter}, ConverterParameter='Fio.DESC'}"
+                                                                        Text="Сортировка по убыванию" />
+                                                                    <MenuFlyoutItem
+                                                                        Command="{Binding ClearSortColumnCommand}"
+                                                                        CommandParameter="Fio.CLR"
+                                                                        Text="Очистить сортировку" />
 
-                                                                <MenuFlyoutItem
-                                                                    Text="Сортировка по возрастанию" />
-                                                                <MenuFlyoutItem
-                                                                    Text="Сортировка по убыванию" />
-                                                                <MenuFlyoutItem
-                                                                    Text="Очистить сортировку" />
+                                                                    <MenuFlyoutSeparator />
 
-                                                                <MenuFlyoutSeparator />
+                                                                    <TextBox
+                                                                        PlaceholderText="Введите текст для поиска"
+                                                                        Margin="0,10,0,10"
+                                                                        Text="{Binding SearchFio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                </StackPanel>
+                                                            </Flyout.Content>
+                                                        </Flyout>
+                                                    </Button.Flyout>
+                                                    <Viewbox
+                                                        MaxHeight="15"
+                                                        MaxWidth="15">
+                                                        <SymbolIcon
+                                                            Symbol="Filter" />
+                                                    </Viewbox>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </controls:DataGridTemplateColumn.HeaderStyle>
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="10"
+                                    VerticalAlignment="Center"
+                                    d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                    Text="{Binding Path=Fio}" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn.HeaderStyle>
+                            <Style
+                                TargetType="primitives:DataGridColumnHeader">
+                                <Setter
+                                    Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Orientation="Horizontal"
+                                                Padding="5">
+                                                <TextBlock
+                                                    Text="Возраст"
+                                                    VerticalAlignment="Center" />
+                                                <Button
+                                                    Margin="15, 0, 0, 0"
+                                                    Background="{Binding SearchAge, Converter={StaticResource BooleanToBackgroundConverter}}">
+                                                    <Button.Flyout>
+                                                        <Flyout>
+                                                            <Flyout.Content>
+                                                                <StackPanel
+                                                                    MinWidth="200"
+                                                                    Orientation="Vertical">
 
-                                                                <MenuFlyoutItem
-                                                                    Text="Очистить фильтрацию" />
+                                                                    <MenuFlyoutItem
+                                                                        Text="Сортировка по возрастанию" />
+                                                                    <MenuFlyoutItem
+                                                                        Text="Сортировка по убыванию" />
+                                                                    <MenuFlyoutItem
+                                                                        Text="Очистить сортировку" />
 
-                                                                <TextBox
-                                                                    PlaceholderText="Введите текст для поиска"
-                                                                    Margin="0,0,0,10"
-                                                                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                                                <ScrollViewer
-                                                                    VerticalScrollBarVisibility="Auto"
-                                                                    Height="200">
-                                                                    <ItemsControl
-                                                                        ItemsSource="{Binding FilteredOptions}">
-                                                                        <ItemsControl.ItemTemplate>
-                                                                            <DataTemplate>
-                                                                                <CheckBox
-                                                                                    Content="{Binding Name}"
-                                                                                    IsChecked="{Binding IsSelected, Mode=TwoWay}" />
-                                                                            </DataTemplate>
-                                                                        </ItemsControl.ItemTemplate>
-                                                                    </ItemsControl>
-                                                                </ScrollViewer>
-                                                            </StackPanel>
-                                                        </Flyout.Content>
-                                                    </Flyout>
-                                                </Button.Flyout>
-                                                <Viewbox
-                                                    MaxHeight="15"
-                                                    MaxWidth="15">
-                                                    <SymbolIcon
-                                                        Symbol="Filter" />
-                                                </Viewbox>
-                                            </Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </controls:DataGridTemplateColumn.HeaderStyle>
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Padding="10"
-                                VerticalAlignment="Center"
-                                d:DataContext="{d:DesignInstance Type=entities:Client}"
-                                Text="{Binding Fio}" />
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
-                <controls:DataGridTemplateColumn
-                    Header="Возраст">
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Padding="10"
-                                VerticalAlignment="Center"
-                                d:DataContext="{d:DesignInstance Type=entities:Client}"
-                                Text="{Binding Age}" />
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
-                <controls:DataGridTemplateColumn
-                    Header="Телефон">
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Padding="10"
-                                VerticalAlignment="Center"
-                                d:DataContext="{d:DesignInstance Type=entities:Client}"
-                                Text="{Binding Phone}" />
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
-                <controls:DataGridTemplateColumn
-                    Header="Номер водительского удостоверения">
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Padding="10"
-                                VerticalAlignment="Center"
-                                d:DataContext="{d:DesignInstance Type=entities:Client}"
-                                Text="{Binding DriverLicenseNumber}" />
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
+                                                                    <MenuFlyoutSeparator />
 
-                <!-- Кнопка "Удалить" -->
-                <controls:DataGridTemplateColumn
-                    Header="Удалить">
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Padding="10">
-                                <Button
-                                    Content="Изменить"
-                                    Tag="{Binding}"
-                                    Click="ButtonEdit_OnClick"
-                                    Margin="0, 0, 10, 0" />
-                                <Button
-                                    Content="Удалить"
-                                    Tag="{Binding}"
-                                    Click="ButtonRemove_OnClick" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
-            </controls:DataGrid.Columns>
-        </controls:DataGrid>
-    </StackPanel>
+                                                                    <TextBox
+                                                                        PlaceholderText="Введите текст для поиска"
+                                                                        Margin="0,10,0,10"
+                                                                        Text="{Binding SearchAge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                </StackPanel>
+                                                            </Flyout.Content>
+                                                        </Flyout>
+                                                    </Button.Flyout>
+                                                    <Viewbox
+                                                        MaxHeight="15"
+                                                        MaxWidth="15">
+                                                        <SymbolIcon
+                                                            Symbol="Filter" />
+                                                    </Viewbox>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </controls:DataGridTemplateColumn.HeaderStyle>
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="10"
+                                    VerticalAlignment="Center"
+                                    d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                    Text="{Binding Path=Age}" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn.HeaderStyle>
+                            <Style
+                                TargetType="primitives:DataGridColumnHeader">
+                                <Setter
+                                    Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Orientation="Horizontal"
+                                                Padding="5">
+                                                <TextBlock
+                                                    Text="Телефон"
+                                                    VerticalAlignment="Center" />
+                                                <Button
+                                                    Margin="15, 0, 0, 0"
+                                                    Background="{Binding SearchPhone, Converter={StaticResource BooleanToBackgroundConverter}}">
+                                                    <Button.Flyout>
+                                                        <Flyout>
+                                                            <Flyout.Content>
+                                                                <StackPanel
+                                                                    MinWidth="200"
+                                                                    Orientation="Vertical">
+
+                                                                    <MenuFlyoutItem
+                                                                        Text="Сортировка по возрастанию" />
+                                                                    <MenuFlyoutItem
+                                                                        Text="Сортировка по убыванию" />
+                                                                    <MenuFlyoutItem
+                                                                        Text="Очистить сортировку" />
+
+                                                                    <MenuFlyoutSeparator />
+
+                                                                    <TextBox
+                                                                        PlaceholderText="Введите текст для поиска"
+                                                                        Margin="0,10,0,10"
+                                                                        Text="{Binding SearchPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                </StackPanel>
+                                                            </Flyout.Content>
+                                                        </Flyout>
+                                                    </Button.Flyout>
+                                                    <Viewbox
+                                                        MaxHeight="15"
+                                                        MaxWidth="15">
+                                                        <SymbolIcon
+                                                            Symbol="Filter" />
+                                                    </Viewbox>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </controls:DataGridTemplateColumn.HeaderStyle>
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="10"
+                                    VerticalAlignment="Center"
+                                    d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                    Text="{Binding Path=Phone}" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn.HeaderStyle>
+                            <Style
+                                TargetType="primitives:DataGridColumnHeader">
+                                <Setter
+                                    Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Orientation="Horizontal"
+                                                Padding="5">
+                                                <TextBlock
+                                                    Text="Номер водительского удостоверения"
+                                                    VerticalAlignment="Center" />
+                                                <Button
+                                                    Margin="15, 0, 0, 0"
+                                                    Background="{Binding SearchDriverLicenseNumber, Converter={StaticResource BooleanToBackgroundConverter}}">
+                                                    <Button.Flyout>
+                                                        <Flyout>
+                                                            <Flyout.Content>
+                                                                <StackPanel
+                                                                    MinWidth="200"
+                                                                    Orientation="Vertical">
+
+                                                                    <MenuFlyoutItem
+                                                                        Text="Сортировка по возрастанию" />
+                                                                    <MenuFlyoutItem
+                                                                        Text="Сортировка по убыванию" />
+                                                                    <MenuFlyoutItem
+                                                                        Text="Очистить сортировку" />
+
+                                                                    <MenuFlyoutSeparator />
+
+                                                                    <TextBox
+                                                                        PlaceholderText="Введите текст для поиска"
+                                                                        Margin="0,10,0,10"
+                                                                        Text="{Binding SearchDriverLicenseNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                </StackPanel>
+                                                            </Flyout.Content>
+                                                        </Flyout>
+                                                    </Button.Flyout>
+                                                    <Viewbox
+                                                        MaxHeight="15"
+                                                        MaxWidth="15">
+                                                        <SymbolIcon
+                                                            Symbol="Filter" />
+                                                    </Viewbox>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </controls:DataGridTemplateColumn.HeaderStyle>
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="10"
+                                    VerticalAlignment="Center"
+                                    d:DataContext="{d:DesignInstance Type=entities:Client}"
+                                    Text="{Binding Path=DriverLicenseNumber}" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+
+                    <!-- Кнопка "Удалить" -->
+                    <controls:DataGridTemplateColumn
+                        Header="Удалить">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Padding="10">
+                                    <Button
+                                        Content="Изменить"
+                                        Tag="{Binding}"
+                                        Click="ButtonEdit_OnClick"
+                                        Margin="0, 0, 10, 0" />
+                                    <Button
+                                        Content="Удалить"
+                                        Tag="{Binding}"
+                                        Click="ButtonRemove_OnClick" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+        </StackPanel>
     </ScrollViewer>
 </domain:InjectedHomePage>

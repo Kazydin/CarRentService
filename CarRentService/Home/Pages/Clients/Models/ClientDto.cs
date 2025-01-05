@@ -3,18 +3,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.Home.Pages.Clients.Models
 {
-    [ObservableObject]
-    public partial class ClientDto
+    public partial class ClientDto : Client
     {
         [ObservableProperty]
-        private Client _client;
-
-        [ObservableProperty]
         private bool _isSelected = true;
-
-        public ClientDto(Client client)
-        {
-            _client = client;
-        }
     }
 }
