@@ -12,7 +12,7 @@
 
     <StackPanel Margin="0, 30, 0, 0">
         <TextBlock FontSize="70">Добро пожаловать,</TextBlock>
-        <TextBlock FontSize="35">Иванов Иван Иванович!</TextBlock>
-        <TextBlock FontSize="20" Margin="0, 30, 0,0">Краткая сводка</TextBlock>
+        <TextBlock
+            FontSize="35">Иванов Иван Иванович!</TextBlock>
     </StackPanel>
 </domain:InjectedHomePage>

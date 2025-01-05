@@ -32,5 +32,10 @@ namespace CarRentService.Home.Pages.Clients
 
             ViewModel.EditClientCommand.Execute(client);
         }
+
+        private void ClientsPage_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel.XamlRoot = this.XamlRoot;
+        }
     }
 }

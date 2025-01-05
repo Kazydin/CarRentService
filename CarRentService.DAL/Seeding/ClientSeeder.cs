@@ -7,48 +7,384 @@ public class ClientSeeder(IDataStoreContext store) : ISeeder
 {
     public void Seed()
     {
-        store.Add(new Client { Fio = "Иванов Иван Иванович", Age = 34, DriverLicenseNumber = "12 14 65789", Login = "ivanov", Password = "ivanov123" });
-        store.Add(new Client { Fio = "Петров Петр Петрович", Age = 28, DriverLicenseNumber = "13 25 12345", Login = "petrov", Password = "petrov123" });
-        store.Add(new Client { Fio = "Сидоров Сидор Сидорович", Age = 40, DriverLicenseNumber = "14 36 54321", Login = "sidorov", Password = "sidorov123" });
-        store.Add(new Client { Fio = "Александров Александр Александрович", Age = 29, DriverLicenseNumber = "15 47 11111", Login = "alexandr", Password = "alexandr123" });
-        store.Add(new Client { Fio = "Кузнецов Михаил Иванович", Age = 31, DriverLicenseNumber = "16 58 22222", Login = "kuznetsov", Password = "kuznetsov123" });
-        store.Add(new Client { Fio = "Федоров Алексей Петрович", Age = 25, DriverLicenseNumber = "17 69 33333", Login = "fedorov", Password = "fedorov123" });
-        store.Add(new Client { Fio = "Григорьев Игорь Сергеевич", Age = 32, DriverLicenseNumber = "18 70 44444", Login = "grigoryev", Password = "grigoryev123" });
-        store.Add(new Client { Fio = "Лебедев Сергей Владимирович", Age = 27, DriverLicenseNumber = "19 81 55555", Login = "lebedev", Password = "lebedev123" });
-        store.Add(new Client { Fio = "Морозов Павел Дмитриевич", Age = 30, DriverLicenseNumber = "20 92 66666", Login = "morozov", Password = "morozov123" });
-        store.Add(new Client { Fio = "Николаев Виктор Аркадьевич", Age = 35, DriverLicenseNumber = "21 03 77777", Login = "nikolaev", Password = "nikolaev123" });
+        store.Add(new Client
+        {
+            Fio = "Иванов Иван Иванович",
+            Age = 34,
+            Phone = "+79035356434",
+            DriverLicenseNumber = "12 14 65789",
+            Login = "ivanov",
+            Password = "ivanov123"
+        });
 
-        store.Add(new Client { Fio = "Андреев Андрей Иванович", Age = 26, DriverLicenseNumber = "22 14 88888", Login = "andreev", Password = "andreev123" });
-        store.Add(new Client { Fio = "Васильев Василий Петрович", Age = 33, DriverLicenseNumber = "23 25 99999", Login = "vasilyev", Password = "vasilyev123" });
-        store.Add(new Client { Fio = "Дмитриев Дмитрий Александрович", Age = 24, DriverLicenseNumber = "24 36 10101", Login = "dmitriev", Password = "dmitriev123" });
-        store.Add(new Client { Fio = "Егоров Егор Игоревич", Age = 28, DriverLicenseNumber = "25 47 20202", Login = "egorov", Password = "egorov123" });
-        store.Add(new Client { Fio = "Захаров Захар Алексеевич", Age = 31, DriverLicenseNumber = "26 58 30303", Login = "zaharov", Password = "zaharov123" });
-        store.Add(new Client { Fio = "Игнатьев Игнат Сергеевич", Age = 29, DriverLicenseNumber = "27 69 40404", Login = "ignatiev", Password = "ignatiev123" });
-        store.Add(new Client { Fio = "Кириллов Кирилл Петрович", Age = 30, DriverLicenseNumber = "28 70 50505", Login = "kirillov", Password = "kirillov123" });
-        store.Add(new Client { Fio = "Максимов Максим Игоревич", Age = 35, DriverLicenseNumber = "29 81 60606", Login = "maksimov", Password = "maksimov123" });
-        store.Add(new Client { Fio = "Новиков Николай Владимирович", Age = 34, DriverLicenseNumber = "30 92 70707", Login = "novikov", Password = "novikov123" });
-        store.Add(new Client { Fio = "Орлов Олег Дмитриевич", Age = 27, DriverLicenseNumber = "31 03 80808", Login = "orlov", Password = "orlov123" });
+        store.Add(new Client
+        {
+            Fio = "Петров Петр Петрович",
+            Age = 29,
+            Phone = "+79145567823",
+            DriverLicenseNumber = "45 67 23456",
+            Login = "petrov",
+            Password = "petrov123"
+        });
 
-        store.Add(new Client { Fio = "Попов Павел Андреевич", Age = 32, DriverLicenseNumber = "32 14 90909", Login = "popov", Password = "popov123" });
-        store.Add(new Client { Fio = "Романов Роман Васильевич", Age = 28, DriverLicenseNumber = "33 25 11111", Login = "romanov", Password = "romanov123" });
-        store.Add(new Client { Fio = "Семенов Семен Дмитриевич", Age = 30, DriverLicenseNumber = "34 36 22222", Login = "semenov", Password = "semenov123" });
-        store.Add(new Client { Fio = "Тарасов Тарас Игоревич", Age = 29, DriverLicenseNumber = "35 47 33333", Login = "tarasov", Password = "tarasov123" });
-        store.Add(new Client { Fio = "Ушаков Ульянов Александрович", Age = 33, DriverLicenseNumber = "36 58 44444", Login = "ushakov", Password = "ushakov123" });
-        store.Add(new Client { Fio = "Филиппов Филипп Викторович", Age = 26, DriverLicenseNumber = "37 69 55555", Login = "filippov", Password = "filippov123" });
-        store.Add(new Client { Fio = "Харитонов Харитон Петрович", Age = 34, DriverLicenseNumber = "38 70 66666", Login = "haritonov", Password = "haritonov123" });
-        store.Add(new Client { Fio = "Чернов Чернов Александр", Age = 25, DriverLicenseNumber = "39 81 77777", Login = "chernov", Password = "chernov123" });
-        store.Add(new Client { Fio = "Шестаков Шестак Васильевич", Age = 31, DriverLicenseNumber = "40 92 88888", Login = "shestakov", Password = "shestakov123" });
-        store.Add(new Client { Fio = "Щербаков Щербак Дмитриевич", Age = 29, DriverLicenseNumber = "41 03 99999", Login = "sherbakov", Password = "sherbakov123" });
+        store.Add(new Client
+        {
+            Fio = "Сидоров Сидор Сидорович",
+            Age = 41,
+            Phone = "+79876543210",
+            DriverLicenseNumber = "98 76 54321",
+            Login = "sidorov",
+            Password = "sidorov123"
+        });
 
-        store.Add(new Client { Fio = "Юрьев Юрий Николаевич", Age = 28, DriverLicenseNumber = "42 14 10101", Login = "yuriev", Password = "yuriev123" });
-        store.Add(new Client { Fio = "Яковлев Яков Викторович", Age = 32, DriverLicenseNumber = "43 25 20202", Login = "yakovlev", Password = "yakovlev123" });
-        store.Add(new Client { Fio = "Афанасьев Афанасий Андреевич", Age = 27, DriverLicenseNumber = "44 36 30303", Login = "afanasiev", Password = "afanasiev123" });
-        store.Add(new Client { Fio = "Беликов Белик Иванович", Age = 33, DriverLicenseNumber = "45 47 40404", Login = "belikov", Password = "belikov123" });
-        store.Add(new Client { Fio = "Виноградов Виноград Алексей", Age = 29, DriverLicenseNumber = "46 58 50505", Login = "vinogradov", Password = "vinogradov123" });
-        store.Add(new Client { Fio = "Голубев Голуб Михаил", Age = 31, DriverLicenseNumber = "47 69 60606", Login = "golubev", Password = "golubev123" });
-        store.Add(new Client { Fio = "Денисов Денис Павлович", Age = 30, DriverLicenseNumber = "48 70 70707", Login = "denisov", Password = "denisov123" });
-        store.Add(new Client { Fio = "Еремеев Еремей Максимович", Age = 34, DriverLicenseNumber = "49 81 80808", Login = "eremeev", Password = "eremeev123" });
-        store.Add(new Client { Fio = "Жуков Жук Олегович", Age = 28, DriverLicenseNumber = "50 92 90909", Login = "zhukov", Password = "zhukov123" });
+        store.Add(new Client
+        {
+            Fio = "Кузнецов Алексей Алексеевич",
+            Age = 36,
+            Phone = "+79001234567",
+            DriverLicenseNumber = "01 23 45678",
+            Login = "kuznetsov",
+            Password = "kuznetsov123"
+        });
 
+        store.Add(new Client
+        {
+            Fio = "Васильев Василий Васильевич",
+            Age = 28,
+            Phone = "+79094561234",
+            DriverLicenseNumber = "67 89 01234",
+            Login = "vasiliev",
+            Password = "vasiliev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Морозов Михаил Михайлович",
+            Age = 45,
+            Phone = "+79123456789",
+            DriverLicenseNumber = "45 12 34567",
+            Login = "morozov",
+            Password = "morozov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Новиков Николай Николаевич",
+            Age = 32,
+            Phone = "+79219876543",
+            DriverLicenseNumber = "23 45 67890",
+            Login = "novikov",
+            Password = "novikov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Фёдоров Фёдор Фёдорович",
+            Age = 38,
+            Phone = "+79304567891",
+            DriverLicenseNumber = "34 56 78901",
+            Login = "fedorov",
+            Password = "fedorov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Михайлов Михаил Михайлович",
+            Age = 27,
+            Phone = "+79401234567",
+            DriverLicenseNumber = "12 34 56789",
+            Login = "mikhailov",
+            Password = "mikhailov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Орлов Олег Олегович",
+            Age = 30,
+            Phone = "+79567890123",
+            DriverLicenseNumber = "78 90 12345",
+            Login = "orlov",
+            Password = "orlov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Смирнов Сергей Сергеевич",
+            Age = 40,
+            Phone = "+79612345678",
+            DriverLicenseNumber = "56 78 90123",
+            Login = "smirnov",
+            Password = "smirnov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Попов Павел Павлович",
+            Age = 31,
+            Phone = "+79789012345",
+            DriverLicenseNumber = "89 01 23456",
+            Login = "popov",
+            Password = "popov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Григорьев Григорий Григорьевич",
+            Age = 35,
+            Phone = "+79801234567",
+            DriverLicenseNumber = "34 56 78901",
+            Login = "grigoriev",
+            Password = "grigoriev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Зайцев Захар Захарович",
+            Age = 33,
+            Phone = "+79912345678",
+            DriverLicenseNumber = "90 12 34567",
+            Login = "zaytsev",
+            Password = "zaytsev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Белозеров Борис Борисович",
+            Age = 37,
+            Phone = "+79023456789",
+            DriverLicenseNumber = "12 34 56789",
+            Login = "belozerov",
+            Password = "belozerov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Егоров Евгений Евгеньевич",
+            Age = 26,
+            Phone = "+79101234567",
+            DriverLicenseNumber = "45 67 89012",
+            Login = "egorov",
+            Password = "egorov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Дмитриев Дмитрий Дмитриевич",
+            Age = 44,
+            Phone = "+79234567890",
+            DriverLicenseNumber = "67 89 01234",
+            Login = "dmitriev",
+            Password = "dmitriev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Николаев Николай Николаевич",
+            Age = 39,
+            Phone = "+79345678901",
+            DriverLicenseNumber = "34 56 78901",
+            Login = "nikolaev",
+            Password = "nikolaev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Громов Григорий Громович",
+            Age = 42,
+            Phone = "+79456789012",
+            DriverLicenseNumber = "12 34 56789",
+            Login = "gromov",
+            Password = "gromov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Савельев Станислав Станиславович",
+            Age = 46,
+            Phone = "+79567890123",
+            DriverLicenseNumber = "78 90 12345",
+            Login = "saveliev",
+            Password = "saveliev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Ковалев Константин Константинович",
+            Age = 48,
+            Phone = "+79167890123",
+            DriverLicenseNumber = "23 45 67890",
+            Login = "kovalev",
+            Password = "kovalev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Широков Сергей Викторович",
+            Age = 50,
+            Phone = "+79234567891",
+            DriverLicenseNumber = "45 67 89012",
+            Login = "shirokov",
+            Password = "shirokov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Мартынов Максим Алексеевич",
+            Age = 27,
+            Phone = "+79345678912",
+            DriverLicenseNumber = "67 89 01234",
+            Login = "martynov",
+            Password = "martynov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Захаров Захар Захарович",
+            Age = 29,
+            Phone = "+79456789023",
+            DriverLicenseNumber = "34 56 78901",
+            Login = "zaharov",
+            Password = "zaharov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Тимофеев Тимофей Тимофеевич",
+            Age = 31,
+            Phone = "+79567890134",
+            DriverLicenseNumber = "12 34 56789",
+            Login = "timofeev",
+            Password = "timofeev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Никифоров Николай Николаевич",
+            Age = 33,
+            Phone = "+79678901234",
+            DriverLicenseNumber = "78 90 12345",
+            Login = "nikiforov",
+            Password = "nikiforov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Макаров Михаил Михайлович",
+            Age = 40,
+            Phone = "+79789012345",
+            DriverLicenseNumber = "45 67 89012",
+            Login = "makarov",
+            Password = "makarov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Игнатьев Игорь Игнатьевич",
+            Age = 37,
+            Phone = "+79890123456",
+            DriverLicenseNumber = "67 89 01234",
+            Login = "ignatiev",
+            Password = "ignatiev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Филатов Филипп Филиппович",
+            Age = 36,
+            Phone = "+79901234567",
+            DriverLicenseNumber = "34 56 78901",
+            Login = "filatov",
+            Password = "filatov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Афанасьев Андрей Афанасьевич",
+            Age = 45,
+            Phone = "+79012345678",
+            DriverLicenseNumber = "12 34 56789",
+            Login = "afanasiev",
+            Password = "afanasiev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Прохоров Павел Прохорович",
+            Age = 42,
+            Phone = "+79123456789",
+            DriverLicenseNumber = "78 90 12345",
+            Login = "prokhorov",
+            Password = "prokhorov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Родионов Роман Родионович",
+            Age = 39,
+            Phone = "+79234567890",
+            DriverLicenseNumber = "45 67 89012",
+            Login = "rodionov",
+            Password = "rodionov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Артамонов Александр Артемович",
+            Age = 44,
+            Phone = "+79345678901",
+            DriverLicenseNumber = "67 89 01234",
+            Login = "artamonov",
+            Password = "artamonov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Рябов Роман Романович",
+            Age = 38,
+            Phone = "+79456789012",
+            DriverLicenseNumber = "34 56 78901",
+            Login = "ryabov",
+            Password = "ryabov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Титов Тимур Тимурович",
+            Age = 35,
+            Phone = "+79567890123",
+            DriverLicenseNumber = "12 34 56789",
+            Login = "titov",
+            Password = "titov123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Лебедев Леонид Львович",
+            Age = 32,
+            Phone = "+79678901234",
+            DriverLicenseNumber = "78 90 12345",
+            Login = "lebedev",
+            Password = "lebedev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Соловьев Сергей Сергеевич",
+            Age = 30,
+            Phone = "+79789012345",
+            DriverLicenseNumber = "45 67 89012",
+            Login = "soloviev",
+            Password = "soloviev123"
+        });
+
+        store.Add(new Client
+        {
+            Fio = "Борисов Борис Борисович",
+            Age = 28,
+            Phone = "+79890123456",
+            DriverLicenseNumber = "67 89 01234",
+            Login = "borisov",
+            Password = "borisov123"
+        });
     }
 }

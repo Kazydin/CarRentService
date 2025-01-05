@@ -13,7 +13,8 @@
     xmlns:entities="using:CarRentService.DAL.Entities"
     xmlns:primitives="using:CommunityToolkit.WinUI.UI.Controls.Primitives"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=clients:ClientsViewModel}">
+    d:DataContext="{d:DesignInstance Type=clients:ClientsViewModel}"
+    Loaded="ClientsPage_OnLoaded">
     <ScrollViewer
         VerticalScrollBarVisibility="Auto"
         HorizontalScrollBarVisibility="Auto">

@@ -2,24 +2,27 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Enums;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Entities;
+using CarRentService.Home.Pages.Clients.Dialogs;
 using CarRentService.Home.Pages.Clients.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation.Peers;
+using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Home.Pages.Clients;
 
 public partial class ClientsViewModel : IViewModel
 {
     public RelayCommand AddClientCommand { get; }
-
 
     public RelayCommand<ClientDto> EditClientCommand { get; }
 
@@ -31,10 +34,10 @@ public partial class ClientsViewModel : IViewModel
 
     public RelayCommand<string> ClearSortColumnCommand { get; }
 
+    public XamlRoot XamlRoot { get; set; }
+
     [ObservableProperty]
     private ObservableCollection<ClientDto> _clients;
-
-    private readonly IDataStoreContext _dataStore;
 
     [ObservableProperty]
     private ClientDto? _selectedClient;
@@ -75,6 +78,10 @@ public partial class ClientsViewModel : IViewModel
     [ObservableProperty]
     private bool _driverLicenseNumberColumnFilteredOrSorted;
 
+    private readonly IDataStoreContext _dataStore;
+
+    private IMapper _mapper;
+
     private readonly string[] _searchFieldNames =
     [
         nameof(SearchId),
@@ -96,6 +103,7 @@ public partial class ClientsViewModel : IViewModel
     public ClientsViewModel(IDataStoreContext dataStore, IMapper mapper)
     {
         _dataStore = dataStore;
+        _mapper = mapper;
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
@@ -121,12 +129,16 @@ public partial class ClientsViewModel : IViewModel
     {
         var filtered = Clients
             .Where(o =>
-                (string.IsNullOrEmpty(SearchId) || !string.IsNullOrEmpty(o.Id.ToString()) && o.Id.ToString().Contains(SearchId))
+                (string.IsNullOrEmpty(SearchId) ||
+                 !string.IsNullOrEmpty(o.Id.ToString()) && o.Id.ToString().Contains(SearchId))
                 && (string.IsNullOrEmpty(SearchFio) || !string.IsNullOrEmpty(o.Fio) && o.Fio.Contains(SearchFio))
-                && (string.IsNullOrEmpty(SearchAge) || !string.IsNullOrEmpty(o.Age.ToString()) && o.Age.ToString().Contains(SearchAge))
-                && (string.IsNullOrEmpty(SearchPhone) || !string.IsNullOrEmpty(o.Phone) && o.Phone.Contains(SearchPhone))
+                && (string.IsNullOrEmpty(SearchAge) ||
+                    !string.IsNullOrEmpty(o.Age.ToString()) && o.Age.ToString().Contains(SearchAge))
+                && (string.IsNullOrEmpty(SearchPhone) ||
+                    !string.IsNullOrEmpty(o.Phone) && o.Phone.Contains(SearchPhone))
                 && (string.IsNullOrEmpty(SearchDriverLicenseNumber) ||
-                    !string.IsNullOrEmpty(o.DriverLicenseNumber) && o.DriverLicenseNumber.Contains(SearchDriverLicenseNumber)))
+                    !string.IsNullOrEmpty(o.DriverLicenseNumber) &&
+                    o.DriverLicenseNumber.Contains(SearchDriverLicenseNumber)))
             .ToList();
 
         if (filtered.Count == 0
@@ -158,17 +170,39 @@ public partial class ClientsViewModel : IViewModel
         FioColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchFio) || (SortOrder?.Contains("Fio") ?? false);
         AgeColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchAge) || (SortOrder?.Contains("Age") ?? false);
         PhoneColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchPhone) || (SortOrder?.Contains("Phone") ?? false);
-        DriverLicenseNumberColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchDriverLicenseNumber) || (SortOrder?.Contains("DriverLicenseNumber") ?? false);
+        DriverLicenseNumberColumnFilteredOrSorted = !string.IsNullOrEmpty(SearchDriverLicenseNumber) ||
+                                                    (SortOrder?.Contains("DriverLicenseNumber") ?? false);
     }
 
-    private void AddClient()
+    private async void AddClient()
     {
+        var dialog = new CreateClientDialog
+        {
+            XamlRoot = XamlRoot
+        };
+
+        var result = await dialog.ShowAsync();
+
+        if (result == ContentDialogResult.Primary)
+        {
+            _dataStore.Add(dialog.NewClient);
+
+            var clientDto = _mapper.Map<ClientDto>(_dataStore.Client.Last());
+            Clients.Add(clientDto);
+            UpdateFilteredOptions();
+            if (!string.IsNullOrEmpty(SortOrder))
+            {
+                SortColumn(SortOrder);
+            }
+        }
     }
 
     private void RemoveClient(ClientDto? client)
     {
         Guard.NotNull(client, nameof(client), "Клиент не может быть пустым");
 
+        FilteredClients.Remove(client!);
+        _dataStore.Client.Remove(client!);
         Clients.Remove(client!);
     }
 
@@ -176,7 +210,7 @@ public partial class ClientsViewModel : IViewModel
     {
     }
 
-    private (string, SortColumnOrder) ValidateAndGetFilter(string? filterName)
+    private (string, SortColumnOrder) ValidateAndGetSortOrder(string? filterName)
     {
         Guard.NotNull(filterName, nameof(filterName), "Имя фильтра не может быть пустым");
 
@@ -202,9 +236,9 @@ public partial class ClientsViewModel : IViewModel
         return (filterParams[0], sortOrder.Value);
     }
 
-    private void SortColumn(string? filterName)
+    private void SortColumn(string? sortOrder)
     {
-        var filter = ValidateAndGetFilter(filterName);
+        var filter = ValidateAndGetSortOrder(sortOrder);
 
         Func<ClientDto, object> sortKeySelector = filter.Item1 switch
         {
@@ -223,7 +257,7 @@ public partial class ClientsViewModel : IViewModel
             _ => throw new ArgumentException("Некорректный порядок сортировки")
         };
 
-        SortOrder = filterName!;
+        SortOrder = sortOrder!;
         UpdateSortAndFilterIcons();
         ClearSortColumnCommand.NotifyCanExecuteChanged();
     }
@@ -237,14 +271,14 @@ public partial class ClientsViewModel : IViewModel
     {
         SortOrder = null!;
         FilteredClients = FilteredClients.OrderBy(p => p.Id).ToObservableCollection();
-        
+
         UpdateSortAndFilterIcons();
         ClearSortColumnCommand.NotifyCanExecuteChanged();
     }
 
     private bool CanClearSort(string? filterName)
     {
-        var filter = ValidateAndGetFilter(filterName);
+        var filter = ValidateAndGetSortOrder(filterName);
 
         return SortOrder?.Contains(filter.Item1) ?? false;
     }
