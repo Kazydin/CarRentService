@@ -82,7 +82,7 @@ public class CreateClientDialog : ContentDialog
             return;
         }
 
-        if (!int.TryParse(AgeTextBox.Text, out int age) || age <= 0)
+        if (!int.TryParse(AgeTextBox.Text, out int age) || age <= 0 || age >= 100)
         {
             args.Cancel = true;
             ErrorTextBlock.Text = "Введите корректный возраст.";
