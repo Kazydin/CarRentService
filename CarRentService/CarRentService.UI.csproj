@@ -102,4 +102,9 @@
   <ItemGroup>
     <PRIResource Remove="Home\Pages\Welcom\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Page Update="Home\Pages\Clients\Windows\ClientWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
 </Project>

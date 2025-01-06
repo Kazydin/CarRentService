@@ -1,4 +1,5 @@
-﻿using CarRentService.DAL.Entities;
+﻿using Windows.UI;
+using CarRentService.DAL.Entities;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -52,7 +53,7 @@ public class CreateClientDialog : ContentDialog
         // Текст для ошибок
         ErrorTextBlock = new TextBlock
         {
-            Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0)),
+            Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
             Visibility = Visibility.Collapsed
         };
         stackPanel.Children.Add(ErrorTextBlock);

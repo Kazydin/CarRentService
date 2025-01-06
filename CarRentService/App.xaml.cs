@@ -4,6 +4,8 @@ using System;
 using CarRentService.DAL.Seeding;
 using CarRentService.Extensions;
 using System.Reflection;
+using CarRentService.Common.Enums;
+using CarRentService.Common.Services;
 
 namespace CarRentService;
 
@@ -26,8 +28,8 @@ public partial class App : Application
 
         SeedData();
 
-        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-        mainWindow.Activate();
+        var windowManager = ServiceProvider.GetRequiredService<WindowManager>();
+        windowManager.OpenWindow(WindowTypeEnum.Main);
     }
 
     private static void SeedData()

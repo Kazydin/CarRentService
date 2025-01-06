@@ -1,13 +1,12 @@
-using CarRentService.Common.Attributes;
+using CarRentService.Common.Abstract;
+using CarRentService.Common.Enums;
 using CarRentService.Home;
-using Microsoft.UI.Xaml;
 
 namespace CarRentService
 {
-    [InjectDI]
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainWindow : InjectedWindow
     {
-        public MainWindow(HomePage homePage)
+        public MainWindow(HomePage homePage) : base(WindowTypeEnum.Main)
         {
             this.InitializeComponent();
 

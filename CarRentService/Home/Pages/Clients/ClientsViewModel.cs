@@ -7,16 +7,19 @@ using AutoMapper;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Enums;
 using CarRentService.Common.Extensions;
+using CarRentService.Common.Services;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Entities;
 using CarRentService.Home.Pages.Clients.Dialogs;
 using CarRentService.Home.Pages.Clients.Models;
+using CarRentService.Home.Pages.Clients.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation.Peers;
 using Microsoft.UI.Xaml.Controls;
+using WinRT;
 
 namespace CarRentService.Home.Pages.Clients;
 
@@ -82,6 +85,8 @@ public partial class ClientsViewModel : IViewModel
 
     private IMapper _mapper;
 
+    private WindowManager _windowManager;
+
     private readonly string[] _searchFieldNames =
     [
         nameof(SearchId),
@@ -100,10 +105,13 @@ public partial class ClientsViewModel : IViewModel
         "DriverLicenseNumber"
     ];
 
-    public ClientsViewModel(IDataStoreContext dataStore, IMapper mapper)
+    public ClientsViewModel(IDataStoreContext dataStore,
+        IMapper mapper,
+        WindowManager windowManager)
     {
         _dataStore = dataStore;
         _mapper = mapper;
+        _windowManager = windowManager;
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
@@ -208,6 +216,18 @@ public partial class ClientsViewModel : IViewModel
 
     private void EditClient(Client? client)
     {
+        // var w = _windowManager.OpenWindow(WindowTypeEnum.Client);
+
+        var newWindow = WindowHelper.CreateWindow();
+        var rootPage = new NavigationRootPage();
+        rootPage.RequestedTheme = ThemeHelper.RootTheme;
+        newWindow.Content = rootPage;
+        newWindow.Activate();
+
+        // C# code to navigate in the new window
+        var targetPageType = typeof(HomePage);
+        string targetPageArguments = string.Empty;
+        rootPage.Navigate(targetPageType, targetPageArguments);
     }
 
     private (string, SortColumnOrder) ValidateAndGetSortOrder(string? filterName)
