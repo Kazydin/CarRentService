@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Entities;
@@ -10,13 +11,12 @@ public sealed partial class EditClientPage : NavigationPage
 {
     private readonly EditClientViewModel _viewModel;
 
-    public EditClientPage(EditClientViewModel viewModel) : base(PageTypeEnum.EditClient)
+    public EditClientPage(EditClientViewModel viewModel) : base(PageTypeEnum.EditClient, "Редактирование клиента")
     {
         InitializeComponent();
 
         DataContext = viewModel;
         _viewModel = viewModel;
-
     }
 
     public override void OnNavigatedTo(object? parameter)
@@ -24,6 +24,7 @@ public sealed partial class EditClientPage : NavigationPage
         if (parameter is Client client)
         {
             _viewModel.Client = client;
+            Header = client.Fio;
         }
     }
 }

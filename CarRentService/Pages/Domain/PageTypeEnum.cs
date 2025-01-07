@@ -10,19 +10,15 @@ namespace CarRentService.Pages.Domain;
 
 public enum PageTypeEnum
 {
-    [Description("Главная")]
     [PageType(typeof(WelcomePage))]
     Welcome,
 
-    [Description("Клиенты")]
     [PageType(typeof(ClientsPage))]
     Clients,
 
-    [Description("Редактирование клиента")]
     [PageType(typeof(EditClientPage))]
     EditClient,
 
-    [Description("Автомобили")]
     [PageType(typeof(CarsPage))]
     Cars,
 

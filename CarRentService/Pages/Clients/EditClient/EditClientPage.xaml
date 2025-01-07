@@ -9,8 +9,7 @@
     xmlns:abstract="using:CarRentService.Common.Abstract"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:EditClientViewModel }">
 
-    <StackPanel>
-        <TextBlock>Редактирование клиента </TextBlock>
-        <TextBlock Text="{Binding Client.Fio}"/>
-    </StackPanel>
+    <Grid>
+
+    </Grid>
 </abstract:NavigationPage>

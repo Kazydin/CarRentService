@@ -52,9 +52,9 @@ public class NavigationService : INavigationService
     {
         Guard.NotNull(_frame, nameof(_frame), "Frame не задан");
 
-        var page = _pages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
+        var pageDto = _pages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
 
-        Guard.NotNull(page, nameof(page), $"Страница {pageTypeEnum.GetDescription()} не найдена");
+        Guard.NotNull(pageDto, nameof(pageDto), $"Страница {pageTypeEnum.GetDescription()} не найдена");
 
         // Добавляем текущую страницу в BackStack
         if (addToBackStack && _frame.Content is NavigationPage currentPage)
@@ -65,13 +65,13 @@ public class NavigationService : INavigationService
         // Передача параметра через интерфейс INavigable
         if (parameter != null)
         {
-            page.Page.OnNavigatedTo(parameter);
+            pageDto!.Page.OnNavigatedTo(parameter);
         }
 
-        _frame.Content = page!.Page;
+        _frame.Content = pageDto!.Page;
 
         // Обновляем заголовок через событие
-        PageChanged?.Invoke(page.Header);
+        PageChanged?.Invoke(pageDto.Page.Header);
         CanGoBackChanged?.Invoke(CanGoBack());
     }
 

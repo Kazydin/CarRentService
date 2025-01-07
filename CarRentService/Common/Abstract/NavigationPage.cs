@@ -1,17 +1,21 @@
-﻿using CarRentService.Pages.Domain;
+﻿using System;
+using CarRentService.Pages.Domain;
 
 namespace CarRentService.Common.Abstract;
 
 public abstract class NavigationPage : BasePage
 {
+    public PageTypeEnum Type { get; }
+
+    public string Header { get; set; }
+
     public virtual void OnNavigatedTo(object? parameter)
     {
     }
 
-    protected NavigationPage(PageTypeEnum type)
+    protected NavigationPage(PageTypeEnum type, string header)
     {
         Type = type;
+        Header = header;
     }
-
-    public PageTypeEnum Type { get; }
 }

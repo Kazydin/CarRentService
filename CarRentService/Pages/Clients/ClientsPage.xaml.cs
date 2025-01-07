@@ -10,7 +10,7 @@ namespace CarRentService.Pages.Clients
     {
         public ClientsViewModel ViewModel { get; }
 
-        public ClientsPage(ClientsViewModel viewModel) : base(PageTypeEnum.Clients)
+        public ClientsPage(ClientsViewModel viewModel) : base(PageTypeEnum.Clients, "Клиенты")
         {
             InitializeComponent();
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using CarRentService.Common.Extensions;
 
 namespace CarRentService.Pages.Domain;
 
@@ -13,7 +12,7 @@ public class PageFactory : IPageFactory
     public PageFactory(IEnumerable<NavigationPage> pages)
     {
         _pages = pages
-            .Select(p => new PageDto(p, p.Type.GetDescription(), p.Type))
+            .Select(p => new PageDto(p))
             .ToImmutableArray();
     }
 
