@@ -9,9 +9,9 @@ public interface IClientService
 {
     public ObservableCollection<Client> Clients { get; }
 
-    public void AddClient(Client client);
+    public Client Add(Client client);
 
-    public void RemoveClient(Client client);
+    public void Remove(Client client);
 
-    public void EditClient(Client client);
+    public void Update(Client client);
 }

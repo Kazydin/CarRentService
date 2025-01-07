@@ -3,6 +3,7 @@ using CarRentService.Common.Abstract;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Entities;
 using CarRentService.Pages.Domain;
+using Microsoft.UI.Xaml;
 
 namespace CarRentService.Pages.Clients.EditClient;
 
@@ -26,5 +27,10 @@ public sealed partial class EditClientPage : NavigationPage
             _viewModel.Client = client;
             Header = client.Fio;
         }
+    }
+
+    private void EditClientPage_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        _viewModel.SetXamlRoot(XamlRoot);
     }
 }

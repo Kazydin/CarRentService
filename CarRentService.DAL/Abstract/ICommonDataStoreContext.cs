@@ -7,7 +7,7 @@ public interface ICommonDataStoreContext
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="entity"></param>
-    void Add<T>(T entity) where T : IEntity;
+    T Add<T>(T entity) where T : IEntity;
 
     /// <summary>
     /// Удалить запись из таблицы

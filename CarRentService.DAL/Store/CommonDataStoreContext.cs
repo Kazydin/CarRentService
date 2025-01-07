@@ -29,7 +29,7 @@ namespace CarRentService.DAL.Store
         [ObservableProperty]
         private ObservableCollection<Rental> _rental = [];
 
-        public void Add<T>(T entity) where T : IEntity
+        public T Add<T>(T entity) where T : IEntity
         {
             var table = GetTable<T>();
 
@@ -39,6 +39,8 @@ namespace CarRentService.DAL.Store
             }
 
             table.Add(entity);
+
+            return entity;
         }
 
         public void Remove<T>(T entity) where T : IEntity

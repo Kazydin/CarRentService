@@ -189,10 +189,9 @@ public partial class ClientsViewModel : IViewModel
 
         if (result == ContentDialogResult.Primary)
         {
-            _clientService.AddClient(dialog.NewClient);
+            var savedClient = _clientService.Add(dialog.NewClient);
 
-            var clientDto = _mapper.Map<Client>(_clientService.Clients.Last());
-            Clients.Add(clientDto);
+            Clients.Add(savedClient);
             UpdateFilteredOptions();
             if (!string.IsNullOrEmpty(SortOrder))
             {
@@ -206,7 +205,7 @@ public partial class ClientsViewModel : IViewModel
         Guard.NotNull(client, nameof(client), "Клиент не может быть пустым");
 
         FilteredClients.Remove(client!);
-        _clientService.RemoveClient(client!);
+        _clientService.Remove(client!);
         Clients.Remove(client!);
     }
 
