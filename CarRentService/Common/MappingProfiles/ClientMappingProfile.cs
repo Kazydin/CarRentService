@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 using CarRentService.DAL.Entities;
-using CarRentService.Home.Pages.Clients.Models;
+using ClientDto = CarRentService.Pages.Clients.Models.ClientDto;
 
 namespace CarRentService.Common.MappingProfiles
 {
@@ -10,7 +10,6 @@ namespace CarRentService.Common.MappingProfiles
         public ClientMappingProfile()
         {
             CreateMap<Client, ClientDto>();
-                //.ForMember(dest => dest.IsSelected, opt => opt.MapFrom(src => true)); // Значение по умолчанию
 
             CreateMap<ClientDto, Client>();
         }

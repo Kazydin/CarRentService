@@ -13,18 +13,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Home\Pages\Welcom\**" />
-    <EmbeddedResource Remove="Home\Pages\Welcom\**" />
-    <None Remove="Home\Pages\Welcom\**" />
-    <Page Remove="Home\Pages\Welcom\**" />
+    <Compile Remove="Pages\Welcom\**" />
+    <EmbeddedResource Remove="Pages\Welcom\**" />
+    <None Remove="Pages\Welcom\**" />
+    <Page Remove="Pages\Welcom\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\logout.png" />
-    <None Remove="Home\HomePage.xaml" />
-    <None Remove="Home\Pages\CarsPage.xaml" />
-    <None Remove="Home\Pages\ClientsPage.xaml" />
-    <None Remove="Home\Pages\WelcomeHomePage.xaml" />
-    <None Remove="Login\LoginPage.xaml" />
+    <None Remove="Pages\CarsPage.xaml" />
+    <None Remove="Pages\ClientsPage.xaml" />
+    <None Remove="Pages\WelcomeHomePage.xaml" />
+    <None Remove="Pages\Login\LoginPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,32 +54,7 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Home\Pages\WelcomeHomePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Home\Pages\CarsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Home\HomePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Login\LoginPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Home\Pages\ClientsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Home\Pages\Cars\" />
+    <Folder Include="Pages\Cars\" />
   </ItemGroup>
 
   <!--
@@ -100,11 +74,6 @@
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
-    <PRIResource Remove="Home\Pages\Welcom\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Home\Pages\Clients\Windows\ClientWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <PRIResource Remove="Pages\Welcom\**" />
   </ItemGroup>
 </Project>

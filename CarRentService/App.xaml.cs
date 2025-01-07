@@ -28,8 +28,8 @@ public partial class App : Application
 
         SeedData();
 
-        var windowManager = ServiceProvider.GetRequiredService<WindowManager>();
-        windowManager.OpenWindow(WindowTypeEnum.Main);
+        var windowManager = ServiceProvider.GetRequiredService<MainWindow>();
+        windowManager.Activate();
     }
 
     private static void SeedData()

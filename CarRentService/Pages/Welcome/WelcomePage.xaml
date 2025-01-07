@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<abstract:NavigationPage
+    x:Class="CarRentService.Pages.Welcome.WelcomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:abstract="using:CarRentService.Common.Abstract"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel Margin="0, 30, 0, 0">
+        <TextBlock FontSize="70">Добро пожаловать,</TextBlock>
+        <TextBlock
+            FontSize="35">Иванов Иван Иванович!</TextBlock>
+    </StackPanel>
+</abstract:NavigationPage>

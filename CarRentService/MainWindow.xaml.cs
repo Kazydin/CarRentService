@@ -1,16 +1,16 @@
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Enums;
-using CarRentService.Home;
+using CarRentService.Pages.Home;
 
 namespace CarRentService
 {
     public sealed partial class MainWindow : InjectedWindow
     {
-        public MainWindow(HomePage homePage) : base(WindowTypeEnum.Main)
+        public MainWindow(MenuPage menuPage) : base(WindowTypeEnum.Main)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.Content = homePage;
+            Content = menuPage;
         }
     }
 }
