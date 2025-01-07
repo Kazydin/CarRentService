@@ -99,11 +99,15 @@ public partial class ClientsViewModel : IViewModel
         "DriverLicenseNumber"
     ];
 
+    private readonly INavigationService _navigationService;
+
     public ClientsViewModel(IDataStoreContext dataStore,
-        IMapper mapper)
+        IMapper mapper,
+        INavigationService navigationService)
     {
         _dataStore = dataStore;
         _mapper = mapper;
+        _navigationService = navigationService;
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
@@ -208,6 +212,8 @@ public partial class ClientsViewModel : IViewModel
 
     private void EditClient(Client? client)
     {
+        _navigationService.Navigate(PageTypeEnum.EditClient);
+
         // var newWindow = WindowHelper.CreateWindow();
         // var rootPage = new WelcomePage();
         // newWindow.Content = rootPage;

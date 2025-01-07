@@ -7,11 +7,6 @@ namespace CarRentService.Common.Abstract
     [InjectDI]
     public abstract class InjectedWindow : Window
     {
-        public WindowTypeEnum Type { get; }
-
-        protected InjectedWindow(WindowTypeEnum type)
-        {
-            Type = type;
-        }
+        
     }
 }

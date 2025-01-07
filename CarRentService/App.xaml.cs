@@ -6,6 +6,7 @@ using CarRentService.Extensions;
 using System.Reflection;
 using CarRentService.Common.Enums;
 using CarRentService.Common.Services;
+using CarRentService.Pages.Domain;
 
 namespace CarRentService;
 
@@ -28,8 +29,8 @@ public partial class App : Application
 
         SeedData();
 
-        var windowManager = ServiceProvider.GetRequiredService<MainWindow>();
-        windowManager.Activate();
+        var navigationService = ServiceProvider.GetRequiredService<MainWindow>();
+        navigationService.Activate();
     }
 
     private static void SeedData()

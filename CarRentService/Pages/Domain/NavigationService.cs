@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using GuardNet;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Pages.Domain;
@@ -12,13 +13,15 @@ public class NavigationService : INavigationService
 {
     private Frame _frame = null!;
 
-    private readonly ImmutableArray<PageDto> _pages;
+    private readonly List<PageDto> _openedPages = new();
 
     private readonly Stack<PageTypeEnum> _backStack = new();
 
-    public NavigationService(IPageFactory factory)
+    private readonly IServiceProvider _serviceProvider;
+
+    public NavigationService(IServiceProvider serviceProvider)
     {
-        _pages = factory.GetPages();
+        _serviceProvider = serviceProvider;
     }
 
     public void SetFrame(Frame frame)
@@ -30,16 +33,20 @@ public class NavigationService : INavigationService
 
     public event Action<bool> CanGoBackChanged;
 
-    public bool CanGoBack() => _canGoBack;
-
-    private bool _canGoBack => _backStack.Count > 0;
+    public bool CanGoBack() => _backStack.Count > 0;
 
     public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true)
     {
         Guard.NotNull(_frame, nameof(_frame), "Frame не задан");
 
-        var page = _pages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
-        Guard.NotNull(page, nameof(page), "Не найдена страница для отображения");
+        var page = _openedPages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
+
+        if (page == null)
+        {
+            var navigationPage = (NavigationPage)_serviceProvider.GetRequiredService(pageTypeEnum.GetPageType());
+            page = new PageDto(navigationPage, pageTypeEnum.GetDescription(), pageTypeEnum);
+            _openedPages.Add(page);
+        }
 
         // Добавляем текущую страницу в BackStack
         if (addToBackStack && _frame.Content is NavigationPage currentPage)
@@ -51,19 +58,19 @@ public class NavigationService : INavigationService
 
         // Обновляем заголовок через событие
         PageChanged?.Invoke(page.Header);
-        CanGoBackChanged?.Invoke(_canGoBack);
+        CanGoBackChanged?.Invoke(CanGoBack());
     }
 
     public void GoBack()
     {
         Guard.NotNull(_frame, nameof(_frame), "Frame не задан");
 
-        if (_canGoBack)
+        if (CanGoBack())
         {
             var previousPageType = _backStack.Pop();
             Navigate(previousPageType, false);
 
-            CanGoBackChanged?.Invoke(_canGoBack);
+            CanGoBackChanged?.Invoke(CanGoBack());
         }
     }
 }
