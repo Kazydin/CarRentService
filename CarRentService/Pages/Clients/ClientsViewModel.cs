@@ -79,8 +79,6 @@ public partial class ClientsViewModel : IViewModel
 
     private readonly IClientService _clientService;
 
-    private readonly IMapper _mapper;
-
     private readonly string[] _searchFieldNames =
     [
         nameof(SearchId),
@@ -106,7 +104,6 @@ public partial class ClientsViewModel : IViewModel
         INavigationService navigationService)
     {
         _clientService = clientService;
-        _mapper = mapper;
         _navigationService = navigationService;
 
         // Настройка команд
@@ -117,9 +114,9 @@ public partial class ClientsViewModel : IViewModel
         SortColumnCommand = new RelayCommand<string>(SortColumn, CanSortColumn);
         ClearSortColumnCommand = new RelayCommand<string>(ClearSort, CanClearSort);
 
-        _clients = mapper.Map<ObservableCollection<Client>>(_clientService.Clients);
+        _clients = _clientService.Clients;
 
-        _filteredClients = new ObservableCollection<Client>(_clients);
+        _filteredClients = _clients;
         PropertyChanged += (s, e) =>
         {
             if (_searchFieldNames.Contains(e.PropertyName))
@@ -299,5 +296,10 @@ public partial class ClientsViewModel : IViewModel
         SortOrder = null!;
 
         UpdateSortAndFilterIcons();
+    }
+
+    public void ReloadState()
+    {
+        
     }
 }

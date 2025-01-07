@@ -1,10 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Extensions;
 using CarRentService.DAL.Validators;
+using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
@@ -16,10 +18,15 @@ public class ClientService : IClientService
 
     private readonly ClientValidator _validator;
 
-    public ClientService(IDataStoreContext store, ClientValidator validator)
+    private readonly IMapper _mapper;
+
+    public ClientService(IDataStoreContext store,
+        ClientValidator validator,
+        IMapper mapper)
     {
         _store = store;
         _validator = validator;
+        _mapper = mapper;
     }
 
     public Client Add(Client client)
@@ -38,8 +45,11 @@ public class ClientService : IClientService
     {
         ValidateClient(client);
 
-        var index = _store.Client.IndexOf(client);
-        _store.Client[index] = client;
+        var existingClient = _store.Client.FirstOrDefault(p => p.Id == client.Id);
+
+        Guard.NotNull(existingClient, nameof(existingClient), "Обновляемый клиент не найден");
+
+        _mapper.Map(client, existingClient);
     }
 
     private void ValidateClient(Client client)

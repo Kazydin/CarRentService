@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
@@ -25,13 +26,17 @@ public partial class EditClientViewModel : IViewModel
 
     private readonly INotificationService _notificationService;
 
+    private readonly IMapper _mapper;
+
     public EditClientViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IClientService service)
+        IClientService service,
+        IMapper mapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
         _service = service;
+        _mapper = mapper;
         CancelEditCommand = new RelayCommand(CancelEdit);
         SaveCommand = new RelayCommand<FrameworkElement>(Save);
     }
@@ -49,7 +54,9 @@ public partial class EditClientViewModel : IViewModel
         {
             _service.Update(Client);
 
-            _notificationService.ShowTeachingTip(element!, "Сохранение", "Прошло успешно!");
+            _notificationService.ShowTeachingTip(element!, "Обновление клиента", "Сохранено успешно успешно!");
+
+            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {
@@ -60,5 +67,10 @@ public partial class EditClientViewModel : IViewModel
     private void CancelEdit()
     {
         _navigationService.GoBack();
+    }
+
+    public void SetClient(Client client)
+    {
+        Client = _mapper.Map<Client>(client);
     }
 }

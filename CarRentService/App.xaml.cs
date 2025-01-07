@@ -4,9 +4,6 @@ using System;
 using CarRentService.DAL.Seeding;
 using CarRentService.Extensions;
 using System.Reflection;
-using CarRentService.Common.Enums;
-using CarRentService.Common.Services;
-using CarRentService.Pages.Domain;
 
 namespace CarRentService;
 

@@ -55,7 +55,6 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\MappingProfiles\" />
     <Folder Include="Pages\Cars\" />
   </ItemGroup>
 

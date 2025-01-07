@@ -26,21 +26,26 @@ public class NotificationService : INotificationService
         await dialog.ShowAsync();
     }
 
-    public void ShowTeachingTip(FrameworkElement targetElement, string title, string message)
+    public void ShowTeachingTip(FrameworkElement targetElement, string title, string message, Symbol icon = Symbol.Accept)
     {
         if (targetElement == null)
             throw new ArgumentNullException(nameof(targetElement));
+
+        var iconSource = new SymbolIconSource
+        {
+            Symbol = icon
+        };
 
         var tip = new TeachingTip
         {
             Title = title,
             Subtitle = message,
             IsLightDismissEnabled = true, // Закрывается при клике вне
-            PreferredPlacement = TeachingTipPlacementMode.Auto
+            PreferredPlacement = TeachingTipPlacementMode.Auto,
+            // Устанавливаем XamlRoot для корректного отображения
+            XamlRoot = targetElement.XamlRoot,
+            IconSource = iconSource
         };
-
-        // Устанавливаем XamlRoot для корректного отображения
-        tip.XamlRoot = targetElement.XamlRoot;
 
         tip.Closed += (sender, args) =>
         {

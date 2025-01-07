@@ -24,7 +24,7 @@ public sealed partial class EditClientPage : NavigationPage
     {
         if (parameter is Client client)
         {
-            _viewModel.Client = client;
+            _viewModel.SetClient(client);
             Header = client.Fio;
         }
     }

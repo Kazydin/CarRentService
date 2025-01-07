@@ -2,6 +2,7 @@
 
 using System.Threading.Tasks;
 using CarRentService.Common.Attributes;
+using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Common.Abstract;
 
@@ -12,5 +13,5 @@ public interface INotificationService
 
     Task ShowErrorDialogAsync(string title, string errorMessage);
 
-    void ShowTeachingTip(FrameworkElement targetElement, string title, string message);
+    void ShowTeachingTip(FrameworkElement targetElement, string title, string message, Symbol icon = Symbol.Accept);
 }

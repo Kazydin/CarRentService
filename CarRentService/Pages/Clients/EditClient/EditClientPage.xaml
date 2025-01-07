@@ -39,7 +39,7 @@
                     Grid.Column="0">
                     <TextBlock Margin="0, 0, 0, 10">ID</TextBlock>
                     <TextBox
-                        Text="{Binding Client.Id}"
+                        Text="{Binding Client.Id, Mode=TwoWay}"
                         IsReadOnly="True" />
                 </StackPanel>
 
@@ -52,7 +52,7 @@
                         Фамилия Имя Отчество
                     </TextBlock>
                     <TextBox
-                        Text="{Binding Client.Fio}" />
+                        Text="{Binding Client.Fio, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 5, 10"
@@ -63,7 +63,7 @@
                         Возраст
                     </TextBlock>
                     <TextBox
-                        Text="{Binding Client.Age}" />
+                        Text="{Binding Client.Age, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 5, 10"
@@ -74,7 +74,7 @@
                         Телефон
                     </TextBlock>
                     <TextBox
-                        Text="{Binding Client.Phone}" />
+                        Text="{Binding Client.Phone, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 0, 10"
@@ -85,7 +85,7 @@
                         Номер водительского удостоверения
                     </TextBlock>
                     <TextBox
-                        Text="{Binding Client.DriverLicenseNumber}" />
+                        Text="{Binding Client.DriverLicenseNumber, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 15, 0, 0"
                             HorizontalAlignment="Right" Orientation="Horizontal">
