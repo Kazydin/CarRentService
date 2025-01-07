@@ -22,6 +22,7 @@
     <None Remove="Assets\logout.png" />
     <None Remove="Pages\CarsPage.xaml" />
     <None Remove="Pages\ClientsPage.xaml" />
+    <None Remove="Pages\Clients\EditClient\EditClientPage.xaml" />
     <None Remove="Pages\WelcomeHomePage.xaml" />
     <None Remove="Pages\Login\LoginPage.xaml" />
   </ItemGroup>
@@ -54,6 +55,7 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Common\MappingProfiles\" />
     <Folder Include="Pages\Cars\" />
   </ItemGroup>
 
@@ -75,5 +77,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="Pages\Welcom\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Clients\EditClient\EditClientPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

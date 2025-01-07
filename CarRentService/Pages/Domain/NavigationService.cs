@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
@@ -13,7 +14,7 @@ public class NavigationService : INavigationService
 {
     private Frame _frame = null!;
 
-    private readonly List<PageDto> _openedPages = new();
+    private ImmutableArray<PageDto> _pages;
 
     private readonly Stack<PageTypeEnum> _backStack = new();
 
@@ -35,23 +36,36 @@ public class NavigationService : INavigationService
 
     public bool CanGoBack() => _backStack.Count > 0;
 
-    public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true)
+    public void InitAllPages()
+    {
+        if (_pages != null)
+        {
+            throw new InvalidOperationException("Страницы уже инициализированы");
+        }
+
+        var factory = _serviceProvider.GetRequiredService<IPageFactory>();
+
+        _pages = factory.GetPages();
+    }
+
+    public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, object? parameter = null)
     {
         Guard.NotNull(_frame, nameof(_frame), "Frame не задан");
 
-        var page = _openedPages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
+        var page = _pages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
 
-        if (page == null)
-        {
-            var navigationPage = (NavigationPage)_serviceProvider.GetRequiredService(pageTypeEnum.GetPageType());
-            page = new PageDto(navigationPage, pageTypeEnum.GetDescription(), pageTypeEnum);
-            _openedPages.Add(page);
-        }
+        Guard.NotNull(page, nameof(page), $"Страница {pageTypeEnum.GetDescription()} не найдена");
 
         // Добавляем текущую страницу в BackStack
         if (addToBackStack && _frame.Content is NavigationPage currentPage)
         {
             _backStack.Push(currentPage.Type);
+        }
+
+        // Передача параметра через интерфейс INavigable
+        if (parameter != null)
+        {
+            page.Page.OnNavigatedTo(parameter);
         }
 
         _frame.Content = page!.Page;

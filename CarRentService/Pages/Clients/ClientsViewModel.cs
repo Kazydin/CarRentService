@@ -5,11 +5,11 @@ using AutoMapper;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Enums;
 using CarRentService.Common.Extensions;
-using CarRentService.Common.Services;
 using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Services;
 using CarRentService.Modals.Clients;
-using CarRentService.Pages.Clients.Models;
 using CarRentService.Pages.Domain;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -23,9 +23,9 @@ public partial class ClientsViewModel : IViewModel
 {
     public RelayCommand AddClientCommand { get; }
 
-    public RelayCommand<ClientDto> EditClientCommand { get; }
+    public RelayCommand<Client> EditClientCommand { get; }
 
-    public RelayCommand<ClientDto> RemoveClientCommand { get; }
+    public RelayCommand<Client> RemoveClientCommand { get; }
 
     public RelayCommand ClearFiltersAndSortCommand { get; }
 
@@ -36,10 +36,10 @@ public partial class ClientsViewModel : IViewModel
     public XamlRoot XamlRoot { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<ClientDto> _clients;
+    private ObservableCollection<Client> _clients;
 
     [ObservableProperty]
-    private ClientDto? _selectedClient;
+    private Client? _selectedClient;
 
     [ObservableProperty]
     private string _searchId;
@@ -60,7 +60,7 @@ public partial class ClientsViewModel : IViewModel
     private string _sortOrder;
 
     [ObservableProperty]
-    private ObservableCollection<ClientDto> _filteredClients;
+    private ObservableCollection<Client> _filteredClients;
 
     [ObservableProperty]
     private bool _idColumnFilteredOrSorted;
@@ -77,7 +77,7 @@ public partial class ClientsViewModel : IViewModel
     [ObservableProperty]
     private bool _driverLicenseNumberColumnFilteredOrSorted;
 
-    private readonly IDataStoreContext _dataStore;
+    private readonly IClientService _clientService;
 
     private readonly IMapper _mapper;
 
@@ -101,25 +101,25 @@ public partial class ClientsViewModel : IViewModel
 
     private readonly INavigationService _navigationService;
 
-    public ClientsViewModel(IDataStoreContext dataStore,
+    public ClientsViewModel(IClientService clientService,
         IMapper mapper,
         INavigationService navigationService)
     {
-        _dataStore = dataStore;
+        _clientService = clientService;
         _mapper = mapper;
         _navigationService = navigationService;
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
-        EditClientCommand = new RelayCommand<ClientDto>(EditClient);
-        RemoveClientCommand = new RelayCommand<ClientDto>(RemoveClient);
+        EditClientCommand = new RelayCommand<Client>(EditClient);
+        RemoveClientCommand = new RelayCommand<Client>(RemoveClient);
         ClearFiltersAndSortCommand = new RelayCommand(ClearFiltersAndSort);
         SortColumnCommand = new RelayCommand<string>(SortColumn, CanSortColumn);
         ClearSortColumnCommand = new RelayCommand<string>(ClearSort, CanClearSort);
 
-        _clients = mapper.Map<ObservableCollection<ClientDto>>(_dataStore.Client);
+        _clients = mapper.Map<ObservableCollection<Client>>(_clientService.Clients);
 
-        _filteredClients = new ObservableCollection<ClientDto>(_clients);
+        _filteredClients = new ObservableCollection<Client>(_clients);
         PropertyChanged += (s, e) =>
         {
             if (_searchFieldNames.Contains(e.PropertyName))
@@ -132,7 +132,7 @@ public partial class ClientsViewModel : IViewModel
     public void UpdateFilteredOptions()
     {
         var filtered = Enumerable
-            .Where<ClientDto>(Clients, o =>
+            .Where(Clients, o =>
                 (string.IsNullOrEmpty(SearchId) ||
                  !string.IsNullOrEmpty(o.Id.ToString()) && o.Id.ToString().Contains(SearchId))
                 && (string.IsNullOrEmpty(SearchFio) || !string.IsNullOrEmpty(o.Fio) && o.Fio.Contains(SearchFio))
@@ -152,7 +152,7 @@ public partial class ClientsViewModel : IViewModel
             && string.IsNullOrEmpty(SearchPhone)
             && string.IsNullOrEmpty(SearchDriverLicenseNumber))
         {
-            FilteredClients = new ObservableCollection<ClientDto>(Clients);
+            FilteredClients = new ObservableCollection<Client>(Clients);
         }
         else
         {
@@ -189,9 +189,9 @@ public partial class ClientsViewModel : IViewModel
 
         if (result == ContentDialogResult.Primary)
         {
-            _dataStore.Add(dialog.NewClient);
+            _clientService.AddClient(dialog.NewClient);
 
-            var clientDto = _mapper.Map<ClientDto>(_dataStore.Client.Last());
+            var clientDto = _mapper.Map<Client>(_clientService.Clients.Last());
             Clients.Add(clientDto);
             UpdateFilteredOptions();
             if (!string.IsNullOrEmpty(SortOrder))
@@ -201,35 +201,18 @@ public partial class ClientsViewModel : IViewModel
         }
     }
 
-    private void RemoveClient(ClientDto? client)
+    private void RemoveClient(Client? client)
     {
         Guard.NotNull(client, nameof(client), "Клиент не может быть пустым");
 
         FilteredClients.Remove(client!);
-        _dataStore.Client.Remove(client!);
+        _clientService.RemoveClient(client!);
         Clients.Remove(client!);
     }
 
     private void EditClient(Client? client)
     {
-        _navigationService.Navigate(PageTypeEnum.EditClient);
-
-        // var newWindow = WindowHelper.CreateWindow();
-        // var rootPage = new WelcomePage();
-        // newWindow.Content = rootPage;
-        // newWindow.Activate();
-
-
-        // var newWindow = WindowHelper.CreateWindow();
-        // var rootPage = new NavigationRootPage();
-        // rootPage.RequestedTheme = ThemeHelper.RootTheme;
-        // newWindow.Content = rootPage;
-        // newWindow.Activate();
-        //
-        // // C# code to navigate in the new window
-        // var targetPageType = typeof(MenuPage);
-        // string targetPageArguments = string.Empty;
-        // rootPage.Navigate(targetPageType, targetPageArguments);
+        _navigationService.Navigate(PageTypeEnum.EditClient, parameter: client);
     }
 
     private (string, SortColumnOrder) ValidateAndGetSortOrder(string? filterName)
@@ -262,7 +245,7 @@ public partial class ClientsViewModel : IViewModel
     {
         var filter = ValidateAndGetSortOrder(sortOrder);
 
-        Func<ClientDto, object> sortKeySelector = filter.Item1 switch
+        Func<Client, object> sortKeySelector = filter.Item1 switch
         {
             "ID" => client => client.Id,
             "Fio" => client => client.Fio,
@@ -274,8 +257,9 @@ public partial class ClientsViewModel : IViewModel
 
         FilteredClients = filter.Item2 switch
         {
-            SortColumnOrder.ASC => Enumerable.OrderBy(FilteredClients, sortKeySelector).ToObservableCollection(),
-            SortColumnOrder.DESC => Enumerable.OrderByDescending(FilteredClients, sortKeySelector).ToObservableCollection(),
+            SortColumnOrder.ASC => FilteredClients.OrderBy(sortKeySelector).ToObservableCollection(),
+            SortColumnOrder.DESC => FilteredClients.OrderByDescending(sortKeySelector)
+                .ToObservableCollection(),
             _ => throw new ArgumentException("Некорректный порядок сортировки")
         };
 
@@ -286,13 +270,13 @@ public partial class ClientsViewModel : IViewModel
 
     private bool CanSortColumn(string? filterName)
     {
-        return Enumerable.Any<ClientDto>(FilteredClients);
+        return FilteredClients.Any();
     }
 
     private void ClearSort(string? filterName)
     {
         SortOrder = null!;
-        FilteredClients = Enumerable.OrderBy<ClientDto, int>(FilteredClients, p => p.Id).ToObservableCollection();
+        FilteredClients = FilteredClients.OrderBy(p => p.Id).ToObservableCollection();
 
         UpdateSortAndFilterIcons();
         ClearSortColumnCommand.NotifyCanExecuteChanged();

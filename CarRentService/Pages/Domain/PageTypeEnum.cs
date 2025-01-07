@@ -3,6 +3,7 @@ using System.ComponentModel;
 using CarRentService.Common.Attributes;
 using CarRentService.Pages.Cars;
 using CarRentService.Pages.Clients;
+using CarRentService.Pages.Clients.EditClient;
 using CarRentService.Pages.Welcome;
 
 namespace CarRentService.Pages.Domain;
@@ -18,6 +19,7 @@ public enum PageTypeEnum
     Clients,
 
     [Description("Редактирование клиента")]
+    [PageType(typeof(EditClientPage))]
     EditClient,
 
     [Description("Автомобили")]
