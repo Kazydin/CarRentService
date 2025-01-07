@@ -18,6 +18,8 @@
         x:Name="Navi"
         IsSettingsVisible="False"
         IsBackEnabled="True"
+        BackRequested="NavigationViewControl_BackRequested"
+        IsBackButtonVisible="{Binding CanGoBack, Mode=OneWay}"
         SelectionChanged="Navi_OnSelectionChanged">
         <!-- IsBackButtonVisible="Collapsed" -->
         <!-- IsBackEnabled="False" -->

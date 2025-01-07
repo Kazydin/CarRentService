@@ -18,6 +18,8 @@ namespace CarRentService.Pages.Home
 
         public XamlRoot XamlRoot = null!;
 
+        public bool CanGoBack => _navigationService.CanGoBack();
+
         private readonly LoginPage _loginPage;
 
         private readonly INavigationService _navigationService;

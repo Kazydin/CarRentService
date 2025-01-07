@@ -8,8 +8,9 @@ namespace CarRentService.Pages.Home;
 
 public sealed partial class MenuPage : BasePage
 {
-    private readonly INavigationService _navigationService;
     public MenuViewModel ViewModel { get; set; }
+
+    private readonly INavigationService _navigationService;
 
     public MenuPage(MenuViewModel viewModel, INavigationService navigationService)
     {
@@ -23,6 +24,26 @@ public sealed partial class MenuPage : BasePage
         {
             Navi.Header = header;
         };
+
+        // Подписка на изменение состояния CanGoBack
+        _navigationService.CanGoBackChanged += OnCanGoBackChanged;
+
+        // Инициализация состояния кнопки
+        Navi.IsBackEnabled = _navigationService.CanGoBack();
+    }
+
+    private void OnCanGoBackChanged(bool canGoBack)
+    {
+        // Включаем или отключаем кнопку "Назад"
+        Navi.IsBackEnabled = canGoBack;
+    }
+
+    private void NavigationViewControl_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+    {
+        if (_navigationService.CanGoBack())
+        {
+            _navigationService.GoBack();
+        }
     }
 
     private void HomePage_OnLoaded(object sender, RoutedEventArgs e)

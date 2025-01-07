@@ -28,7 +28,11 @@ public class NavigationService : INavigationService
 
     public event Action<string>? PageChanged;
 
-    public bool CanGoBack => _backStack.Count > 0;
+    public event Action<bool> CanGoBackChanged;
+
+    public bool CanGoBack() => _canGoBack;
+
+    private bool _canGoBack => _backStack.Count > 0;
 
     public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true)
     {
@@ -47,16 +51,19 @@ public class NavigationService : INavigationService
 
         // Обновляем заголовок через событие
         PageChanged?.Invoke(page.Header);
+        CanGoBackChanged?.Invoke(_canGoBack);
     }
 
     public void GoBack()
     {
         Guard.NotNull(_frame, nameof(_frame), "Frame не задан");
 
-        if (_backStack.Count > 0)
+        if (_canGoBack)
         {
             var previousPageType = _backStack.Pop();
             Navigate(previousPageType, false);
+
+            CanGoBackChanged?.Invoke(_canGoBack);
         }
     }
 }

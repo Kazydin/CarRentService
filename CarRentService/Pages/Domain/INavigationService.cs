@@ -10,6 +10,10 @@ public interface INavigationService
 {
     event Action<string> PageChanged;
 
+    event Action<bool> CanGoBackChanged;
+
+    bool CanGoBack();
+
     void SetFrame(Frame frame);
 
     void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true);
