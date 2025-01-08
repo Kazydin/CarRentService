@@ -14,8 +14,6 @@ public class NavigationService : INavigationService
 {
     private Frame _frame = null!;
 
-    private ImmutableArray<PageDto> _pages;
-
     private readonly Stack<PageTypeEnum> _backStack = new();
 
     private readonly IServiceProvider _serviceProvider;
@@ -36,25 +34,14 @@ public class NavigationService : INavigationService
 
     public bool CanGoBack() => _backStack.Count > 0;
 
-    public void InitAllPages()
-    {
-        if (_pages != null)
-        {
-            throw new InvalidOperationException("Страницы уже инициализированы");
-        }
-
-        var factory = _serviceProvider.GetRequiredService<IPageFactory>();
-
-        _pages = factory.GetPages();
-    }
-
     public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, object? parameter = null)
     {
         Guard.NotNull(_frame, nameof(_frame), "Frame не задан");
 
-        var pageDto = _pages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
+        var page = (NavigationPage)_serviceProvider.GetRequiredService(pageTypeEnum.GetPageType());
+        // var pageDto = _pages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
 
-        Guard.NotNull(pageDto, nameof(pageDto), $"Страница {pageTypeEnum.GetDescription()} не найдена");
+        // Guard.NotNull(pageDto, nameof(pageDto), $"Страница {pageTypeEnum.GetDescription()} не найдена");
 
         // Добавляем текущую страницу в BackStack
         if (addToBackStack && _frame.Content is NavigationPage currentPage)
@@ -65,13 +52,13 @@ public class NavigationService : INavigationService
         // Передача параметра через интерфейс INavigable
         if (parameter != null)
         {
-            pageDto!.Page.OnNavigatedTo(parameter);
+            page.OnNavigatedTo(parameter);
         }
 
-        _frame.Content = pageDto!.Page;
+        _frame.Content = page;
 
         // Обновляем заголовок через событие
-        PageChanged?.Invoke(pageDto.Page.Header);
+        PageChanged?.Invoke(page.Header);
         CanGoBackChanged?.Invoke(CanGoBack());
     }
 

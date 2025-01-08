@@ -29,8 +29,6 @@ public sealed partial class MenuPage : BasePage
 
         // Инициализация состояния кнопки
         Navi.IsBackEnabled = _navigationService.CanGoBack();
-
-        navigationService.InitAllPages();
     }
 
     private void OnCanGoBackChanged(bool canGoBack)

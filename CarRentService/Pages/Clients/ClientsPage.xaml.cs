@@ -39,8 +39,8 @@ public sealed partial class ClientsPage : NavigationPage
         ViewModel.XamlRoot = this.XamlRoot;
     }
 
-    public new void OnNavigatedTo(object? parameter)
+    public override void OnNavigatedTo(object? parameter)
     {
-        ViewModel.ReloadState();
+        ViewModel.OnNavigatedTo();
     }
 }

@@ -19,4 +19,10 @@ public partial class Client : Person
     /// </summary>
     [ObservableProperty]
     private List<Rental> _rentalHistory = new List<Rental>();
+
+    /// <summary>
+    /// ИД филиала, если есть привязка
+    /// </summary>
+    [ObservableProperty]
+    private int _branchId;
 }

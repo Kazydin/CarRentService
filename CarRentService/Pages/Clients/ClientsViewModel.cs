@@ -114,9 +114,9 @@ public partial class ClientsViewModel : IViewModel
         SortColumnCommand = new RelayCommand<string>(SortColumn, CanSortColumn);
         ClearSortColumnCommand = new RelayCommand<string>(ClearSort, CanClearSort);
 
-        _clients = _clientService.Clients;
+        Clients = new ObservableCollection<Client>(_clientService.Clients);
 
-        _filteredClients = _clients;
+        FilteredClients = new ObservableCollection<Client>(Clients);
         PropertyChanged += (s, e) =>
         {
             if (_searchFieldNames.Contains(e.PropertyName))
@@ -128,8 +128,8 @@ public partial class ClientsViewModel : IViewModel
 
     public void UpdateFilteredOptions()
     {
-        var filtered = Enumerable
-            .Where(Clients, o =>
+        var filtered = Clients
+            .Where(o =>
                 (string.IsNullOrEmpty(SearchId) ||
                  !string.IsNullOrEmpty(o.Id.ToString()) && o.Id.ToString().Contains(SearchId))
                 && (string.IsNullOrEmpty(SearchFio) || !string.IsNullOrEmpty(o.Fio) && o.Fio.Contains(SearchFio))
@@ -295,10 +295,10 @@ public partial class ClientsViewModel : IViewModel
 
         SortOrder = null!;
 
-        UpdateSortAndFilterIcons();
+        UpdateFilteredOptions();
     }
 
-    public void ReloadState()
+    public void OnNavigatedTo()
     {
         
     }

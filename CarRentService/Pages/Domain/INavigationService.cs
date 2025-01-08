@@ -19,6 +19,4 @@ public interface INavigationService
     void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, object? parameter = null);
 
     void GoBack();
-
-    void InitAllPages();
 }

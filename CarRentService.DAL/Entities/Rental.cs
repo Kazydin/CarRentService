@@ -1,4 +1,5 @@
 ﻿using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;
@@ -52,7 +53,7 @@ public partial class Rental : IEntity
     /// Статус аренды.
     /// </summary>
     [ObservableProperty]
-    private string _status;
+    private RentalStatusEnum _status;
 
     /// <summary>
     /// Итоговая стоимость аренды.

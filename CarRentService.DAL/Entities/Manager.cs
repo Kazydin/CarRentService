@@ -10,10 +10,4 @@ public partial class Manager : Person
     /// </summary>
     [ObservableProperty]
     private ManagerRoleEnum _role;
-
-    /// <summary>
-    /// ИД филиала, если есть привязка
-    /// </summary>
-    [ObservableProperty]
-    private int _branchId;
 }
