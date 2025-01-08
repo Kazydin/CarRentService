@@ -33,7 +33,7 @@ public partial class ClientsViewModel : IViewModel
 
     public RelayCommand<string> ClearSortColumnCommand { get; }
 
-    public XamlRoot XamlRoot { get; set; }
+    private XamlRoot _xamlRoot;
 
     [ObservableProperty]
     private ObservableCollection<Client> _clients;
@@ -79,6 +79,8 @@ public partial class ClientsViewModel : IViewModel
 
     private readonly IClientService _clientService;
 
+    private readonly CreateClientDialog _createClientDialog;
+
     private readonly string[] _searchFieldNames =
     [
         nameof(SearchId),
@@ -101,10 +103,12 @@ public partial class ClientsViewModel : IViewModel
 
     public ClientsViewModel(IClientService clientService,
         IMapper mapper,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        CreateClientDialog createClientDialog)
     {
         _clientService = clientService;
         _navigationService = navigationService;
+        _createClientDialog = createClientDialog;
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
@@ -124,6 +128,12 @@ public partial class ClientsViewModel : IViewModel
                 UpdateFilteredOptions();
             }
         };
+    }
+
+    public void SetXamlRoot(XamlRoot xamlRoot)
+    {
+        _xamlRoot = xamlRoot;
+        _createClientDialog.XamlRoot = xamlRoot;
     }
 
     public void UpdateFilteredOptions()
@@ -177,18 +187,12 @@ public partial class ClientsViewModel : IViewModel
 
     private async void AddClient()
     {
-        var dialog = new CreateClientDialog
-        {
-            XamlRoot = XamlRoot
-        };
-
-        var result = await dialog.ShowAsync();
+        var result = await _createClientDialog.ShowAsync();
 
         if (result == ContentDialogResult.Primary)
         {
-            var savedClient = _clientService.Add(dialog.NewClient);
+            Clients.Add(_createClientDialog.NewClient);
 
-            Clients.Add(savedClient);
             UpdateFilteredOptions();
             if (!string.IsNullOrEmpty(SortOrder))
             {
@@ -296,10 +300,5 @@ public partial class ClientsViewModel : IViewModel
         SortOrder = null!;
 
         UpdateFilteredOptions();
-    }
-
-    public void OnNavigatedTo()
-    {
-        
     }
 }

@@ -48,7 +48,7 @@ public class NotificationService : INotificationService
             Title = title,
             Subtitle = message,
             IsLightDismissEnabled = true, // Закрывается при клике вне
-            PreferredPlacement = TeachingTipPlacementMode.Auto,
+            PreferredPlacement = TeachingTipPlacementMode.BottomRight,
             // Устанавливаем XamlRoot для корректного отображения
             XamlRoot = _targetElement.XamlRoot,
             IconSource = iconSource

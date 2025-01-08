@@ -36,11 +36,6 @@ public sealed partial class ClientsPage : NavigationPage
 
     private void ClientsPage_OnLoaded(object sender, RoutedEventArgs e)
     {
-        ViewModel.XamlRoot = this.XamlRoot;
-    }
-
-    public override void OnNavigatedTo(object? parameter)
-    {
-        ViewModel.OnNavigatedTo();
+        ViewModel.SetXamlRoot(XamlRoot);
     }
 }

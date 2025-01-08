@@ -1,5 +1,10 @@
-﻿using Windows.UI;
+﻿using System.ComponentModel.DataAnnotations;
+using Windows.UI;
+using CarRentService.Common.Attributes;
+using CarRentService.Common.Extensions;
+using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -7,8 +12,11 @@ using Microsoft.UI.Xaml.Media;
 
 namespace CarRentService.Modals.Clients;
 
+[InjectDI]
 public class CreateClientDialog : ContentDialog
 {
+    public Client NewClient { get; private set; }
+
     private readonly TextBox _fioTextBox;
 
     private readonly TextBox _ageTextBox;
@@ -23,10 +31,12 @@ public class CreateClientDialog : ContentDialog
 
     private readonly TextBlock _errorTextBlock; // Для отображения ошибок
 
-    public Client NewClient { get; private set; }
+    private readonly IClientService _clientService;
 
-    public CreateClientDialog()
+    public CreateClientDialog(IClientService clientService)
     {
+        _clientService = clientService;
+
         Title = "Добавить нового клиента";
         PrimaryButtonText = "Сохранить";
         CloseButtonText = "Отмена";
@@ -75,37 +85,26 @@ public class CreateClientDialog : ContentDialog
         // Скрываем текст ошибки перед проверкой
         _errorTextBlock.Visibility = Visibility.Collapsed;
 
-        // Проверка валидности данных
-        if (string.IsNullOrWhiteSpace(_fioTextBox.Text) ||
-            string.IsNullOrWhiteSpace(_ageTextBox.Text) ||
-            string.IsNullOrWhiteSpace(_phoneTextBox.Text) ||
-            string.IsNullOrWhiteSpace(_driverLicenseNumberTextBox.Text) ||
-            string.IsNullOrWhiteSpace(_loginTextBox.Text) ||
-            string.IsNullOrWhiteSpace(_passwordBox.Password))
-        {
-            args.Cancel = true;
-            _errorTextBlock.Text = "Пожалуйста, заполните все поля.";
-            _errorTextBlock.Visibility = Visibility.Visible;
-            return;
-        }
-
-        if (!int.TryParse(_ageTextBox.Text, out int age) || age <= 0 || age >= 100)
-        {
-            args.Cancel = true;
-            _errorTextBlock.Text = "Введите корректный возраст.";
-            _errorTextBlock.Visibility = Visibility.Visible;
-            return;
-        }
-
-        // Создание нового клиента
-        NewClient = new Client
+        var client = new Client
         {
             Fio = _fioTextBox.Text,
-            Age = age,
+            Age = _ageTextBox.Text.TryInt(),
             Phone = _phoneTextBox.Text,
             DriverLicenseNumber = _driverLicenseNumberTextBox.Text,
             Login = _loginTextBox.Text,
             Password = _passwordBox.Password
         };
+
+        try
+        {
+            NewClient = _clientService.Add(client);
+        }
+        catch (ValidationException e)
+        {
+            // Проверка валидности данных
+            args.Cancel = true;
+            _errorTextBlock.Text = e.Message;
+            _errorTextBlock.Visibility = Visibility.Visible;
+        }
     }
 }
