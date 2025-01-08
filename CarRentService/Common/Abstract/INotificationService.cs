@@ -2,16 +2,17 @@
 
 using System.Threading.Tasks;
 using CarRentService.Common.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Common.Abstract;
 
-[InjectDI]
+[InjectDI(ServiceLifetime.Singleton)]
 public interface INotificationService
 {
-    public XamlRoot XamlRoot { protected get; set; }
+    void Init(Frame contentFrame);
 
     Task ShowErrorDialogAsync(string title, string errorMessage);
 
-    void ShowTeachingTip(FrameworkElement targetElement, string title, string message, Symbol icon = Symbol.Accept);
+    void ShowTip(string title, string message, Symbol icon = Symbol.Accept);
 }

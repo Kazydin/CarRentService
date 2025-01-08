@@ -15,7 +15,7 @@ public partial class EditClientViewModel : IViewModel
 {
     public RelayCommand CancelEditCommand { get; }
     
-    public RelayCommand<FrameworkElement> SaveCommand { get; }
+    public RelayCommand SaveCommand { get; }
 
     [ObservableProperty]
     private Client _client;
@@ -38,23 +38,16 @@ public partial class EditClientViewModel : IViewModel
         _service = service;
         _mapper = mapper;
         CancelEditCommand = new RelayCommand(CancelEdit);
-        SaveCommand = new RelayCommand<FrameworkElement>(Save);
+        SaveCommand = new RelayCommand(Save);
     }
 
-    public void SetXamlRoot(XamlRoot xamlRoot)
+    private async void Save()
     {
-        _notificationService.XamlRoot = xamlRoot;
-    }
-
-    private async void Save(FrameworkElement? element)
-    {
-        Guard.NotNull(element, nameof(element), "Элемент интерфейса отсутствует");
-
         try
         {
             _service.Update(Client);
 
-            _notificationService.ShowTeachingTip(element!, "Обновление клиента", "Сохранено успешно успешно!");
+            _notificationService.ShowTip("Обновление клиента", "Сохранено успешно!");
 
             _navigationService.GoBack();
         }

@@ -10,10 +10,12 @@ public sealed partial class MenuPage : BasePage
     public MenuViewModel ViewModel { get; set; }
 
     private readonly INavigationService _navigationService;
+    private readonly INotificationService _service;
 
-    public MenuPage(MenuViewModel viewModel, INavigationService navigationService)
+    public MenuPage(MenuViewModel viewModel, INavigationService navigationService, INotificationService service)
     {
         _navigationService = navigationService;
+        _service = service;
         InitializeComponent();
 
         ViewModel = viewModel;
@@ -29,6 +31,8 @@ public sealed partial class MenuPage : BasePage
 
         // Инициализация состояния кнопки
         Navi.IsBackEnabled = _navigationService.CanGoBack();
+
+        _navigationService.InitAllPages();
     }
 
     private void OnCanGoBackChanged(bool canGoBack)
@@ -50,6 +54,8 @@ public sealed partial class MenuPage : BasePage
         ViewModel.XamlRoot = XamlRoot;
         _navigationService.SetFrame(ContentFrame);
         ViewModel.ShowLoginDialogCommand.Execute(null);
+
+        _service.Init(ContentFrame);
     }
 
     private void Navi_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

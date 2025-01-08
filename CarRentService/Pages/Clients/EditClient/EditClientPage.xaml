@@ -8,8 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
-    mc:Ignorable="d" d:DataContext="{d:DesignInstance local:EditClientViewModel }"
-    Loaded="EditClientPage_OnLoaded">
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance local:EditClientViewModel }">
 
     <Grid
         x:Name="UserGrid"
@@ -109,8 +108,7 @@
             Orientation="Horizontal">
             <Button
                 Margin="0, 0, 10, 0"
-                Command="{Binding SaveCommand}"
-                CommandParameter="{Binding ElementName=UserGrid}">
+                Command="{Binding SaveCommand}">
                 Сохранить
             </Button>
             <Button

@@ -28,9 +28,4 @@ public sealed partial class EditClientPage : NavigationPage
             Header = client.Fio;
         }
     }
-
-    private void EditClientPage_OnLoaded(object sender, RoutedEventArgs e)
-    {
-        _viewModel.SetXamlRoot(XamlRoot);
-    }
 }

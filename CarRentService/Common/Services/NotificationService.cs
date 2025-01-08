@@ -4,32 +4,39 @@ using Microsoft.UI.Xaml;
 using System;
 using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
+using GuardNet;
 using Microsoft.UI.Xaml.Media;
 
 namespace CarRentService.Common.Services;
 
 public class NotificationService : INotificationService
 {
-    public XamlRoot XamlRoot { get; set; } = null!;
+    private FrameworkElement _targetElement = null!;
 
     public async Task ShowErrorDialogAsync(string title, string errorMessage)
     {
+        Guard.NotNull(_targetElement, nameof(_targetElement), "Контейнер для Tip не инициализирован");
+
         var dialog = new ContentDialog
         {
             Title = title,
             Content = errorMessage,
             CloseButtonText = "ОК",
             DefaultButton = ContentDialogButton.Close,
-            XamlRoot = XamlRoot
+            XamlRoot = _targetElement.XamlRoot
         };
 
         await dialog.ShowAsync();
     }
 
-    public void ShowTeachingTip(FrameworkElement targetElement, string title, string message, Symbol icon = Symbol.Accept)
+    public void Init(Frame contentFrame)
     {
-        if (targetElement == null)
-            throw new ArgumentNullException(nameof(targetElement));
+        _targetElement = contentFrame;
+    }
+
+    public void ShowTip(string title, string message, Symbol icon = Symbol.Accept)
+    {
+        Guard.NotNull(_targetElement, nameof(_targetElement), "Контейнер для Tip не инициализирован");
 
         var iconSource = new SymbolIconSource
         {
@@ -43,7 +50,7 @@ public class NotificationService : INotificationService
             IsLightDismissEnabled = true, // Закрывается при клике вне
             PreferredPlacement = TeachingTipPlacementMode.Auto,
             // Устанавливаем XamlRoot для корректного отображения
-            XamlRoot = targetElement.XamlRoot,
+            XamlRoot = _targetElement.XamlRoot,
             IconSource = iconSource
         };
 
@@ -54,7 +61,7 @@ public class NotificationService : INotificationService
         };
 
         // Добавляем в визуальное дерево
-        AddToVisualTree(targetElement, tip);
+        AddToVisualTree(_targetElement, tip);
 
         // Показываем TeachingTip
         tip.IsOpen = true;
