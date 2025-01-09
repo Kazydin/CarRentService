@@ -26,7 +26,7 @@ public sealed partial class DataStoreContext : ObservableObject, IDataStoreConte
     private ObservableCollection<Payment> _payment = [];
 
     [ObservableProperty]
-    private ObservableCollection<rental> _rental = [];
+    private ObservableCollection<Rental> _rental = [];
 
     public T Add<T>(T entity) where T : IEntity
     {

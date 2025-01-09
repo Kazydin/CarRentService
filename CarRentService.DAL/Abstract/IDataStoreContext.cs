@@ -17,5 +17,5 @@ public interface IDataStoreContext : ICommonDataStoreContext
 
     public ObservableCollection<Payment> Payment { get; set; }
 
-    public ObservableCollection<rental> Rental { get; set; }
+    public ObservableCollection<Rental> Rental { get; set; }
 }

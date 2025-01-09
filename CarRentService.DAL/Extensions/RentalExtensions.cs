@@ -19,7 +19,7 @@ public static class RentalExtensions
     {
         var dataStore = DataStoreContextProvider.Current;
 
-        rental.Branch = dataStore.Branch.FirstOrDefault(p => p.Id == rental.BranchId);
+        // rental.Branch = dataStore.Branch.FirstOrDefault(p => p.Id == rental.BranchId);
 
         return rental;
     }

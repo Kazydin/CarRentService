@@ -17,4 +17,8 @@
     <ProjectReference Include="..\CarRentService.Common\CarRentService.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Attributes\" />
+  </ItemGroup>
+
 </Project>

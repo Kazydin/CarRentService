@@ -12,6 +12,7 @@ public class ClientSeeder(IClientService service) : ISeeder
     {
         service.Add(new Client
         {
+            BranchId = 1,
             Fio = "Иванов Иван Иванович",
             Age = 34,
             Phone = "+79035356434",
@@ -22,6 +23,7 @@ public class ClientSeeder(IClientService service) : ISeeder
 
         service.Add(new Client
         {
+            BranchId = 2,
             Fio = "Петров Петр Петрович",
             Age = 25,
             Phone = "+79213456789",
@@ -32,6 +34,7 @@ public class ClientSeeder(IClientService service) : ISeeder
 
         service.Add(new Client
         {
+            BranchId = 3,
             Fio = "Сидоров Сидр Сидорович",
             Age = 30,
             Phone = "+79001234567",

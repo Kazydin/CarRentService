@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using AutoMapper;
+
+using CarRentService.Common.Attributes;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
-using CarRentService.DAL.Entities;
 using CarRentService.DAL.Extensions;
 using FluentValidation;
 using GuardNet;

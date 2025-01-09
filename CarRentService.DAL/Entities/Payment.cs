@@ -42,5 +42,5 @@ public partial class Payment : IEntity
     /// Аренда, связанная с этим платежом.
     /// </summary>
     [ObservableProperty]
-    private rental? _rental;
+    private Rental? _rental;
 }

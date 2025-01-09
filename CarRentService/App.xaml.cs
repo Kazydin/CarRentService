@@ -4,6 +4,7 @@ using System;
 using CarRentService.DAL.Seeding;
 using CarRentService.Extensions;
 using System.Reflection;
+using FluentValidation;
 
 namespace CarRentService;
 
@@ -21,7 +22,6 @@ public partial class App : Application
         // Настроим DI контейнер
         var services = new ServiceCollection();
         ConfigureServices(services);
-        services.AddDataStoreContext();
 
         ServiceProvider = services.BuildServiceProvider();
 
@@ -40,6 +40,9 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
+        services.AddDataStoreContext();
+        services.AddValidatorsFromAssembly(Assembly.Load("CarRentService.DAL"));
+
         services.AddAutoMapper(Assembly.Load("CarRentService.Common"),
             Assembly.Load("CarRentService.BLL"),
             Assembly.Load("CarRentService.DAL"),

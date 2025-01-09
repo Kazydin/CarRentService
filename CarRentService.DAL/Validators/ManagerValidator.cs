@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace CarRentService.DAL.Validators;
 
-public class BranchValidator : AbstractValidator<Branch>
+public class ManagerValidator : AbstractValidator<Manager>
 {
-    public BranchValidator()
+    public ManagerValidator()
     {
-        
+
     }
 }

@@ -118,7 +118,7 @@ public partial class ClientsViewModel : IViewModel
         SortColumnCommand = new RelayCommand<string>(SortColumn, CanSortColumn);
         ClearSortColumnCommand = new RelayCommand<string>(ClearSort, CanClearSort);
 
-        Clients = new ObservableCollection<Client>(_clientService.Clients);
+        Clients = new ObservableCollection<Client>(_clientService.Table);
 
         FilteredClients = new ObservableCollection<Client>(Clients);
         PropertyChanged += (s, e) =>

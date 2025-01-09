@@ -5,6 +5,7 @@ using System;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Store;
+using FluentValidation;
 
 namespace CarRentService.Extensions;
 

@@ -20,7 +20,7 @@ public partial class Client : Person
     /// История аренд клиента
     /// </summary>
     [ObservableProperty]
-    private ObservableCollection<rental> _rentals = new();
+    private ObservableCollection<Rental> _rentals = new();
 
     /// <summary>
     /// ИД филиала, если есть привязка

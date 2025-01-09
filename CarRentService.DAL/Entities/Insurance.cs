@@ -29,7 +29,7 @@ public partial class Insurance : IEntity
     private int _rentalId;
 
     [ObservableProperty]
-    private rental? _rental;
+    private Rental? _rental;
 
     /// <summary>
     /// Сумма покрытия страховки.

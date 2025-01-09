@@ -5,7 +5,6 @@ using FluentValidation;
 
 namespace CarRentService.DAL.Validators;
 
-[InjectDI]
 public class ClientValidator : AbstractValidator<Client>
 {
     public ClientValidator()
