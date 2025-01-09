@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\Cars\" />
-    <Folder Include="Pages\Clients\ViewClients\" />
   </ItemGroup>
 
   <!--

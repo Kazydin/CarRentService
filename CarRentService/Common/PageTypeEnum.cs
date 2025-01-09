@@ -1,12 +1,10 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 using CarRentService.Common.Attributes;
 using CarRentService.Pages.Cars;
-using CarRentService.Pages.Clients;
 using CarRentService.Pages.Clients.EditClient;
 using CarRentService.Pages.Welcome;
-using ClientsPage = CarRentService.Pages.Clients.ViewClients.ClientsPage;
+using ClientsTablePage = CarRentService.Pages.Clients.ClientsTable.ClientsTablePage;
 
 namespace CarRentService.Common;
 
@@ -15,7 +13,7 @@ public enum PageTypeEnum
     [PageType(typeof(WelcomePage))]
     Welcome,
 
-    [PageType(typeof(ClientsPage))]
+    [PageType(typeof(ClientsTablePage))]
     Clients,
 
     [PageType(typeof(EditClientPage))]

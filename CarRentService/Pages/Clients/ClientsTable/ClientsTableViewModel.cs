@@ -15,9 +15,9 @@ using GuardNet;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CarRentService.Pages.Clients.ViewClients;
+namespace CarRentService.Pages.Clients.ClientsTable;
 
-public partial class ClientsViewModel : IViewModel
+public partial class ClientsTableViewModel : IViewModel
 {
     public RelayCommand AddClientCommand { get; }
 
@@ -99,7 +99,7 @@ public partial class ClientsViewModel : IViewModel
 
     private readonly INavigationService _navigationService;
 
-    public ClientsViewModel(IClientService clientService,
+    public ClientsTableViewModel(IClientService clientService,
         IMapper mapper,
         INavigationService navigationService,
         CreateClientDialog createClientDialog)

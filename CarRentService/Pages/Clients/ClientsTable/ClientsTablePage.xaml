@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <abstract:NavigationPage
-    x:Class="CarRentService.Pages.Clients.ViewClients.ClientsPage"
+    x:Class="CarRentService.Pages.Clients.ClientsTable.ClientsTablePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,8 +12,9 @@
     xmlns:clients1="using:CarRentService.Pages.Clients"
     xmlns:abstract="using:CarRentService.Common.Abstract"
     xmlns:viewClients="using:CarRentService.Pages.Clients.ViewClients"
+    xmlns:clientsTable="using:CarRentService.Pages.Clients.ClientsTable"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=viewClients:ClientsViewModel}"
+    d:DataContext="{d:DesignInstance Type=clientsTable:ClientsTableViewModel}"
     Loaded="ClientsPage_OnLoaded">
     <ScrollViewer
         VerticalScrollBarVisibility="Auto"

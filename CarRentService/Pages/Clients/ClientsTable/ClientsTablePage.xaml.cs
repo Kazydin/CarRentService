@@ -4,13 +4,13 @@ using CarRentService.DAL.Entities;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CarRentService.Pages.Clients.ViewClients;
+namespace CarRentService.Pages.Clients.ClientsTable;
 
-public sealed partial class ClientsPage : NavigationPage
+public sealed partial class ClientsTablePage : NavigationPage
 {
-    public ClientsViewModel ViewModel { get; }
+    public ClientsTable.ClientsTableViewModel ViewModel { get; }
 
-    public ClientsPage(ClientsViewModel viewModel) : base(PageTypeEnum.Clients, "Клиенты")
+    public ClientsTablePage(ClientsTable.ClientsTableViewModel viewModel) : base(PageTypeEnum.Clients, "Клиенты")
     {
         InitializeComponent();
 
