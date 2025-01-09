@@ -1,4 +1,5 @@
-﻿using CarRentService.DAL.Abstract;
+﻿using System.Collections.ObjectModel;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -72,8 +73,8 @@ public partial class Rental : IEntity
     private double _totalCost;
 
     [ObservableProperty]
-    private List<Payment> _payments = new();
-
+    private ObservableCollection<Payment> _payments = new();
+    
     [ObservableProperty]
-    private List<Insurance> _insurances = new();
+    private ObservableCollection<Insurance> _insurances = new();
 }

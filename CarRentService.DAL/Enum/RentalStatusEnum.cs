@@ -4,5 +4,5 @@ public enum RentalStatusEnum
 {
     Created,
 
-    Closed
+    Completed
 }

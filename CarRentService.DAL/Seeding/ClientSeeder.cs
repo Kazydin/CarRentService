@@ -18,7 +18,7 @@ public class ClientSeeder(IClientService service) : ISeeder
             Phone = "+79035356434",
             DriverLicenseNumber = "12 14 657890",
             Login = "ivanov",
-            Password = "Ivanov123!"
+            Password = "Ivanov123!",
         });
 
         service.Add(new Client

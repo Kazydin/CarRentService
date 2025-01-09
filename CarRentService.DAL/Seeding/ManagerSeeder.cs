@@ -11,28 +11,36 @@ public class ManagerSeeder(IManagerService service) : ISeeder
 
     public void Seed()
     {
-        var admin = new Manager
+        service.Add(new Manager
         {
             Role = ManagerRoleEnum.Admin,
             Fio = "Петров Петр Сергеевич",
             Age = 35,
             Phone = "+7900045678",
             Login = "admin",
-            Password = "admin123"
-        };
+            Password = "Admin123!",
+        });
 
-        service.Add(admin);
-
-        var admin2 = new Manager
+        service.Add(new Manager
         {
             Role = ManagerRoleEnum.BranchManager,
             Fio = "Сергеев Семён Олегович",
             Age = 19,
             Phone = "+7965386478",
             Login = "sergo",
-            Password = "sergo123456789"
-        };
+            Password = "Sergo123!",
+            BranchIds = [1, 2]
+        });
 
-        service.Add(admin2);
+        service.Add(new Manager
+        {
+            Role = ManagerRoleEnum.BranchManager,
+            Fio = "Олегов Антон Петрович",
+            Age = 28,
+            Phone = "+7965478965",
+            Login = "anton",
+            Password = "Anton123!",
+            BranchIds = [3]
+        });
     }
 }
