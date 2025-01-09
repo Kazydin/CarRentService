@@ -7,8 +7,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
-    xmlns:domain="using:CarRentService.Pages.Domain"
     xmlns:home="using:CarRentService.Pages.Home"
+    xmlns:common="using:CarRentService.Common"
     d:DataContext="{d:DesignInstance Type=home:MenuViewModel}"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -21,15 +21,13 @@
         BackRequested="NavigationViewControl_BackRequested"
         IsBackButtonVisible="{Binding CanGoBack, Mode=OneWay}"
         SelectionChanged="Navi_OnSelectionChanged">
-        <!-- IsBackButtonVisible="Collapsed" -->
-        <!-- IsBackEnabled="False" -->
         <NavigationView.MenuItems>
             <NavigationViewItemHeader
                 Content="Обслуживание" />
 
             <NavigationViewItem
                 Content="Клиенты"
-                Tag="{x:Bind domain:PageTypeEnum.Clients, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Clients, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/clients.png" />
@@ -37,7 +35,7 @@
             </NavigationViewItem>
             <NavigationViewItem
                 Content="Автомобили"
-                Tag="{x:Bind domain:PageTypeEnum.Cars, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Cars, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/car.png" />
@@ -49,7 +47,7 @@
 
             <NavigationViewItem
                 Content="Договора"
-                Tag="{x:Bind domain:PageTypeEnum.Contracts, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Contracts, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/contract.png" />
@@ -57,7 +55,7 @@
             </NavigationViewItem>
             <NavigationViewItem
                 Content="Платежи"
-                Tag="{x:Bind domain:PageTypeEnum.Payments, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Payments, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/payment.png" />
@@ -65,7 +63,7 @@
             </NavigationViewItem>
             <NavigationViewItem
                 Content="Страховки"
-                Tag="{x:Bind domain:PageTypeEnum.Insurances, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Insurances, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/insurance.png" />
@@ -77,7 +75,7 @@
 
             <NavigationViewItem
                 Content="Филиалы"
-                Tag="{x:Bind domain:PageTypeEnum.Branches, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Branches, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/branch.png" />
@@ -85,14 +83,14 @@
             </NavigationViewItem>
             <NavigationViewItem
                 Content="Управление персоналом"
-                Tag="{x:Bind domain:PageTypeEnum.ManageAdmins, Converter={StaticResource EnumToStringConverter}}"
+                Tag="{x:Bind common:PageTypeEnum.ManageAdmins, Converter={StaticResource EnumToStringConverter}}"
                 Icon="Contact" />
 
         </NavigationView.MenuItems>
         <NavigationView.FooterMenuItems>
             <NavigationViewItem
                 Content="Иванов Иван Иванович"
-                Tag="{x:Bind domain:PageTypeEnum.Account, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Account, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/user.png" />
@@ -100,7 +98,7 @@
             </NavigationViewItem>
             <NavigationViewItem
                 Content="Выйти"
-                Tag="{x:Bind domain:PageTypeEnum.Exit, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Exit, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/switch.png" />

@@ -2,22 +2,20 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using AutoMapper;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Enums;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
-using CarRentService.DAL.Services;
 using CarRentService.Modals.Clients;
-using CarRentService.Pages.Domain;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CarRentService.Pages.Clients;
+namespace CarRentService.Pages.Clients.ViewClients;
 
 public partial class ClientsViewModel : IViewModel
 {
@@ -57,7 +55,7 @@ public partial class ClientsViewModel : IViewModel
     private string _searchDriverLicenseNumber;
 
     [ObservableProperty]
-    private string _sortOrder;
+    private string? _sortOrder;
 
     [ObservableProperty]
     private ObservableCollection<Client> _filteredClients;
@@ -92,11 +90,11 @@ public partial class ClientsViewModel : IViewModel
 
     private readonly string[] _sortableColumnNames =
     [
-        "ID",
-        "Fio",
-        "Age",
-        "Phone",
-        "DriverLicenseNumber"
+        nameof(Client.Id),
+        nameof(Client.Fio),
+        nameof(Client.Age),
+        nameof(Client.Phone),
+        nameof(Client.DriverLicenseNumber),
     ];
 
     private readonly INavigationService _navigationService;
@@ -136,7 +134,20 @@ public partial class ClientsViewModel : IViewModel
         _createClientDialog.XamlRoot = xamlRoot;
     }
 
-    public void UpdateFilteredOptions()
+    public void UpdateState()
+    {
+        Clients = new ObservableCollection<Client>(_clientService.Table);
+        UpdateFilteredOptions();
+
+        if (!string.IsNullOrEmpty(SortOrder))
+        {
+            SortColumn(SortOrder);
+            SortColumnCommand.NotifyCanExecuteChanged();
+            ClearSortColumnCommand.NotifyCanExecuteChanged();
+        }
+    }
+
+    private void UpdateFilteredOptions()
     {
         var filtered = Clients
             .Where(o =>
@@ -191,13 +202,7 @@ public partial class ClientsViewModel : IViewModel
 
         if (result == ContentDialogResult.Primary)
         {
-            Clients.Add(_createClientDialog.NewClient);
-
-            UpdateFilteredOptions();
-            if (!string.IsNullOrEmpty(SortOrder))
-            {
-                SortColumn(SortOrder);
-            }
+            UpdateState();
         }
     }
 
@@ -205,9 +210,9 @@ public partial class ClientsViewModel : IViewModel
     {
         Guard.NotNull(client, nameof(client), "Клиент не может быть пустым");
 
-        FilteredClients.Remove(client!);
         _clientService.Remove(client!);
-        Clients.Remove(client!);
+
+        UpdateState();
     }
 
     private void EditClient(Client? client)
@@ -275,7 +280,7 @@ public partial class ClientsViewModel : IViewModel
 
     private void ClearSort(string? filterName)
     {
-        SortOrder = null!;
+        SortOrder = null;
         FilteredClients = FilteredClients.OrderBy(p => p.Id).ToObservableCollection();
 
         UpdateSortAndFilterIcons();

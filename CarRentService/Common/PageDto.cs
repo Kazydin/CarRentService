@@ -1,6 +1,6 @@
 ﻿using CarRentService.Common.Abstract;
 
-namespace CarRentService.Pages.Domain;
+namespace CarRentService.Common;
 
 public class PageDto
 {

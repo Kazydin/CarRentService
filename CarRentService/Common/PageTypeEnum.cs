@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+
 using CarRentService.Common.Attributes;
 using CarRentService.Pages.Cars;
 using CarRentService.Pages.Clients;
 using CarRentService.Pages.Clients.EditClient;
 using CarRentService.Pages.Welcome;
+using ClientsPage = CarRentService.Pages.Clients.ViewClients.ClientsPage;
 
-namespace CarRentService.Pages.Domain;
+namespace CarRentService.Common;
 
 public enum PageTypeEnum
 {

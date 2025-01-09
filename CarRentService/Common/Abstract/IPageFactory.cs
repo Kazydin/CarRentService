@@ -1,7 +1,8 @@
 ﻿using System.Collections.Immutable;
+
 using CarRentService.Common.Attributes;
 
-namespace CarRentService.Pages.Domain;
+namespace CarRentService.Common.Abstract;
 
 [InjectDI]
 public interface IPageFactory

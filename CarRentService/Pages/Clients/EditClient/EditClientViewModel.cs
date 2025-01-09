@@ -1,12 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using AutoMapper;
+
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
-using CarRentService.Pages.Domain;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using GuardNet;
+
 using Microsoft.UI.Xaml;
 
 namespace CarRentService.Pages.Clients.EditClient;

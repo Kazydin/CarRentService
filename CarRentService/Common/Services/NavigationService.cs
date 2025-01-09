@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
+
 using GuardNet;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CarRentService.Pages.Domain;
+namespace CarRentService.Common.Services;
 
 public class NavigationService : INavigationService
 {
@@ -62,11 +65,7 @@ public class NavigationService : INavigationService
             _backStack.Push(currentPage.Type);
         }
 
-        // Передача параметра через интерфейс INavigable
-        if (parameter != null)
-        {
-            pageDto!.Page.OnNavigatedTo(parameter);
-        }
+        pageDto!.Page.OnNavigatedTo(parameter);
 
         _frame.Content = pageDto!.Page;
 

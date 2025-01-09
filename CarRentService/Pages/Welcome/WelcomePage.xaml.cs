@@ -1,5 +1,5 @@
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
-using CarRentService.Pages.Domain;
 
 namespace CarRentService.Pages.Welcome
 {

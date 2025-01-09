@@ -1,9 +1,11 @@
 ﻿using System;
+
 using CarRentService.Common.Attributes;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CarRentService.Pages.Domain;
+namespace CarRentService.Common.Abstract;
 
 [InjectDI(ServiceLifetime.Singleton)]
 public interface INavigationService

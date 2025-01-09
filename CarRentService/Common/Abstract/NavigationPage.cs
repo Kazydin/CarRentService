@@ -1,5 +1,4 @@
 ﻿using System;
-using CarRentService.Pages.Domain;
 
 namespace CarRentService.Common.Abstract;
 

@@ -1,9 +1,11 @@
-﻿using CarRentService.Common.Abstract;
+﻿using CarRentService.Common;
+using CarRentService.Common.Abstract;
+
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace CarRentService.Pages.Domain;
+namespace CarRentService.Common.Services;
 
 public class PageFactory : IPageFactory
 {

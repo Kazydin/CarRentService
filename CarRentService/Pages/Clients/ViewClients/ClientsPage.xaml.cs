@@ -1,10 +1,10 @@
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Entities;
-using CarRentService.Pages.Domain;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CarRentService.Pages.Clients;
+namespace CarRentService.Pages.Clients.ViewClients;
 
 public sealed partial class ClientsPage : NavigationPage
 {
@@ -37,5 +37,10 @@ public sealed partial class ClientsPage : NavigationPage
     private void ClientsPage_OnLoaded(object sender, RoutedEventArgs e)
     {
         ViewModel.SetXamlRoot(XamlRoot);
+    }
+
+    public override void OnNavigatedTo(object? parameter)
+    {
+        ViewModel.UpdateState();
     }
 }

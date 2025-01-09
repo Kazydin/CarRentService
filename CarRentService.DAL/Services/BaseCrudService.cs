@@ -7,6 +7,7 @@ using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Extensions;
 using FluentValidation;
 using GuardNet;
+using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
 namespace CarRentService.DAL.Services;
 
