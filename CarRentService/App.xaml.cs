@@ -21,6 +21,7 @@ public partial class App : Application
         // Настроим DI контейнер
         var services = new ServiceCollection();
         ConfigureServices(services);
+        services.AddDataStoreContext();
 
         ServiceProvider = services.BuildServiceProvider();
 

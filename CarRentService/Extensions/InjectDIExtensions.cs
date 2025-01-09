@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reflection;
 using System;
 using CarRentService.Common.Attributes;
+using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Store;
 
 namespace CarRentService.Extensions;
 
@@ -77,5 +79,19 @@ public static class InjectDIExtensions
         {
             services.AddTransient(serviceType, implementationType);
         }
+    }
+
+    public static void AddDataStoreContext(this IServiceCollection services)
+    {
+        services.AddSingleton<IDataStoreContext>(serviceProvider =>
+        {
+            // Инициализируем DataStoreContext
+            var context = new DataStoreContext();
+
+            // Устанавливаем в DataStoreContextProvider
+            DataStoreContextProvider.Init(context);
+
+            return context;
+        });
     }
 }

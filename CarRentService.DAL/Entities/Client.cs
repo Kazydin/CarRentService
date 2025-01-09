@@ -1,6 +1,8 @@
 ﻿using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
+using System.Collections.ObjectModel;
+
 namespace CarRentService.DAL.Entities;
 
 /// <summary>
@@ -18,11 +20,14 @@ public partial class Client : Person
     /// История аренд клиента
     /// </summary>
     [ObservableProperty]
-    private List<Rental> _rentalHistory = new List<Rental>();
+    private ObservableCollection<rental> _rentals = new();
 
     /// <summary>
     /// ИД филиала, если есть привязка
     /// </summary>
     [ObservableProperty]
     private int _branchId;
+
+    [ObservableProperty]
+    private Branch? _branch;
 }

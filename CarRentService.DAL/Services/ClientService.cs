@@ -1,64 +1,29 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
-using CarRentService.DAL.Extensions;
 using CarRentService.DAL.Validators;
-using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
-public class ClientService : IClientService
+public class ClientService : BaseCrudService<Client>, IClientService
 {
-    private readonly IDataStoreContext _store;
-
-    public ObservableCollection<Client> Clients => _store.Client;
-
-    private readonly ClientValidator _validator;
-
-    private readonly IMapper _mapper;
+    public override ObservableCollection<Client> Table => _store.Client;
 
     public ClientService(IDataStoreContext store,
         ClientValidator validator,
-        IMapper mapper)
+        IMapper mapper) : base(store, validator, mapper)
     {
-        _store = store;
-        _validator = validator;
-        _mapper = mapper;
     }
 
-    public Client Add(Client client)
+    public override Client? TryFindById(int id)
     {
-        ValidateClient(client);
-
-        return _store.Add(client);
+        return _store.Client.FirstOrDefault(p => p.Id == id);
     }
 
-    public void Remove(Client client)
+    protected override void CleanEntity(Client entity)
     {
-        _store.Client.Remove(client);
-    }
-
-    public void Update(Client client)
-    {
-        ValidateClient(client);
-
-        var existingClient = _store.Client.FirstOrDefault(p => p.Id == client.Id);
-
-        Guard.NotNull(existingClient, nameof(existingClient), "Обновляемый клиент не найден");
-
-        _mapper.Map(client, existingClient);
-    }
-
-    private void ValidateClient(Client client)
-    {
-        var validationResult = _validator.Validate(client);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.GetValidationErrors());
-        }
+        entity.Rentals = new();
     }
 }

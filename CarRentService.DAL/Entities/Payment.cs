@@ -1,4 +1,6 @@
 ﻿using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Enum;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;
@@ -11,12 +13,6 @@ public partial class Payment : IEntity
 {
     [ObservableProperty]
     private int _id;
-
-    /// <summary>
-    /// Уникальный идентификатор платежа.
-    /// </summary>
-    [ObservableProperty]
-    private string _paymentID;
 
     /// <summary>
     /// Сумма платежа.
@@ -34,11 +30,17 @@ public partial class Payment : IEntity
     /// Метод оплаты (например, наличные, карта).
     /// </summary>
     [ObservableProperty]
-    private string _method;
+    private PaymentMethodEnum _method;
 
     /// <summary>
     /// Аренда, связанная с этим платежом.
     /// </summary>
     [ObservableProperty]
-    private Rental _rental;
+    private int _rentalId;
+
+    /// <summary>
+    /// Аренда, связанная с этим платежом.
+    /// </summary>
+    [ObservableProperty]
+    private rental? _rental;
 }

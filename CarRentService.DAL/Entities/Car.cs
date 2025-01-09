@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;
 
@@ -7,19 +8,27 @@ namespace CarRentService.DAL.Entities;
 /// </summary>
 public partial class Car : Vehicle
 {
-    // Приватное поле - уникальный идентификатор автомобиля
-    [ObservableProperty]
-    private string _carID;
-
-    // Приватное поле - регистрационный номер автомобиля
+    /// <summary>
+    /// Приватное поле - регистрационный номер автомобиля
+    /// </summary>
     [ObservableProperty]
     private string _registrationNumber;
 
-    // Приватное поле - статус автомобиля (например, доступен, в ремонте)
+    /// <summary>
+    /// Приватное поле - статус автомобиля (например, доступен, в ремонте)
+    /// </summary>
     [ObservableProperty]
     private string _status;
 
-    // Приватное поле - идентификатор филиала
+    /// <summary>
+    /// Приватное поле - идентификатор филиала
+    /// </summary>
     [ObservableProperty]
-    private string _branchID;
+    private int _branchId;
+
+    [ObservableProperty]
+    private Branch? _branch;
+
+    [ObservableProperty]
+    private ObservableCollection<Rental> _rentals = new();
 }

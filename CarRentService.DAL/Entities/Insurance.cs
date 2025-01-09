@@ -1,4 +1,5 @@
 ﻿using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;
@@ -13,22 +14,22 @@ public partial class Insurance : IEntity
     private int _id;
 
     /// <summary>
-    /// Уникальный идентификатор страховки.
-    /// </summary>
-    [ObservableProperty]
-    private string _insuranceID;
-
-    /// <summary>
     /// Идентификатор клиента, которому принадлежит страховка.
     /// </summary>
     [ObservableProperty]
-    private string _clientID;
+    private int _clientId;
+
+    [ObservableProperty]
+    private Client? _client;
 
     /// <summary>
     /// Идентификатор аренды, к которой привязана страховка.
     /// </summary>
     [ObservableProperty]
-    private string _rentalID;
+    private int _rentalId;
+
+    [ObservableProperty]
+    private rental? _rental;
 
     /// <summary>
     /// Сумма покрытия страховки.
@@ -52,17 +53,11 @@ public partial class Insurance : IEntity
     /// Тип страховки (например, полное или частичное покрытие).
     /// </summary>
     [ObservableProperty]
-    private string _type;
+    private InsuranceTypeEnum _type;
 
     /// <summary>
     /// Стоимость страховки.
     /// </summary>
     [ObservableProperty]
     private double _cost;
-
-    /// <summary>
-    /// Автомобиль, на который оформлена страховка.
-    /// </summary>
-    [ObservableProperty]
-    private Car _car;
 }

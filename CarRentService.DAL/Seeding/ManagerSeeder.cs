@@ -1,11 +1,14 @@
 ﻿using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Seeding;
 
-public class ManagerSeeder(IDataStoreContext store) : ISeeder
+public class ManagerSeeder(IManagerService service) : ISeeder
 {
+    public SeederType SeederType => SeederType.Manager;
+
     public void Seed()
     {
         var admin = new Manager
@@ -18,7 +21,7 @@ public class ManagerSeeder(IDataStoreContext store) : ISeeder
             Password = "admin123"
         };
 
-        store.Add(admin);
+        service.Add(admin);
 
         var admin2 = new Manager
         {
@@ -30,6 +33,6 @@ public class ManagerSeeder(IDataStoreContext store) : ISeeder
             Password = "sergo123456789"
         };
 
-        store.Add(admin2);
+        service.Add(admin2);
     }
 }

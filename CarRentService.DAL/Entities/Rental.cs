@@ -14,28 +14,31 @@ public partial class Rental : IEntity
     private int _id;
 
     /// <summary>
-    /// Уникальный идентификатор аренды.
-    /// </summary>
-    [ObservableProperty]
-    private string _rentalID;
-
-    /// <summary>
     /// Идентификатор арендуемого автомобиля.
     /// </summary>
     [ObservableProperty]
-    private string _carID;
+    private int _carId;
+
+    [ObservableProperty]
+    private Car? _car;
 
     /// <summary>
     /// Идентификатор клиента, который арендует автомобиль.
     /// </summary>
     [ObservableProperty]
-    private string _clientID;
+    private int _clientId;
+
+    [ObservableProperty]
+    private Client? _client;
 
     /// <summary>
     /// Идентификатор филиала, где происходит аренда.
     /// </summary>
     [ObservableProperty]
-    private string _branchID;
+    private int _branchId;
+
+    [ObservableProperty]
+    private Branch? _branch;
 
     /// <summary>
     /// Дата начала аренды.
@@ -56,8 +59,21 @@ public partial class Rental : IEntity
     private RentalStatusEnum _status;
 
     /// <summary>
+    /// Цена
+    /// </summary>
+    [ObservableProperty]
+    private double _cost;
+
+    /// <summary>
     /// Итоговая стоимость аренды.
+    /// Считается = Цена - сумма платежей
     /// </summary>
     [ObservableProperty]
     private double _totalCost;
+
+    [ObservableProperty]
+    private List<Payment> _payments = new();
+
+    [ObservableProperty]
+    private List<Insurance> _insurances = new();
 }

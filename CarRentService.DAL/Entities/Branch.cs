@@ -1,4 +1,5 @@
-﻿using CarRentService.DAL.Abstract;
+﻿using System.Collections.ObjectModel;
+using CarRentService.DAL.Abstract;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;
@@ -13,12 +14,6 @@ public partial class Branch : IEntity
     private int _id;
 
     /// <summary>
-    /// Уникальный идентификатор филиала.
-    /// </summary>
-    [ObservableProperty]
-    private string _branchID;
-
-    /// <summary>
     /// Название филиала.
     /// </summary>
     [ObservableProperty]
@@ -30,21 +25,12 @@ public partial class Branch : IEntity
     [ObservableProperty]
     private string _address;
 
-    /// <summary>
-    /// Количество автомобилей в филиале.
-    /// </summary>
     [ObservableProperty]
-    private int _numberOfCars;
+    private ObservableCollection<Car> _cars = new();
 
     /// <summary>
     /// Контактные данные филиала.
     /// </summary>
     [ObservableProperty]
     private string _contactDetails;
-
-    /// <summary>
-    /// Список автомобилей, принадлежащих филиалу.
-    /// </summary>
-    [ObservableProperty]
-    private List<Car> _carList = new();
 }

@@ -36,6 +36,9 @@ public abstract partial class Person : IEntity
     [ObservableProperty]
     private string _login;
 
+    /// <summary>
+    /// Пароль для авторизации
+    /// </summary>
     [ObservableProperty]
     private string _password;
 }

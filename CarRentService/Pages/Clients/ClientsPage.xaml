@@ -20,8 +20,6 @@
         <StackPanel
             Margin="57, 20, 57, 20" Orientation="Vertical">
             <CommandBar
-                Background="Transparent"
-                IsOpen="False"
                 DefaultLabelPosition="Right">
                 <AppBarButton
                     Icon="Add"

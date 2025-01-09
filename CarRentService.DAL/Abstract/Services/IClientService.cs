@@ -5,13 +5,6 @@ using CarRentService.Common.Attributes;
 namespace CarRentService.DAL.Abstract.Services;
 
 [InjectDI]
-public interface IClientService
+public interface IClientService : ICrudService<Client>
 {
-    public ObservableCollection<Client> Clients { get; }
-
-    public Client Add(Client client);
-
-    public void Remove(Client client);
-
-    public void Update(Client client);
 }

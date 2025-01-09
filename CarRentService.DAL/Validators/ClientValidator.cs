@@ -10,6 +10,9 @@ public class ClientValidator : AbstractValidator<Client>
 {
     public ClientValidator()
     {
+        RuleFor(client => client.BranchId)
+            .NotEmpty().WithMessage("Привязка к филиалу обязательна");
+
         RuleFor(client => client.Fio)
             .NotEmpty().WithMessage("ФИО не должно быть пустым.")
             .MinimumLength(5).WithMessage("ФИО должно содержать не менее 5 символов.")

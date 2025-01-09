@@ -1,13 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-
-using CarRentService.Common.Attributes;
 using CarRentService.DAL.Entities;
-
-using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRentService.DAL.Abstract;
 
-[InjectDI(ServiceLifetime.Singleton)]
 public interface IDataStoreContext : ICommonDataStoreContext
 {
     public ObservableCollection<Client> Client { get; set; }
@@ -22,5 +17,5 @@ public interface IDataStoreContext : ICommonDataStoreContext
 
     public ObservableCollection<Payment> Payment { get; set; }
 
-    public ObservableCollection<Rental> Rental { get; set; }
+    public ObservableCollection<rental> Rental { get; set; }
 }
