@@ -71,23 +71,19 @@ public partial class ClientsTableViewModel : IViewModel
 
     private void DeleteClient(object param)
     {
-        var grid = (param as GridRecordContextFlyoutInfo).DataGrid;
-        var record = (param as GridRecordContextFlyoutInfo).Record as Client;
-        if (record != null)
+        if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
         {
             _clientService.Remove(record);
             UpdateState();
         }
-
-        // grid.View.Refresh();
     }
 
     private void EditClient(object param)
     {
-        var grid = (param as GridRecordContextFlyoutInfo).DataGrid;
-        var record = (param as GridRecordContextFlyoutInfo).Record as Client;
-
-        _navigationService.Navigate(PageTypeEnum.EditClient, parameter: record);
+        if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditClient, parameter: record);
+        }
     }
 
     private void ClearFiltersAndSort()
