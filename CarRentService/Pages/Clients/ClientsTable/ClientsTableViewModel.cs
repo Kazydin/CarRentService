@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
-using CarRentService.Common.Enums;
-using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
 using CarRentService.Modals.Clients;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GuardNet;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Syncfusion.UI.Xaml.Core;
 using Syncfusion.UI.Xaml.DataGrid;
@@ -22,9 +17,9 @@ public partial class ClientsTableViewModel : IViewModel
 {
     public RelayCommand AddClientCommand { get; }
 
-    public DelegateCommand EditClientCommand { get; }
+    public RelayCommand<object> EditClientCommand { get; }
 
-    public DelegateCommand DeleteClientCommand { get; }
+    public RelayCommand<object> DeleteClientCommand { get; }
 
     public RelayCommand ClearFiltersAndSortCommand { get; }
 
@@ -49,8 +44,8 @@ public partial class ClientsTableViewModel : IViewModel
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
-        EditClientCommand = new DelegateCommand(EditClient);
-        DeleteClientCommand = new DelegateCommand(DeleteClient);
+        EditClientCommand = new RelayCommand<object>(EditClient);
+        DeleteClientCommand = new RelayCommand<object>(DeleteClient);
         ClearFiltersAndSortCommand = new RelayCommand(ClearFiltersAndSort);
     }
 
@@ -69,20 +64,20 @@ public partial class ClientsTableViewModel : IViewModel
         }
     }
 
-    private void DeleteClient(object param)
+    private void EditClient(object? param)
+    {
+        if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditClient, parameter: record);
+        }
+    }
+
+    private void DeleteClient(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
         {
             _clientService.Remove(record);
             UpdateState();
-        }
-    }
-
-    private void EditClient(object param)
-    {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
-        {
-            _navigationService.Navigate(PageTypeEnum.EditClient, parameter: record);
         }
     }
 
