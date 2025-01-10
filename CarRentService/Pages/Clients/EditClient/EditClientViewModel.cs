@@ -5,7 +5,7 @@ using AutoMapper;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
-
+using CarRentService.DAL.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -69,5 +69,8 @@ public partial class EditClientViewModel : IViewModel
     public void SetClient(Client client)
     {
         Client = _mapper.Map<Client>(client);
+
+        Client.IncludeBranch();
+        Client.IncludeRentals();
     }
 }

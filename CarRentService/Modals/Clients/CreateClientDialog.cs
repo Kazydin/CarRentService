@@ -4,7 +4,7 @@ using CarRentService.Common.Attributes;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
-using CarRentService.DAL.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -12,11 +12,9 @@ using Microsoft.UI.Xaml.Media;
 
 namespace CarRentService.Modals.Clients;
 
-[InjectDI]
+[InjectDI(ServiceLifetime.Singleton)]
 public class CreateClientDialog : ContentDialog
 {
-    public Client NewClient { get; private set; }
-
     private readonly TextBox _fioTextBox;
 
     private readonly TextBox _ageTextBox;
@@ -97,7 +95,7 @@ public class CreateClientDialog : ContentDialog
 
         try
         {
-            NewClient = _clientService.Add(client);
+            _clientService.Add(client);
         }
         catch (ValidationException e)
         {

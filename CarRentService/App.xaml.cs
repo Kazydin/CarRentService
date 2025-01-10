@@ -40,6 +40,9 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
+        Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "ru-RU";
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NMaF5cXmtCfEx+WmFZfVtgcl9HaVZRRWY/P1ZhSXxWdkRjUH5Wc31XTmhaWEQ=");
+
         services.AddDataStoreContext();
         services.AddValidatorsFromAssembly(Assembly.Load("CarRentService.DAL"));
 

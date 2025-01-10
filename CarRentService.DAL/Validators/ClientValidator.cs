@@ -1,5 +1,4 @@
-﻿using CarRentService.Common.Attributes;
-using CarRentService.DAL.Entities;
+﻿using CarRentService.DAL.Entities;
 
 using FluentValidation;
 
@@ -9,8 +8,8 @@ public class ClientValidator : AbstractValidator<Client>
 {
     public ClientValidator()
     {
-        RuleFor(client => client.BranchId)
-            .NotEmpty().WithMessage("Привязка к филиалу обязательна");
+        ClassLevelCascadeMode = CascadeMode.Stop;
+        RuleLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(client => client.Fio)
             .NotEmpty().WithMessage("ФИО не должно быть пустым.")
@@ -40,5 +39,8 @@ public class ClientValidator : AbstractValidator<Client>
             .Matches(@"[a-z]").WithMessage("Пароль должен содержать хотя бы одну строчную букву.")
             .Matches(@"[0-9]").WithMessage("Пароль должен содержать хотя бы одну цифру.")
             .Matches(@"[\W]").WithMessage("Пароль должен содержать хотя бы один специальный символ.");
+
+        // RuleFor(client => client.BranchId)
+        //     .NotEmpty().WithMessage("Привязка к филиалу обязательна");
     }
 }

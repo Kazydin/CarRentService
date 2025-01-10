@@ -8,6 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:entities="using:CarRentService.DAL.Entities"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:EditClientViewModel }">
 
     <Pivot
@@ -123,8 +125,75 @@
             </Grid>
         </PivotItem>
         <PivotItem
-            Header="Аренды" />
-        <PivotItem
+            Header="Аренды">
+            <controls:DataGrid
+                Margin="10"
+                CanUserSortColumns="True"
+                GridLinesVisibility="All"
+                IsReadOnly="True"
+                ItemsSource="{Binding Path=Client.Rentals}"
+                AutoGenerateColumns="False">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTemplateColumn
+                        Header="ID аренды">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="10"
+                                    VerticalAlignment="Center"
+                                    d:DataContext="{d:DesignInstance Type=entities:Rental}"
+                                    Text="{Binding Id}" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn
+                        Header="Дата начала">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="10"
+                                    VerticalAlignment="Center"
+                                    d:DataContext="{d:DesignInstance Type=entities:Rental}"
+                                    Text="{Binding StartDate}" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn
+                        Header="Дата завершения">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="10"
+                                    VerticalAlignment="Center"
+                                    d:DataContext="{d:DesignInstance Type=entities:Rental}"
+                                    Text="{Binding EndDate}" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+
+                    <!-- Кнопка "Удалить" -->
+                    <controls:DataGridTemplateColumn
+                        Header="Удалить">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Padding="10">
+                                    <Button
+                                        Content="Изменить"
+                                        Tag="{Binding}"
+                                        Margin="0, 0, 10, 0" />
+                                    <Button
+                                        Content="Удалить"
+                                        Tag="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+        </PivotItem>
+            <PivotItem
             Header="Автомобили" />
         <PivotItem
             Header="Страховки" />

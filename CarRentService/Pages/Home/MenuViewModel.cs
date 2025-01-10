@@ -4,13 +4,11 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Services;
-
+using CarRentService.Pages.Login;
 using CommunityToolkit.Mvvm.Input;
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-
-using LoginPage = CarRentService.Pages.Login.LoginPage;
 
 namespace CarRentService.Pages.Home
 {

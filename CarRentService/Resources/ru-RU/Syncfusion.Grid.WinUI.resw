@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddNewRowText" xml:space="preserve">
+    <value>Нажмите здесь, чтобы добавить новую строку</value>
+    <comment>Текст для добавления новой строки</comment>
+  </data>
+  <data name="AND" xml:space="preserve">
+    <value>И</value>
+    <comment>Текст для фильтрации с оператором И</comment>
+  </data>
+  <data name="BeginsWith" xml:space="preserve">
+    <value>Начинается с</value>
+    <comment>Текст для фильтра "Начинается с"</comment>
+  </data>
+  <data name="Blanks" xml:space="preserve">
+    <value>(Пустые)</value>
+    <comment>Текст для фильтра пустых значений</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+    <comment>Текст для кнопки отмены</comment>
+  </data>
+  <data name="ClearFilter" xml:space="preserve">
+    <value>Очистить фильтр</value>
+    <comment>Текст для очистки фильтров</comment>
+  </data>
+  <data name="ColumnChooserTitle" xml:space="preserve">
+    <value>Выбор колонок</value>
+    <comment>Заголовок окна выбора колонок</comment>
+  </data>
+  <data name="ColumnChooserWaterMark" xml:space="preserve">
+    <value>(Нет доступных полей)</value>
+    <comment>Текст-заполнитель для выбора колонок</comment>
+  </data>
+  <data name="Contains" xml:space="preserve">
+    <value>Содержит</value>
+    <comment>Текст для фильтра "Содержит"</comment>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Готово</value>
+    <comment>Текст для закрытия всплывающего окна</comment>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>Пусто</value>
+    <comment>Текст для пустых значений</comment>
+  </data>
+  <data name="EndsWith" xml:space="preserve">
+    <value>Заканчивается на</value>
+    <comment>Текст для фильтра "Заканчивается на"</comment>
+  </data>
+  <data name="Equalss" xml:space="preserve">
+    <value>Равно</value>
+    <comment>Текст для фильтра "Равно"</comment>
+  </data>
+  <data name="GreaterThan" xml:space="preserve">
+    <value>Больше чем</value>
+    <comment>Текст для фильтра "Больше чем"</comment>
+  </data>
+  <data name="GreaterThanorEqual" xml:space="preserve">
+    <value>Больше или равно</value>
+    <comment>Текст для фильтра "Больше или равно"</comment>
+  </data>
+  <data name="GroupDropAreaText" xml:space="preserve">
+    <value>Перетащите колонку для группировки</value>
+    <comment>Текст для области группировки</comment>
+  </data>
+  <data name="LessThan" xml:space="preserve">
+    <value>Меньше чем</value>
+    <comment>Текст для фильтра "Меньше чем"</comment>
+  </data>
+  <data name="LessThanorEqual" xml:space="preserve">
+    <value>Меньше или равно</value>
+    <comment>Текст для фильтра "Меньше или равно"</comment>
+  </data>
+  <data name="Before" xml:space="preserve">
+    <value>До</value>
+    <comment>Текст для фильтра "До"</comment>
+  </data>
+  <data name="BeforeOrEqual" xml:space="preserve">
+    <value>До или равно</value>
+    <comment>Текст для фильтра "До или равно"</comment>
+  </data>
+  <data name="After" xml:space="preserve">
+    <value>После</value>
+    <comment>Текст для фильтра "После"</comment>
+  </data>
+  <data name="AfterOrEqual" xml:space="preserve">
+    <value>После или равно</value>
+    <comment>Текст для фильтра "После или равно"</comment>
+  </data>
+  <data name="SortDateAscending" xml:space="preserve">
+    <value>Сортировать от старых к новым</value>
+    <comment>Текст для сортировки по возрастанию даты</comment>
+  </data>
+  <data name="SortDateDescending" xml:space="preserve">
+    <value>Сортировать от новых к старым</value>
+    <comment>Текст для сортировки по убыванию даты</comment>
+  </data>
+  <data name="NoItems" xml:space="preserve">
+    <value>Нет элементов</value>
+    <comment>Текст для отображения отсутствия элементов</comment>
+  </data>
+  <data name="NoMatches" xml:space="preserve">
+    <value>Совпадений нет</value>
+    <comment>Текст для отсутствия совпадений</comment>
+  </data>
+  <data name="NotContains" xml:space="preserve">
+    <value>Не содержит</value>
+    <comment>Текст для фильтра "Не содержит"</comment>
+  </data>
+  <data name="NotEmpty" xml:space="preserve">
+    <value>Не пусто</value>
+    <comment>Текст для фильтра "Не пусто"</comment>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Не равно</value>
+    <comment>Текст для фильтра "Не равно"</comment>
+  </data>
+  <data name="NotNull" xml:space="preserve">
+    <value>Не Null</value>
+    <comment>Текст для фильтра "Не Null"</comment>
+  </data>
+  <data name="Null" xml:space="preserve">
+    <value>Null</value>
+    <comment>Текст для фильтра "Null"</comment>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>ОК</value>
+    <comment>Текст для кнопки ОК</comment>
+  </data>
+  <data name="OR" xml:space="preserve">
+    <value>ИЛИ</value>
+    <comment>Текст для фильтрации с оператором ИЛИ</comment>
+  </data>
+  <data name="RowErrorMessage" xml:space="preserve">
+    <value>Строка содержит ошибку</value>
+    <comment>Указывает на ошибку с использованием INotifyDataErrorInfo</comment>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+    <comment>Текст для поиска</comment>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>(Выбрать все)</value>
+    <comment>Текст для выбора всех элементов</comment>
+  </data>
+  <data name="ShowRowsWhere" xml:space="preserve">
+    <value>Показывать строки, где:</value>
+    <comment>Текст для фильтрации строк</comment>
+  </data>
+  <data name="SortNumberAscending" xml:space="preserve">
+    <value>Сортировать от меньшего к большему</value>
+    <comment>Текст для сортировки чисел по возрастанию</comment>
+  </data>
+  <data name="SortNumberDescending" xml:space="preserve">
+    <value>Сортировать от большего к меньшему</value>
+    <comment>Текст для сортировки чисел по убыванию</comment>
+  </data>
+  <data name="SortStringAscending" xml:space="preserve">
+    <value>Сортировать от А до Я</value>
+    <comment>Текст для сортировки строк по возрастанию</comment>
+  </data>
+  <data name="SortStringDescending" xml:space="preserve">
+    <value>Сортировать от Я до А</value>
+    <comment>Текст для сортировки строк по убыванию</comment>
+  </data>
+  <data name="EnterValidFilterValue" xml:space="preserve">
+    <value>Введите допустимое значение фильтра</value>
+    <comment>Текст для недопустимого значения фильтра</comment>
+  </data>
+  <data name="TextFilters" xml:space="preserve">
+    <value>Фильтры текста</value>
+    <comment>Текст для текстовых фильтров</comment>
+  </data>
+  <data name="NumberFilters" xml:space="preserve">
+    <value>Числовые фильтры</value>
+    <comment>Текст для числовых фильтров</comment>
+  </data>
+  <data name="DateFilters" xml:space="preserve">
+    <value>Фильтры по датам</value>
+    <comment>Текст для фильтров дат</comment>
+  </data>
+  <data name="CantDropHere" xml:space="preserve">
+    <value>Невозможно оставить здесь</value>
+    <comment>Текст для невозможности перемещения строки</comment>
+  </data>
+  <data name="DropAbove" xml:space="preserve">
+    <value>Оставить выше</value>
+    <comment>Текст для перемещения строки выше</comment>
+  </data>
+  <data name="DropAsChild" xml:space="preserve">
+    <value>Оставить как дочерний элемент</value>
+    <comment>Текст для перемещения строки как дочерний элемент</comment>
+  </data>
+  <data name="DropBelow" xml:space="preserve">
+    <value>Оставить ниже</value>
+    <comment>Текст для перемещения строки ниже</comment>
+  </data>
+  <data name="DropHere" xml:space="preserve">
+    <value>Оставить здесь</value>
+    <comment>Текст для перемещения строки здесь</comment>
+  </data>
+  <data name="DropRowsAbove" xml:space="preserve">
+    <value>Оставить {0} строк выше</value>
+    <comment>Текст для перемещения нескольких строк выше</comment>
+  </data>
+  <data name="DropRowsAsChild" xml:space="preserve">
+    <value>Оставить {0} строк как дочерние</value>
+    <comment>Текст для перемещения нескольких строк как дочерние элементы</comment>
+  </data>
+  <data name="DropRowsBelow" xml:space="preserve">
+    <value>Оставить {0} строк ниже</value>
+    <comment>Текст для перемещения нескольких строк ниже</comment>
+  </data>
+  <data name="DropRowsHere" xml:space="preserve">
+    <value>Оставить {0} строк здесь</value>
+    <comment>Текст для перемещения нескольких строк здесь</comment>
+  </data>
+  <data name="NotBeginsWith" xml:space="preserve">
+    <value>Не начинается с</value>
+    <comment>Текст для фильтра "Не начинается с"</comment>
+  </data>
+  <data name="NotEndsWith" xml:space="preserve">
+    <value>Не заканчивается на</value>
+    <comment>Текст для фильтра "Не заканчивается на"</comment>
+  </data>
+</root>

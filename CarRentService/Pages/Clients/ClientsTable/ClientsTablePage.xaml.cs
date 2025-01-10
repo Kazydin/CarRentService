@@ -1,45 +1,24 @@
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
-using CarRentService.DAL.Entities;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Pages.Clients.ClientsTable;
 
 public sealed partial class ClientsTablePage : NavigationPage
 {
-    public ClientsTable.ClientsTableViewModel ViewModel { get; }
+    public ClientsTableViewModel ViewModel { get; }
 
-    public ClientsTablePage(ClientsTable.ClientsTableViewModel viewModel) : base(PageTypeEnum.Clients, "Клиенты")
+    public ClientsTablePage(ClientsTableViewModel viewModel) : base(PageTypeEnum.Clients, "Клиенты")
     {
         InitializeComponent();
 
         ViewModel = viewModel;
         DataContext = viewModel;
+
+        ViewModel.DataGrid = DataGrid;
     }
 
-    private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
-    {
-        var button = (Button)sender;
-        var client = (Client)button.Tag;
-
-        ViewModel.RemoveClientCommand.Execute(client);
-    }
-
-    private void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
-    {
-        var button = (Button)sender;
-        var client = (Client)button.Tag;
-
-        ViewModel.EditClientCommand.Execute(client);
-    }
-
-    private void ClientsPage_OnLoaded(object sender, RoutedEventArgs e)
-    {
-        ViewModel.SetXamlRoot(XamlRoot);
-    }
-
-    public override void OnNavigatedTo(object? parameter)
+    private void ClientsTablePage_OnLoaded(object sender, RoutedEventArgs e)
     {
         ViewModel.UpdateState();
     }

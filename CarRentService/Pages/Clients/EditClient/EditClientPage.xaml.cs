@@ -1,11 +1,7 @@
-using System.Runtime.CompilerServices;
-
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Entities;
-
-using Microsoft.UI.Xaml;
 
 namespace CarRentService.Pages.Clients.EditClient;
 
