@@ -6,13 +6,11 @@ namespace CarRentService.DAL.Extensions;
 
 public static class ClientExtensions
 {
-    public static IEnumerable<Client> IncludeRentals(this IEnumerable<Client> clients)
+    public static void IncludeRentals(this IEnumerable<Client> clients)
     {
         foreach (var client in clients)
         {
             client.IncludeRentals();
-
-            yield return client;
         }
     }
 

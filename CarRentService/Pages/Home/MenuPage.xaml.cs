@@ -1,5 +1,4 @@
 using CarRentService.Common.Abstract;
-using CarRentService.Modals.Clients;
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -14,16 +13,12 @@ public sealed partial class MenuPage : BasePage
 
     private readonly INotificationService _service;
 
-    private readonly CreateClientDialog _createClientDialog;
-
     public MenuPage(MenuViewModel viewModel,
         INavigationService navigationService,
-        INotificationService service,
-        CreateClientDialog createClientDialog)
+        INotificationService service)
     {
         _navigationService = navigationService;
         _service = service;
-        _createClientDialog = createClientDialog;
         InitializeComponent();
 
         ViewModel = viewModel;
@@ -62,7 +57,6 @@ public sealed partial class MenuPage : BasePage
         ViewModel.XamlRoot = XamlRoot;
         _navigationService.SetFrame(ContentFrame);
         ViewModel.ShowLoginDialogCommand.Execute(null);
-        _createClientDialog.XamlRoot = XamlRoot;
 
         _service.Init(ContentFrame);
     }

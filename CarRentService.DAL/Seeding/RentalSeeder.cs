@@ -14,7 +14,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
         service.Add(new Rental
         {
             Id = 1,
-            CarId = 1,
+            CarIds = [1],
             ClientId = 1,
             BranchId = 1,
             StartDate = new DateTime(2024, 10, 1),
@@ -27,12 +27,12 @@ public class RentalSeeder(IRentalService service) : ISeeder
         service.Add(new Rental
         {
             Id = 2,
-            CarId = 2,
+            CarIds = [2],
             ClientId = 2,
             BranchId = 2,
             StartDate = new DateTime(2024, 11, 1),
             EndDate = new DateTime(2024, 11, 15),
-            Status = RentalStatusEnum.Created,
+            Status = RentalStatusEnum.Active,
             Cost = 7000,
             TotalCost = 7000,
         });
@@ -40,7 +40,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
         service.Add(new Rental
         {
             Id = 3,
-            CarId = 3,
+            CarIds = [3],
             ClientId = 3,
             BranchId = 3,
             StartDate = new DateTime(2024, 12, 1),
@@ -53,7 +53,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
         service.Add(new Rental
         {
             Id = 4,
-            CarId = 4,
+            CarIds = [4],
             ClientId = 1,
             BranchId = 4,
             StartDate = new DateTime(2024, 12, 10),
@@ -66,7 +66,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
         service.Add(new Rental
         {
             Id = 5,
-            CarId = 5,
+            CarIds = [5],
             ClientId = 2,
             BranchId = 5,
             StartDate = new DateTime(2024, 9, 1),

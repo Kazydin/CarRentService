@@ -25,5 +25,10 @@ public sealed partial class EditClientPage : NavigationPage
             _viewModel.SetClient(client);
             Header = client.Fio;
         }
+        else
+        {
+            _viewModel.SetClient();
+            Header = "Создание клиента";
+        }
     }
 }

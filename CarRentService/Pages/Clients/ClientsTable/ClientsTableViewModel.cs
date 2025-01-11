@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
-using CarRentService.Modals.Clients;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.UI.Xaml.Controls;
-using Syncfusion.UI.Xaml.Core;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Clients.ClientsTable;
@@ -30,17 +26,13 @@ public partial class ClientsTableViewModel : IViewModel
 
     private readonly IClientService _clientService;
 
-    private readonly CreateClientDialog _createClientDialog;
-
     private readonly INavigationService _navigationService;
 
     public ClientsTableViewModel(IClientService clientService,
-        INavigationService navigationService,
-        CreateClientDialog createClientDialog)
+        INavigationService navigationService)
     {
         _clientService = clientService;
         _navigationService = navigationService;
-        _createClientDialog = createClientDialog;
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
@@ -54,14 +46,9 @@ public partial class ClientsTableViewModel : IViewModel
         Clients = new ObservableCollection<Client>(_clientService.Table);
     }
 
-    private async void AddClient()
+    private void AddClient()
     {
-        var result = await _createClientDialog.ShowAsync();
-
-        if (result == ContentDialogResult.Primary)
-        {
-            UpdateState();
-        }
+        _navigationService.Navigate(PageTypeEnum.EditClient);
     }
 
     private void EditClient(object? param)

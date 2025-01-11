@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using AutoMapper;
-
-using CarRentService.Common.Attributes;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Extensions;
@@ -43,13 +41,18 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
         return _store.Add(entity);
     }
 
-    public void Remove(T entity)
+    public void Remove(int entityId)
     {
-        var existingEntity = TryFindById(entity.Id);
+        var existingEntity = TryFindById(entityId);
 
         Guard.NotNull(existingEntity, nameof(existingEntity), "Удаляемый объект не найден");
 
         _store.Remove(existingEntity!);
+    }
+
+    public void Remove(T entity)
+    {
+        Remove(entity.Id);
     }
 
     public void Update(T entity)

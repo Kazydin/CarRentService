@@ -1,32 +1,38 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using AutoMapper;
 
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
-using CarRentService.DAL.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using GuardNet;
-
-using Microsoft.UI.Xaml;
 
 namespace CarRentService.Pages.Clients.EditClient;
 
 public partial class EditClientViewModel : IViewModel
 {
+    public RelayCommand DeleteClientCommand { get; }
+
     public RelayCommand CancelEditCommand { get; }
     
     public RelayCommand SaveCommand { get; }
 
     [ObservableProperty]
-    private Client _client;
+    private ClientDto _client;
+
+    [ObservableProperty]
+    private ObservableCollection<Branch> _branches;
 
     private readonly INavigationService _navigationService;
 
-    private readonly IClientService _service;
+    private readonly IClientService _clientService;
+
+    private readonly IBranchService _branchService;
 
     private readonly INotificationService _notificationService;
 
@@ -34,22 +40,28 @@ public partial class EditClientViewModel : IViewModel
 
     public EditClientViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IClientService service,
-        IMapper mapper)
+        IClientService clientService,
+        IMapper mapper,
+        IBranchService branchService)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _service = service;
+        _clientService = clientService;
         _mapper = mapper;
+        _branchService = branchService;
+
+        DeleteClientCommand = new RelayCommand(DeleteClient, CanDeleteClient);
         CancelEditCommand = new RelayCommand(CancelEdit);
         SaveCommand = new RelayCommand(Save);
+
+        Branches = _branchService.Table;
     }
 
     private async void Save()
     {
         try
         {
-            _service.Update(Client);
+            _clientService.Update(_mapper.Map<Client>(Client));
 
             _notificationService.ShowTip("Обновление клиента", "Сохранено успешно!");
 
@@ -61,16 +73,32 @@ public partial class EditClientViewModel : IViewModel
         }
     }
 
+    private void DeleteClient()
+    {
+        Guard.NotNull(Client, "Нельзя удалить клиента, который еще не сохранен");
+
+        _clientService.Remove(Client.Id!.Value);
+        _navigationService.GoBack();
+    }
+
+    public bool CanDeleteClient()
+    {
+        return Client.Id != null;
+    }
+
     private void CancelEdit()
     {
         _navigationService.GoBack();
     }
 
-    public void SetClient(Client client)
+    public void SetClient(Client? client = null)
     {
-        Client = _mapper.Map<Client>(client);
+        if (client == null)
+        {
+            Client = new ClientDto();
+            return;
+        }
 
-        Client.IncludeBranch();
-        Client.IncludeRentals();
+        Client = _clientService.GetClientDto(client.Id);
     }
 }

@@ -17,4 +17,16 @@ public partial class Manager : Person
 
     [ObservableProperty]
     private ObservableCollection<int> _branchIds = new();
+
+    /// <summary>
+    /// Логин для авторизации
+    /// </summary>
+    [ObservableProperty]
+    private string _login;
+
+    /// <summary>
+    /// Пароль для авторизации
+    /// </summary>
+    [ObservableProperty]
+    private string _password;
 }

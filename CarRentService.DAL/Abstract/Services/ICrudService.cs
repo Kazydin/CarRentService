@@ -12,6 +12,8 @@ public interface ICrudService<T> where T : IEntity
 
     T Add(T entity);
 
+    void Remove(int entityId);
+
     void Remove(T entity);
 
     void Update(T entity);

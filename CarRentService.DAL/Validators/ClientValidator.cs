@@ -27,20 +27,7 @@ public class ClientValidator : AbstractValidator<Client>
             .NotEmpty().WithMessage("Номер водительского удостоверения не должен быть пустым.")
             .Matches(@"^\d{2} \d{2} \d{6}$").WithMessage("Номер водительского удостоверения должен быть в формате 'XX XX XXXXXX'.");
 
-        RuleFor(client => client.Login)
-            .NotEmpty().WithMessage("Логин не должен быть пустым.")
-            .MinimumLength(3).WithMessage("Логин должен содержать не менее 3 символов.")
-            .MaximumLength(50).WithMessage("Логин должен содержать не более 50 символов.");
-
-        RuleFor(client => client.Password)
-            .NotEmpty().WithMessage("Пароль не должен быть пустым.")
-            .MinimumLength(6).WithMessage("Пароль должен содержать не менее 6 символов.")
-            .Matches(@"[A-Z]").WithMessage("Пароль должен содержать хотя бы одну заглавную букву.")
-            .Matches(@"[a-z]").WithMessage("Пароль должен содержать хотя бы одну строчную букву.")
-            .Matches(@"[0-9]").WithMessage("Пароль должен содержать хотя бы одну цифру.")
-            .Matches(@"[\W]").WithMessage("Пароль должен содержать хотя бы один специальный символ.");
-
-        // RuleFor(client => client.BranchId)
-        //     .NotEmpty().WithMessage("Привязка к филиалу обязательна");
+        RuleFor(client => client.BranchId)
+            .NotEmpty().WithMessage("Привязка к филиалу обязательна");
     }
 }

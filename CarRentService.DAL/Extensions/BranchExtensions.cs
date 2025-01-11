@@ -6,13 +6,11 @@ namespace CarRentService.DAL.Extensions;
 
 public static class BranchExtensions
 {
-    public static IEnumerable<Branch> IncludeCars(this IEnumerable<Branch> branches)
+    public static void IncludeCars(this IEnumerable<Branch> branches)
     {
         foreach (var branch in branches)
         {
             branch.IncludeCars();
-
-            yield return branch;
         }
     }
 

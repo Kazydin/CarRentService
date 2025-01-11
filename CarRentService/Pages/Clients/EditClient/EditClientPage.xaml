@@ -10,6 +10,8 @@
     xmlns:abstract="using:CarRentService.Common.Abstract"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:entities="using:CarRentService.DAL.Entities"
+    xmlns:dataGrid="using:Syncfusion.UI.Xaml.DataGrid"
+    xmlns:editors="using:Syncfusion.UI.Xaml.Editors"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:EditClientViewModel }">
 
     <Pivot
@@ -18,6 +20,8 @@
             Header="Основная информация">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
                     <RowDefinition
                         Height="Auto" />
                     <RowDefinition
@@ -37,13 +41,23 @@
                     <ColumnDefinition
                         Width="*" />
                 </Grid.ColumnDefinitions>
+                <CommandBar
+                    DefaultLabelPosition="Right"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4">
+                    <AppBarButton
+                        Icon="Delete"
+                        Command="{Binding DeleteClientCommand}"
+                        Label="Удалить клиента" />
+                </CommandBar>
                 <StackPanel
                     Margin="0, 10, 5, 10"
-                    Grid.Row="0"
+                    Grid.Row="1"
                     Grid.Column="0">
                     <TextBlock
                         Margin="0, 0, 0, 10">
-                        ID
+                        ID клиента
                     </TextBlock>
                     <TextBox
                         Text="{Binding Client.Id, Mode=TwoWay}"
@@ -51,7 +65,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="0, 10, 5, 5"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="0">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -62,7 +76,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 5, 10"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="1">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -73,7 +87,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 5, 10"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="2">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -84,7 +98,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 0, 10"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="3">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -93,19 +107,18 @@
                     <TextBox
                         Text="{Binding Client.DriverLicenseNumber, Mode=TwoWay}" />
                 </StackPanel>
-                <ComboBox
+                <editors:SfComboBox
+                    ItemsSource="{Binding Branches, Mode=OneWay}"
                     Header="Филиал договора (основной)"
-                    Grid.Row="2"
-                    SelectedItem="Санкт-Петербург"
+                    Grid.Row="3"
                     Grid.Column="0"
                     Margin="0, 10, 0, 0"
-                    Width="200">
-                    <x:String>Санкт-Петербург</x:String>
-                    <x:String>Москва</x:String>
-                    <x:String>Екатеринбург</x:String>
-                </ComboBox>
+                    TextMemberPath="Name"
+                    DisplayMemberPath="Name"
+                    SelectedItem="{Binding Client.Branch, Mode=TwoWay}"
+                    Width="200" />
                 <StackPanel
-                    Grid.Row="2"
+                    Grid.Row="4"
                     Grid.Column="0"
                     Grid.ColumnSpan="4"
                     Margin="0, 15, 0, 0"
@@ -120,81 +133,142 @@
                         Command="{Binding CancelEditCommand}">
                         Отмена
                     </Button>
-
                 </StackPanel>
             </Grid>
         </PivotItem>
         <PivotItem
             Header="Аренды">
-            <controls:DataGrid
-                Margin="10"
-                CanUserSortColumns="True"
-                GridLinesVisibility="All"
-                IsReadOnly="True"
-                ItemsSource="{Binding Path=Client.Rentals}"
-                AutoGenerateColumns="False">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTemplateColumn
-                        Header="ID аренды">
-                        <controls:DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    Padding="10"
-                                    VerticalAlignment="Center"
-                                    d:DataContext="{d:DesignInstance Type=entities:Rental}"
-                                    Text="{Binding Id}" />
-                            </DataTemplate>
-                        </controls:DataGridTemplateColumn.CellTemplate>
-                    </controls:DataGridTemplateColumn>
-                    <controls:DataGridTemplateColumn
-                        Header="Дата начала">
-                        <controls:DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    Padding="10"
-                                    VerticalAlignment="Center"
-                                    d:DataContext="{d:DesignInstance Type=entities:Rental}"
-                                    Text="{Binding StartDate}" />
-                            </DataTemplate>
-                        </controls:DataGridTemplateColumn.CellTemplate>
-                    </controls:DataGridTemplateColumn>
-                    <controls:DataGridTemplateColumn
-                        Header="Дата завершения">
-                        <controls:DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    Padding="10"
-                                    VerticalAlignment="Center"
-                                    d:DataContext="{d:DesignInstance Type=entities:Rental}"
-                                    Text="{Binding EndDate}" />
-                            </DataTemplate>
-                        </controls:DataGridTemplateColumn.CellTemplate>
-                    </controls:DataGridTemplateColumn>
+            <StackPanel>
+                <CommandBar
+                    DefaultLabelPosition="Right">
+                    <AppBarButton
+                        Icon="Add"
+                        Command="{Binding AddClientCommand}"
+                        Label="Добавить" />
+                    <AppBarButton
+                        Icon="Clear"
+                        Command="{Binding ClearFiltersAndSortCommand}"
+                        Label="Сбросить группировку, фильтры и сортировку" />
+                </CommandBar>
 
-                    <!-- Кнопка "Удалить" -->
-                    <controls:DataGridTemplateColumn
-                        Header="Удалить">
-                        <controls:DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel
-                                    Orientation="Horizontal"
-                                    Padding="10">
-                                    <Button
-                                        Content="Изменить"
-                                        Tag="{Binding}"
-                                        Margin="0, 0, 10, 0" />
-                                    <Button
-                                        Content="Удалить"
-                                        Tag="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </controls:DataGridTemplateColumn.CellTemplate>
-                    </controls:DataGridTemplateColumn>
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
+                <dataGrid:SfDataGrid
+                    x:Name="DataGrid"
+                    AutoGenerateColumns="False"
+                    AllowEditing="False"
+                    AllowFiltering="True"
+                    ShowGroupDropArea="True"
+                    LiveDataUpdateMode="AllowDataShaping"
+                    AllowDraggingColumns="True"
+                    GridLinesVisibility="Both"
+                    HeaderLinesVisibility="Both"
+                    IsGroupDropAreaExpanded="True"
+                    ColumnWidthMode="Star"
+                    ItemsSource="{Binding Client.Rentals}">
+                    <dataGrid:SfDataGrid.DetailsViewDefinition>
+                        <dataGrid:GridViewDefinition
+                            RelationalColumn="Cars">
+                            <dataGrid:GridViewDefinition.DataGrid>
+                                <dataGrid:SfDataGrid
+                                    x:Name="FirstDetailsViewGrid"
+                                    AllowEditing="False"
+                                    AllowFiltering="True"
+                                    ShowGroupDropArea="True"
+                                    LiveDataUpdateMode="AllowDataShaping"
+                                    AllowDraggingColumns="True"
+                                    GridLinesVisibility="Both"
+                                    HeaderLinesVisibility="Both"
+                                    IsGroupDropAreaExpanded="True"
+                                    ColumnWidthMode="Star"
+                                    AutoGenerateColumns="True">
+                                    <dataGrid:SfDataGrid.Columns>
+                                        <dataGrid:GridTextColumn
+                                            HeaderText="ID автомобиля"
+                                            MappingName="Id" />
+                                        <dataGrid:GridTextColumn
+                                            HeaderText="Статус"
+                                            MappingName="Status" />
+                                        <dataGrid:GridTextColumn
+                                            HeaderText="Марка"
+                                            MappingName="Make" />
+                                        <dataGrid:GridTextColumn
+                                            HeaderText="Модель"
+                                            MappingName="Model" />
+                                        <dataGrid:GridNumericColumn
+                                            MappingName="Year"
+                                            HeaderText="Год" />
+                                    </dataGrid:SfDataGrid.Columns>
+                                </dataGrid:SfDataGrid>
+                            </dataGrid:GridViewDefinition.DataGrid>
+                        </dataGrid:GridViewDefinition>
+                    </dataGrid:SfDataGrid.DetailsViewDefinition>
+                    <dataGrid:SfDataGrid.Columns>
+                        <dataGrid:GridTextColumn
+                            HeaderText="ID аренды"
+                            MappingName="Id" />
+                        <dataGrid:GridTextColumn
+                            HeaderText="Статус"
+                            MappingName="Status" />
+                        <dataGrid:GridNumericColumn
+                            HeaderText="Цена"
+                            MappingName="Cost" />
+                    </dataGrid:SfDataGrid.Columns>
+                    <dataGrid:SfDataGrid.RecordContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                Text="Изменить"
+                                Command="{Binding Path=DataGrid.DataContext.EditClientCommand}"
+                                CommandParameter="{Binding}" />
+                            <MenuFlyoutItem
+                                Text="Удалить"
+                                Command="{Binding Path=DataGrid.DataContext.DeleteClientCommand}"
+                                CommandParameter="{Binding}" />
+                        </MenuFlyout>
+                    </dataGrid:SfDataGrid.RecordContextFlyout>
+                </dataGrid:SfDataGrid>
+            </StackPanel>
         </PivotItem>
-            <PivotItem
-            Header="Автомобили" />
+        <PivotItem
+            Header="Автомобили">
+            <StackPanel>
+                <dataGrid:SfDataGrid
+                    x:Name="CarsDataGrid"
+                    AutoGenerateColumns="True"
+                    AllowEditing="False"
+                    AllowFiltering="True"
+                    ShowGroupDropArea="True"
+                    LiveDataUpdateMode="AllowDataShaping"
+                    AllowDraggingColumns="True"
+                    GridLinesVisibility="Both"
+                    HeaderLinesVisibility="Both"
+                    IsGroupDropAreaExpanded="True"
+                    ColumnWidthMode="Star"
+                    ItemsSource="{Binding Client.Cars}">
+                    <!-- <dataGrid:SfDataGrid.Columns> -->
+                    <!--     <dataGrid:GridTextColumn -->
+                    <!--         HeaderText="ID" -->
+                    <!--         MappingName="Id" /> -->
+                    <!--     <dataGrid:GridTextColumn -->
+                    <!--         HeaderText="Статус" -->
+                    <!--         MappingName="Status" /> -->
+                    <!--     <dataGrid:GridNumericColumn -->
+                    <!--         HeaderText="Цена" -->
+                    <!--         MappingName="Cost" /> -->
+                    <!-- </dataGrid:SfDataGrid.Columns> -->
+                    <dataGrid:SfDataGrid.RecordContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                Text="Изменить"
+                                Command="{Binding Path=DataGrid.DataContext.EditClientCommand}"
+                                CommandParameter="{Binding}" />
+                            <MenuFlyoutItem
+                                Text="Удалить"
+                                Command="{Binding Path=DataGrid.DataContext.DeleteClientCommand}"
+                                CommandParameter="{Binding}" />
+                        </MenuFlyout>
+                    </dataGrid:SfDataGrid.RecordContextFlyout>
+                </dataGrid:SfDataGrid>
+            </StackPanel>
+        </PivotItem>
         <PivotItem
             Header="Страховки" />
         <PivotItem

@@ -17,8 +17,6 @@ public class ClientSeeder(IClientService service) : ISeeder
             Age = 34,
             Phone = "+79035356434",
             DriverLicenseNumber = "12 14 657890",
-            Login = "ivanov",
-            Password = "Ivanov123!",
         });
 
         service.Add(new Client
@@ -28,8 +26,6 @@ public class ClientSeeder(IClientService service) : ISeeder
             Age = 25,
             Phone = "+79213456789",
             DriverLicenseNumber = "23 45 123456",
-            Login = "petrov",
-            Password = "Petrov123!"
         });
 
         service.Add(new Client
@@ -39,8 +35,6 @@ public class ClientSeeder(IClientService service) : ISeeder
             Age = 30,
             Phone = "+79001234567",
             DriverLicenseNumber = "34 56 789012",
-            Login = "sidorov",
-            Password = "Sidorov123!"
         });
     }
 }

@@ -29,16 +29,4 @@ public abstract partial class Person : IEntity
     /// </summary>
     [ObservableProperty]
     private string _phone;
-
-    /// <summary>
-    /// Логин для авторизации
-    /// </summary>
-    [ObservableProperty]
-    private string _login;
-
-    /// <summary>
-    /// Пароль для авторизации
-    /// </summary>
-    [ObservableProperty]
-    private string _password;
 }

@@ -24,7 +24,7 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
 
     protected override void CleanEntity(Rental entity)
     {
-        entity.Car = null;
+        entity.Cars = new();
         entity.Client = null;
         entity.Branch = null;
         entity.Payments = new();

@@ -18,10 +18,10 @@ public partial class Rental : IEntity
     /// Идентификатор арендуемого автомобиля.
     /// </summary>
     [ObservableProperty]
-    private int _carId;
+    private ObservableCollection<int> _carIds = new();
 
     [ObservableProperty]
-    private Car? _car;
+    private ObservableCollection<Car> _cars = new();
 
     /// <summary>
     /// Идентификатор клиента, который арендует автомобиль.

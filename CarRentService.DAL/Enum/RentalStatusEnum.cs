@@ -1,8 +1,12 @@
-﻿namespace CarRentService.DAL.Enum;
+﻿using System.ComponentModel;
+
+namespace CarRentService.DAL.Enum;
 
 public enum RentalStatusEnum
 {
-    Created,
+    [Description("Активная")]
+    Active,
 
+    [Description("Завершена")]
     Completed
 }
