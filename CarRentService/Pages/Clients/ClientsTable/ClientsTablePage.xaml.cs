@@ -14,12 +14,11 @@ public sealed partial class ClientsTablePage : NavigationPage
 
         ViewModel = viewModel;
         DataContext = viewModel;
-
-        ViewModel.DataGrid = DataGrid;
     }
 
     private void ClientsTablePage_OnLoaded(object sender, RoutedEventArgs e)
     {
         ViewModel.UpdateState();
+        ViewModel.SetGrids(ClientsDataGrid);
     }
 }

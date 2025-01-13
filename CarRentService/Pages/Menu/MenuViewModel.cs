@@ -1,16 +1,14 @@
 ﻿using System.Windows.Input;
-
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Services;
 using CarRentService.Pages.Login;
 using CommunityToolkit.Mvvm.Input;
-
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CarRentService.Pages.Home
+namespace CarRentService.Pages.Menu
 {
     public partial class MenuViewModel : IViewModel
     {

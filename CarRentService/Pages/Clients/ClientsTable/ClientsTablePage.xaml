@@ -24,11 +24,12 @@
             <AppBarButton
                 Icon="Clear"
                 Command="{Binding ClearFiltersAndSortCommand}"
+                CommandParameter="Clients"
                 Label="Сбросить группировку, фильтры и сортировку" />
         </CommandBar>
 
         <dataGrid:SfDataGrid
-            x:Name="DataGrid"
+            x:Name="ClientsDataGrid"
             AutoGenerateColumns="False"
             AllowEditing="False"
             AllowFiltering="True"

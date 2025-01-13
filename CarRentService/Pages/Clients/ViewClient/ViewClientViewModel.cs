@@ -1,32 +1,31 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using AutoMapper;
-
 using CarRentService.Common.Abstract;
-using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
+using Syncfusion.UI.Xaml.DataGrid;
 
-namespace CarRentService.Pages.Clients.EditClient;
+namespace CarRentService.Pages.Clients.ViewClient;
 
-public partial class EditClientViewModel : IViewModel
+public partial class ViewClientViewModel : BaseViewModel
 {
     public RelayCommand DeleteClientCommand { get; }
 
     public RelayCommand CancelEditCommand { get; }
-    
+
     public RelayCommand SaveCommand { get; }
 
-    [ObservableProperty]
-    private ClientDto _client;
+    public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
 
-    [ObservableProperty]
-    private ObservableCollection<Branch> _branches;
+    [ObservableProperty] private ClientDto _client;
+
+    [ObservableProperty] private ObservableCollection<Branch> _branches;
 
     private readonly INavigationService _navigationService;
 
@@ -38,7 +37,7 @@ public partial class EditClientViewModel : IViewModel
 
     private readonly IMapper _mapper;
 
-    public EditClientViewModel(INavigationService navigationService,
+    public ViewClientViewModel(INavigationService navigationService,
         INotificationService notificationService,
         IClientService clientService,
         IMapper mapper,
@@ -53,6 +52,7 @@ public partial class EditClientViewModel : IViewModel
         DeleteClientCommand = new RelayCommand(DeleteClient, CanDeleteClient);
         CancelEditCommand = new RelayCommand(CancelEdit);
         SaveCommand = new RelayCommand(Save);
+        ClearFiltersAndSortCommand = new RelayCommand<object?>(ClearFiltersAndSort);
 
         Branches = _branchService.Table;
     }
@@ -100,5 +100,17 @@ public partial class EditClientViewModel : IViewModel
         }
 
         Client = _clientService.GetClientDto(client.Id);
+    }
+
+    public void SetGrids(SfDataGrid rentalsDataGrid, SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,
+        SfDataGrid paymentsDataGrid)
+    {
+        Grids = new Dictionary<string, SfDataGrid>()
+        {
+            { "Rentals", rentalsDataGrid },
+            { "Cars", carsDataGrid },
+            { "Insurances", insurancesDataGrid },
+            { "Payments", paymentsDataGrid }
+        };
     }
 }

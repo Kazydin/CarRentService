@@ -6,7 +6,7 @@ public abstract class NavigationPage : BasePage
 {
     public PageTypeEnum Type { get; }
 
-    public string Header { get; set; }
+    public string? Header { get; set; } = null;
 
     public virtual void OnNavigatedTo(object? parameter)
     {
@@ -16,5 +16,10 @@ public abstract class NavigationPage : BasePage
     {
         Type = type;
         Header = header;
+    }
+
+    protected NavigationPage(PageTypeEnum type)
+    {
+        Type = type;
     }
 }

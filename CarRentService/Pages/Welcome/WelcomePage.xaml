@@ -6,12 +6,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
+    xmlns:welcome="using:CarRentService.Pages.Welcome"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=welcome:WelcomeViewModel}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Margin="0, 30, 0, 0">
+    <StackPanel Margin="30">
         <TextBlock FontSize="70">Добро пожаловать,</TextBlock>
         <TextBlock
-            FontSize="35">Иванов Иван Иванович!</TextBlock>
+            FontSize="35" Text="{Binding UserName}" />
     </StackPanel>
 </abstract:NavigationPage>

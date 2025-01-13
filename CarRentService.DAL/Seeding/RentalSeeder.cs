@@ -58,7 +58,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             BranchId = 4,
             StartDate = new DateTime(2024, 12, 10),
             EndDate = new DateTime(2024, 12, 20),
-            Status = RentalStatusEnum.Completed,
+            Status = RentalStatusEnum.Active,
             Cost = 8000,
             TotalCost = 8000,
         });

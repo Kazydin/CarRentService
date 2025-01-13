@@ -28,7 +28,7 @@ public partial class ClientDto
     private ObservableCollection<RentalDto> _rentals = new();
 
     [ObservableProperty]
-    private ObservableCollection<CarDto> _cars = new();
+    private ObservableCollection<CarDto> _currentCars = new();
 
     [ObservableProperty]
     private ObservableCollection<Payment> _payments = new();

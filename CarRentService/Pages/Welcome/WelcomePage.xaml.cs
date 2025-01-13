@@ -5,8 +5,13 @@ namespace CarRentService.Pages.Welcome
 {
     public sealed partial class WelcomePage : NavigationPage
     {
-        public WelcomePage() : base(PageTypeEnum.Welcome, "Главная")
+        public WelcomeViewModel ViewModel;
+
+        public WelcomePage(WelcomeViewModel viewModel) : base(PageTypeEnum.Welcome)
         {
+            ViewModel = viewModel;
+            DataContext = viewModel;
+
             this.InitializeComponent();
         }
     }

@@ -1,9 +1,9 @@
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
-
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CarRentService.Pages.Home;
+namespace CarRentService.Pages.Menu;
 
 public sealed partial class MenuPage : BasePage
 {
@@ -26,7 +26,10 @@ public sealed partial class MenuPage : BasePage
 
         navigationService.PageChanged += header =>
         {
-            Navi.Header = header;
+            if (!string.IsNullOrEmpty(header))
+            {
+                Navi.Header = header;
+            }
         };
 
         // Подписка на изменение состояния CanGoBack
@@ -59,6 +62,7 @@ public sealed partial class MenuPage : BasePage
         ViewModel.ShowLoginDialogCommand.Execute(null);
 
         _service.Init(ContentFrame);
+        _navigationService.Navigate(PageTypeEnum.Welcome, false);
     }
 
     private void Navi_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

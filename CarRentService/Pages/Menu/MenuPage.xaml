@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <abstract:BasePage
-    x:Class="CarRentService.Pages.Home.MenuPage"
+    x:Class="CarRentService.Pages.Menu.MenuPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
-    xmlns:home="using:CarRentService.Pages.Home"
     xmlns:common="using:CarRentService.Common"
-    d:DataContext="{d:DesignInstance Type=home:MenuViewModel}"
+    xmlns:menu="using:CarRentService.Pages.Menu"
+    d:DataContext="{d:DesignInstance Type=menu:MenuViewModel}"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="HomePage_OnLoaded">

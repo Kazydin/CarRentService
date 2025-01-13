@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using AutoMapper;
+using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CarRentService.DAL.Extensions;
 using CarRentService.DAL.Validators;
 
@@ -39,6 +41,23 @@ public class ClientService : BaseCrudService<Client>, IClientService
         client.Rentals.IncludeCars();
 
         var clientDto = _mapper.Map<ClientDto>(client);
+
+        clientDto.CurrentCars = client.Rentals
+            .Where(p => p.Status == RentalStatusEnum.Active)
+            .SelectMany(rental =>
+                rental.Cars.SelectMany(
+                    _ =>
+                    {
+                        var currentCars = _mapper.Map<ObservableCollection<CarDto>>(rental.Cars);
+
+                        foreach (var currentCar in currentCars)
+                        {
+                            currentCar.RentalId = rental.Id;
+                            currentCar.Rental = rental;
+                        }
+
+                        return currentCars;
+                    })).ToObservableCollection();
 
         return clientDto;
     }

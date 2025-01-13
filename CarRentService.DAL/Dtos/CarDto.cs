@@ -1,5 +1,4 @@
-﻿using CarRentService.DAL.Enum;
-
+﻿using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Dtos;
@@ -33,4 +32,10 @@ public partial class CarDto
     /// </summary>
     [ObservableProperty]
     private int _year;
+
+    [ObservableProperty]
+    private Rental? _rental;
+
+    [ObservableProperty]
+    private int? _rentalId;
 }

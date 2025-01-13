@@ -10,7 +10,7 @@ public class ClientMappingProfile : Profile
     public ClientMappingProfile()
     {
         CreateMap<Client, ClientDto>()
-            .ForMember(dest => dest.Cars, opt => opt.MapFrom(src => src.Rentals.SelectMany(r => r.Cars)))
+            .ForMember(dest => dest.CurrentCars, opt => opt.Ignore())
             .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Rentals.SelectMany(r => r.Payments)))
             .ForMember(dest => dest.Insurances, opt => opt.MapFrom(src => src.Rentals.SelectMany(r => r.Insurances)));
 

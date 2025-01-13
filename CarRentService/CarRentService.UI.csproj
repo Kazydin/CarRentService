@@ -22,7 +22,6 @@
     <None Remove="Assets\logout.png" />
     <None Remove="Pages\CarsPage.xaml" />
     <None Remove="Pages\ClientsPage.xaml" />
-    <None Remove="Pages\Clients\EditClient\EditClientPage.xaml" />
     <None Remove="Pages\WelcomeHomePage.xaml" />
     <None Remove="Pages\Login\LoginPage.xaml" />
   </ItemGroup>
@@ -81,7 +80,7 @@
     <PRIResource Remove="Pages\Welcom\**" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Clients\EditClient\EditClientPage.xaml">
+    <Page Update="Pages\Clients\EditClient\ViewClientPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

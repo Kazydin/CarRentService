@@ -2,7 +2,7 @@
 
 using CarRentService.Common.Attributes;
 using CarRentService.Pages.Cars;
-using CarRentService.Pages.Clients.EditClient;
+using CarRentService.Pages.Clients.ViewClient;
 using CarRentService.Pages.Welcome;
 using ClientsTablePage = CarRentService.Pages.Clients.ClientsTable.ClientsTablePage;
 
@@ -16,7 +16,7 @@ public enum PageTypeEnum
     [PageType(typeof(ClientsTablePage))]
     Clients,
 
-    [PageType(typeof(EditClientPage))]
+    [PageType(typeof(ViewClientPage))]
     EditClient,
 
     [PageType(typeof(CarsPage))]

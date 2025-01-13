@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Abstract.Services;
@@ -9,7 +10,7 @@ using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Clients.ClientsTable;
 
-public partial class ClientsTableViewModel : IViewModel
+public partial class ClientsTableViewModel : BaseViewModel
 {
     public RelayCommand AddClientCommand { get; }
 
@@ -17,9 +18,7 @@ public partial class ClientsTableViewModel : IViewModel
 
     public RelayCommand<object> DeleteClientCommand { get; }
 
-    public RelayCommand ClearFiltersAndSortCommand { get; }
-
-    public SfDataGrid DataGrid { get; set; }
+    public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
 
     [ObservableProperty]
     private ObservableCollection<Client> _clients;
@@ -38,7 +37,7 @@ public partial class ClientsTableViewModel : IViewModel
         AddClientCommand = new RelayCommand(AddClient);
         EditClientCommand = new RelayCommand<object>(EditClient);
         DeleteClientCommand = new RelayCommand<object>(DeleteClient);
-        ClearFiltersAndSortCommand = new RelayCommand(ClearFiltersAndSort);
+        ClearFiltersAndSortCommand = new RelayCommand<object?>(ClearFiltersAndSort);
     }
 
     public void UpdateState()
@@ -68,10 +67,11 @@ public partial class ClientsTableViewModel : IViewModel
         }
     }
 
-    private void ClearFiltersAndSort()
+    public void SetGrids(SfDataGrid clientsDataGrid)
     {
-        DataGrid.ClearFilters();
-        DataGrid.SortColumnDescriptions.Clear();
-        DataGrid.GroupColumnDescriptions.Clear();
+        Grids = new Dictionary<string, SfDataGrid>()
+        {
+            { "Clients", clientsDataGrid }
+        };
     }
 }

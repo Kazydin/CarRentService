@@ -3,14 +3,14 @@ using CarRentService.Common.Abstract;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Entities;
 
-namespace CarRentService.Pages.Clients.EditClient;
+namespace CarRentService.Pages.Clients.ViewClient;
 
 [InjectDI]
-public sealed partial class EditClientPage : NavigationPage
+public sealed partial class ViewClientPage : NavigationPage
 {
-    private readonly EditClientViewModel _viewModel;
+    private readonly ViewClientViewModel _viewModel;
 
-    public EditClientPage(EditClientViewModel viewModel) : base(PageTypeEnum.EditClient, "Редактирование клиента")
+    public ViewClientPage(ViewClientViewModel viewModel) : base(PageTypeEnum.EditClient, "Редактирование клиента")
     {
         InitializeComponent();
 
@@ -20,6 +20,8 @@ public sealed partial class EditClientPage : NavigationPage
 
     public override void OnNavigatedTo(object? parameter)
     {
+        _viewModel.SetGrids(RentalsDataGrid, CarsDataGrid, InsurancesDataGrid, PaymentsDataGrid);
+
         if (parameter is Client client)
         {
             _viewModel.SetClient(client);

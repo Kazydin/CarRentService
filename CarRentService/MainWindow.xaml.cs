@@ -1,5 +1,5 @@
 using CarRentService.Common.Abstract;
-using CarRentService.Pages.Home;
+using CarRentService.Pages.Menu;
 
 namespace CarRentService
 {
