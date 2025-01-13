@@ -203,7 +203,7 @@
                         </dataGrid:GridViewDefinition>
                     </dataGrid:SfDataGrid.DetailsViewDefinition>
                     <dataGrid:SfDataGrid.Columns>
-                        <dataGrid:GridTextColumn
+                        <dataGrid:GridNumericColumn
                             HeaderText="ID аренды"
                             MappingName="Id" />
                         <dataGrid:GridTextColumn
@@ -267,7 +267,7 @@
                     </dataGrid:SfDataGrid.GroupColumnDescriptions>
 
                     <dataGrid:SfDataGrid.Columns>
-                        <dataGrid:GridTextColumn
+                        <dataGrid:GridNumericColumn
                             HeaderText="ID автомобиля"
                             MappingName="Id" />
                         <dataGrid:GridTextColumn
@@ -328,10 +328,10 @@
                     </dataGrid:SfDataGrid.GroupColumnDescriptions>
 
                     <dataGrid:SfDataGrid.Columns>
-                        <dataGrid:GridTextColumn
+                        <dataGrid:GridNumericColumn
                             HeaderText="ID страховки"
                             MappingName="Id" />
-                        <dataGrid:GridTextColumn
+                        <dataGrid:GridNumericColumn
                             HeaderText="ID аренды"
                             MappingName="RentalId" />
                         <dataGrid:GridTextColumn
@@ -391,10 +391,10 @@
                     </dataGrid:SfDataGrid.GroupColumnDescriptions>
 
                     <dataGrid:SfDataGrid.Columns>
-                        <dataGrid:GridTextColumn
+                        <dataGrid:GridNumericColumn
                             HeaderText="ID страховки"
                             MappingName="Id" />
-                        <dataGrid:GridTextColumn
+                        <dataGrid:GridNumericColumn
                             HeaderText="ID аренды"
                             MappingName="RentalId" />
                         <dataGrid:GridTextColumn
@@ -406,7 +406,7 @@
                         <dataGrid:GridDateColumn
                             HeaderText="Дата завершение"
                             MappingName="EndDate" />
-                        <dataGrid:GridDateColumn
+                        <dataGrid:GridNumericColumn
                             HeaderText="Стоимость"
                             MappingName="Cost" />
                     </dataGrid:SfDataGrid.Columns>

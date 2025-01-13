@@ -1,6 +1,4 @@
-﻿using CarRentService.DAL.Entities;
-using System.Collections.ObjectModel;
-using CarRentService.Common.Attributes;
+﻿using System.Collections.ObjectModel;
 
 namespace CarRentService.DAL.Abstract.Services;
 

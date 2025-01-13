@@ -42,8 +42,8 @@
             ColumnWidthMode="Star"
             ItemsSource="{Binding Clients}">
             <dataGrid:SfDataGrid.Columns>
-                <dataGrid:GridTextColumn
-                    HeaderText="ID"
+                <dataGrid:GridNumericColumn
+                    HeaderText="ID клиента"
                     MappingName="Id" />
                 <dataGrid:GridTextColumn
                     HeaderText="Фамилия имя отчество"

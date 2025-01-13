@@ -2,7 +2,9 @@
 using AutoMapper;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Extensions;
 using FluentValidation;
 
 namespace CarRentService.DAL.Services;
@@ -25,5 +27,14 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
     protected override void CleanEntity(Branch entity)
     {
         entity.Cars = new();
+    }
+
+    public ObservableCollection<BranchDto> GetAllBranchDtos()
+    {
+        var branches = _mapper.Map<ObservableCollection<Branch>>(Table);
+
+        branches.IncludeCars();
+
+        return _mapper.Map<ObservableCollection<BranchDto>>(branches);
     }
 }

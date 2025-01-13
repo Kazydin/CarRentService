@@ -2,9 +2,9 @@
 
 using CarRentService.Common.Attributes;
 using CarRentService.Pages.Cars;
+using CarRentService.Pages.Clients.ClientsTable;
 using CarRentService.Pages.Clients.ViewClient;
 using CarRentService.Pages.Welcome;
-using ClientsTablePage = CarRentService.Pages.Clients.ClientsTable.ClientsTablePage;
 
 namespace CarRentService.Common;
 
@@ -33,6 +33,9 @@ public enum PageTypeEnum
 
     [Description("Филиалы")]
     Branches,
+
+    // [PageType(typeof(ViewBranchPage))]
+    EditBranch,
 
     [Description("Управление персоналом")]
     ManageAdmins,

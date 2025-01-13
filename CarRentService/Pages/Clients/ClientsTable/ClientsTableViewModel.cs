@@ -4,6 +4,7 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Syncfusion.UI.Xaml.DataGrid;
@@ -62,7 +63,7 @@ public partial class ClientsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
         {
-            _clientService.Remove(record);
+            _clientService.Remove(record.Id);
             UpdateState();
         }
     }

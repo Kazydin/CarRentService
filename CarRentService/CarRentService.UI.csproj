@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\logout.png" />
+    <None Remove="Pages\Branches\BranchesTable\BranchesTable.xaml" />
     <None Remove="Pages\CarsPage.xaml" />
     <None Remove="Pages\ClientsPage.xaml" />
     <None Remove="Pages\WelcomeHomePage.xaml" />
@@ -56,7 +57,17 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\Cars\" />
+    <Folder Include="Pages\Branches\ViewBranch\" />
+    <Folder Include="Pages\Cars\CarsTable\" />
+    <Folder Include="Pages\Cars\ViewCars\" />
+    <Folder Include="Pages\Insurances\InsuracnesTable\" />
+    <Folder Include="Pages\Insurances\ViewInsurance\" />
+    <Folder Include="Pages\Manages\ManagersTable\" />
+    <Folder Include="Pages\Manages\ViewManager\" />
+    <Folder Include="Pages\Payments\PaymentsTable\" />
+    <Folder Include="Pages\Payments\ViewPayment\" />
+    <Folder Include="Pages\Rentals\ViewRental\" />
+    <Folder Include="Pages\Rentals\RentalsTable\" />
     <Folder Include="Resources\ru-RU\" />
   </ItemGroup>
 
@@ -78,6 +89,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="Pages\Welcom\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Branches\BranchesTable\BranchesTable.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\Clients\EditClient\ViewClientPage.xaml">
