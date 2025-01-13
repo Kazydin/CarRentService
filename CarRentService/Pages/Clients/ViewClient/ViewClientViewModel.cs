@@ -21,7 +21,11 @@ public partial class ViewClientViewModel : BaseViewModel
 
     public RelayCommand SaveCommand { get; }
 
-    public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
+    public RelayCommand<object> AddRentalCommand { get; }
+
+    public RelayCommand<object> EditRentalCommand { get; }
+
+    public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
     [ObservableProperty] private ClientDto _client;
 
@@ -49,12 +53,28 @@ public partial class ViewClientViewModel : BaseViewModel
         _mapper = mapper;
         _branchService = branchService;
 
-        DeleteClientCommand = new RelayCommand(DeleteClient, CanDeleteClient);
-        CancelEditCommand = new RelayCommand(CancelEdit);
         SaveCommand = new RelayCommand(Save);
-        ClearFiltersAndSortCommand = new RelayCommand<object?>(ClearFiltersAndSort);
+        CancelEditCommand = new RelayCommand(CancelEdit);
+        DeleteClientCommand = new RelayCommand(DeleteClient, CanDeleteClient);
+
+        ClearFiltersAndSortCommand = new RelayCommand<object>(ClearFiltersAndSort);
+
+        AddRentalCommand = new RelayCommand<object>(AddRental);
+        EditRentalCommand = new RelayCommand<object>(EditRental);
 
         Branches = _branchService.Table;
+    }
+
+    private void EditRental(object? obj)
+    {
+        // TODO: implement
+        throw new System.NotImplementedException();
+    }
+
+    private void AddRental(object? obj)
+    {
+        // TODO: implement
+        throw new System.NotImplementedException();
     }
 
     private async void Save()
