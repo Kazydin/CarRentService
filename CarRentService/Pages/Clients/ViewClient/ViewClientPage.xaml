@@ -161,6 +161,7 @@
                     AllowDraggingColumns="True"
                     GridLinesVisibility="Both"
                     HeaderLinesVisibility="Both"
+                    MinHeight="400"
                     IsGroupDropAreaExpanded="True"
                     ColumnWidthMode="Star"
                     ItemsSource="{Binding Client.Rentals}">
@@ -245,6 +246,7 @@
                         CommandParameter="Cars"
                         Label="Сбросить группировку, фильтры и сортировку" />
                 </CommandBar>
+
                 <dataGrid:SfDataGrid
                     x:Name="CarsDataGrid"
                     AutoGenerateColumns="False"
@@ -252,6 +254,7 @@
                     AllowFiltering="True"
                     ShowGroupDropArea="True"
                     LiveDataUpdateMode="AllowDataShaping"
+                    MinHeight="400"
                     AllowDraggingColumns="True"
                     GridLinesVisibility="Both"
                     HeaderLinesVisibility="Both"
@@ -311,6 +314,7 @@
                     AllowEditing="False"
                     AllowFiltering="True"
                     ShowGroupDropArea="True"
+                    MinHeight="400"
                     LiveDataUpdateMode="AllowDataShaping"
                     AllowDraggingColumns="True"
                     GridLinesVisibility="Both"
@@ -378,6 +382,7 @@
                     GridLinesVisibility="Both"
                     HeaderLinesVisibility="Both"
                     IsGroupDropAreaExpanded="True"
+                    MinHeight="400"
                     ColumnWidthMode="Star"
                     ItemsSource="{Binding Client.Payments}">
 
