@@ -11,10 +11,13 @@ public class CarMappingProfile : Profile
 {
     public CarMappingProfile()
     {
+        CreateMap<Car, Car>();
+
         CreateMap<Car, CarDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
         CreateMap<CarDto, Car>()
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToEnum<CarStatusEnum>()));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToEnumFromDescription<CarStatusEnum>()))
+            .ForMember(dest => dest.Rentals, opt => opt.Ignore());
     }
 }

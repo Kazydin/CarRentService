@@ -42,7 +42,7 @@ public class ClientService : BaseCrudService<Client>, IClientService
         var clientDto = _mapper.Map<ClientDto>(client);
 
         clientDto.CurrentCars = client.Rentals
-            .Where(p => p.Status == RentalStatusEnum.Created)
+            .Where(p => p.Status == RentalStatusEnum.Active)
             .SelectMany(rental =>
                 rental.Cars.SelectMany(
                     _ =>
@@ -51,8 +51,7 @@ public class ClientService : BaseCrudService<Client>, IClientService
 
                         foreach (var currentCar in currentCars)
                         {
-                            currentCar.RentalId = rental.Id;
-                            currentCar.Rental = rental;
+                            currentCar.Rental = _mapper.Map<RentalDto>(rental);
                         }
 
                         return currentCars;

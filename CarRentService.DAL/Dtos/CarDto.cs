@@ -8,7 +8,7 @@ namespace CarRentService.DAL.Dtos;
 public partial class CarDto
 {
     [ObservableProperty]
-    private int _id;
+    private int? _id;
 
     [ObservableProperty]
     private string _registrationNumber;
@@ -35,22 +35,28 @@ public partial class CarDto
     /// Год выпуска транспортного средства.
     /// </summary>
     [ObservableProperty]
-    private int _year;
+    private int? _year;
 
     [ObservableProperty]
     private int? _branchId;
 
     [ObservableProperty]
-    private Branch? _branch;
+    private Branch _branch;
 
     /// <summary>
     /// Текущая аренда
     /// </summary>
     [ObservableProperty]
-    private Rental? _rental;
+    private ObservableCollection<RentalDto> _rentals = new();
 
     /// <summary>
-    /// ID Текущая аренда
+    /// Текущая аренда
+    /// </summary>
+    [ObservableProperty]
+    private RentalDto? _rental;
+
+    /// <summary>
+    /// Текущая аренда
     /// </summary>
     [ObservableProperty]
     private int? _rentalId;
@@ -60,8 +66,13 @@ public partial class CarDto
         return $"{Make} {Model} ({RegistrationNumber})";
     }
 
-    partial void OnRentalChanged(Rental? value)
+    partial void OnRentalChanged(RentalDto? value)
     {
         RentalId = value?.Id;
+    }
+
+    partial void OnBranchChanged(Branch? value)
+    {
+        BranchId = value?.Id;
     }
 }

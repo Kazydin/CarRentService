@@ -36,7 +36,7 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
     {
         var branch = _store.Branch.FirstOrDefault(p => p.Id == branchId);
 
-        Guard.NotNull(branch, nameof(branch), $"Филиал с ID {branch} не найден");
+        Guard.NotNull(branch, nameof(branch), $"Филиал с ID {branchId} не найден");
 
         // Клонирование, чтобы не менять базовый объект
         branch = _mapper.Map<Branch>(branch);

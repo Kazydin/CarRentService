@@ -36,7 +36,8 @@ public static class EnumExtensions
 
         if (field != null)
         {
-            DescriptionAttribute attribute = (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
+            DescriptionAttribute attribute =
+                (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
 
             if (attribute != null)
             {
@@ -45,5 +46,19 @@ public static class EnumExtensions
         }
 
         return value.ToString();
+    }
+
+    public static T ToEnumFromDescription<T>(this string value) where T : struct, Enum
+    {
+        // Преобразуем строку в enum с использованием Enum.TryParse
+        var values = Enum.GetValues<T>().ToDictionary(k => k.GetDescription(), v => v);
+
+        if (values.TryGetValue(value, out T enumValue))
+        {
+            return enumValue;
+        }
+
+        // Если строка не соответствует ни одному значению enum, выбрасываем исключение
+        throw new ArgumentException($"Невозможно преобразовать строку '{value}' в {typeof(T).Name}.");
     }
 }

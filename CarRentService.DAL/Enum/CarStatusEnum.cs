@@ -7,7 +7,7 @@ public enum CarStatusEnum
     /// <summary>
     /// Машина доступна для аренды.
     /// </summary>
-    [Description("Доступна")]
+    [Description("В наличии")]
     Available,
 
     /// <summary>

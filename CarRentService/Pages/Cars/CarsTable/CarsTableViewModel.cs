@@ -19,7 +19,7 @@ public partial class CarsTableViewModel : BaseViewModel
 
     public RelayCommand<object> EditCarCommand { get; }
 
-    public RelayCommand<object> EditRentalCommand { get; }
+    public RelayCommand<object> EditCurrentRentalCommand { get; }
 
     public RelayCommand<object> DeleteCarCommand { get; }
 
@@ -41,7 +41,7 @@ public partial class CarsTableViewModel : BaseViewModel
         // Настройка команд
         AddCarCommand = new RelayCommand(AddCar);
         EditCarCommand = new RelayCommand<object>(EditCar);
-        EditRentalCommand = new RelayCommand<object>(EditRental);
+        EditCurrentRentalCommand = new RelayCommand<object>(EditCurrentRental);
         DeleteCarCommand = new RelayCommand<object>(DeleteCar);
         ClearFiltersAndSortCommand = new RelayCommand<object?>(ClearFiltersAndSort);
     }
@@ -62,11 +62,11 @@ public partial class CarsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Id, record.GetCarHeader()));
+            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Id!.Value, record.GetCarHeader()));
         }
     }
 
-    private void EditRental(object? param)
+    private void EditCurrentRental(object? param)
     {
         throw new NotImplementedException();
     }
@@ -75,7 +75,7 @@ public partial class CarsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
-            _carService.Remove(record.Id);
+            _carService.Remove(record.Id!.Value);
             UpdateState();
         }
     }

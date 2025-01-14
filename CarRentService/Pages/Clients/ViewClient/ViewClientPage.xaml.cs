@@ -1,7 +1,6 @@
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Entities;
 
 namespace CarRentService.Pages.Clients.ViewClient;
 

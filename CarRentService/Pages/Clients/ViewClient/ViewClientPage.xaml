@@ -59,7 +59,7 @@
                     </TextBlock>
                     <TextBox
                         Text="{Binding Client.Id, Mode=TwoWay}"
-                        IsReadOnly="True" />
+                        IsEnabled="False" />
                 </StackPanel>
                 <StackPanel
                     Margin="0, 10, 5, 5"

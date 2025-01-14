@@ -8,6 +8,8 @@ public class BranchMappingProfile : Profile
 {
     public BranchMappingProfile()
     {
+        CreateMap<Branch, Branch>();
+
         CreateMap<Branch, BranchDto>()
             .ForMember(dest => dest.NumberOfCars, opt => opt.MapFrom(src => src.Cars.Count));
 

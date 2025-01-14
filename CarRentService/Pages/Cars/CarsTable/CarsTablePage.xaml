@@ -71,8 +71,8 @@
                         Command="{Binding Path=DataGrid.DataContext.EditCarCommand}"
                         CommandParameter="{Binding}" />
                     <MenuFlyoutItem
-                        Text="Изменить аренду"
-                        Command="{Binding Path=DataGrid.DataContext.EditRentalCommand}"
+                        Text="Изменить текущую аренду"
+                        Command="{Binding Path=DataGrid.DataContext.EditCurrentRentalCommand}"
                         CommandParameter="{Binding}" />
                     <MenuFlyoutItem
                         Text="Удалить"

@@ -9,6 +9,8 @@ public class ClientMappingProfile : Profile
 {
     public ClientMappingProfile()
     {
+        CreateMap<Client, Client>();
+
         CreateMap<Client, ClientDto>()
             .ForMember(dest => dest.CurrentCars, opt => opt.Ignore())
             .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Rentals.SelectMany(r => r.Payments)))

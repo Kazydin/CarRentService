@@ -8,6 +8,7 @@ using CarRentService.Common.Extensions;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Enum;
 using CarRentService.DAL.Extensions;
+using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
@@ -34,19 +35,27 @@ public class CarService : BaseCrudService<Car>, ICarService
 
     public ObservableCollection<CarDto> GetAllCarDtos()
     {
-        var cars = new ObservableCollection<Car>(Table);
-
-        cars.IncludeRentals();
-
-        return cars
-            .Select(car =>
-            {
-                var dto = _mapper.Map<CarDto>(car);
-
-                dto.Rental = car.Rentals.FirstOrDefault(p => p.Status == RentalStatusEnum.Active);
-
-                return dto;
-            })
+        return Table
+            .Select(car => GetCarDto(car.Id))
             .ToObservableCollection();
+    }
+
+    public CarDto GetCarDto(int entityId)
+    {
+        var entity = _store.Car.FirstOrDefault(p => p.Id == entityId);
+
+        Guard.NotNull(entity, nameof(entity), $"Автомобиль с ID {entityId} не найден");
+
+        // Клонирование, чтобы не менять базовый объект
+        var car = _mapper.Map<Car>(entity);
+
+        car.IncludeRentals();
+        car.IncludeBranch();
+
+        var dto = _mapper.Map<CarDto>(car);
+
+        dto.Rental = _mapper.Map<RentalDto>(car.Rentals.FirstOrDefault(p => p.Status == RentalStatusEnum.Active));
+
+        return dto;
     }
 }

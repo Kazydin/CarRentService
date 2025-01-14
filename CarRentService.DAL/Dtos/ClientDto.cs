@@ -37,14 +37,5 @@ public partial class ClientDto
     private ObservableCollection<Insurance> _insurances = new();
 
     [ObservableProperty]
-    private int? _branchId;
-
-    [ObservableProperty]
     private Branch? _branch;
-
-    partial void OnBranchChanged(Branch? value)
-    {
-        // Обновляем branchId при изменении branch
-        BranchId = value?.Id;
-    }
 }
