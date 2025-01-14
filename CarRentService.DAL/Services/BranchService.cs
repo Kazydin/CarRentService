@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
 using AutoMapper;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;

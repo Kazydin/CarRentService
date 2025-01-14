@@ -4,11 +4,11 @@ using Microsoft.UI.Xaml;
 
 namespace CarRentService.Pages.Branches.BranchesTable;
 
-public sealed partial class BranchesTable : NavigationPage
+public sealed partial class BranchesTablePage : NavigationPage
 {
     public BranchesTableViewModel ViewModel { get; }
 
-    public BranchesTable(BranchesTableViewModel viewModel) : base(PageTypeEnum.Branches, "Филиалы")
+    public BranchesTablePage(BranchesTableViewModel viewModel) : base(PageTypeEnum.Branches, "Филиалы")
     {
         InitializeComponent();
 

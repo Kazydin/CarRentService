@@ -42,7 +42,7 @@ public class ClientService : BaseCrudService<Client>, IClientService
         var clientDto = _mapper.Map<ClientDto>(client);
 
         clientDto.CurrentCars = client.Rentals
-            .Where(p => p.Status == RentalStatusEnum.Active)
+            .Where(p => p.Status == RentalStatusEnum.Created)
             .SelectMany(rental =>
                 rental.Cars.SelectMany(
                     _ =>

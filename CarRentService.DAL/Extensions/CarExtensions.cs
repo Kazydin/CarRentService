@@ -22,4 +22,23 @@ public static class CarExtensions
 
         return car;
     }
+
+    public static void IncludeRentals(this IEnumerable<Car> cars)
+    {
+        foreach (var car in cars)
+        {
+            car.IncludeRentals();
+        }
+    }
+
+    public static Car IncludeRentals(this Car car)
+    {
+        var dataStore = DataStoreContextProvider.Current;
+
+        car.Rentals = dataStore.Rental
+            .Where(p => p.CarIds.Contains(car.Id))
+            .ToObservableCollection();
+
+        return car;
+    }
 }

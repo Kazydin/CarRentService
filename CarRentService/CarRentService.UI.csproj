@@ -20,8 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\logout.png" />
-    <None Remove="Pages\Branches\BranchesTable\BranchesTable.xaml" />
     <None Remove="Pages\CarsPage.xaml" />
+    <None Remove="Pages\Cars\CarsTable\CarsTablePage.xaml" />
     <None Remove="Pages\ClientsPage.xaml" />
     <None Remove="Pages\WelcomeHomePage.xaml" />
     <None Remove="Pages\Login\LoginPage.xaml" />
@@ -57,7 +57,6 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\Cars\CarsTable\" />
     <Folder Include="Pages\Cars\ViewCars\" />
     <Folder Include="Pages\Insurances\InsuracnesTable\" />
     <Folder Include="Pages\Insurances\ViewInsurance\" />
@@ -90,12 +89,17 @@
     <PRIResource Remove="Pages\Welcom\**" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Pages\Cars\CarsTable\CarsTablePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Pages\Branches\ViewBranch\ViewBranchPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Branches\BranchesTable\BranchesTable.xaml">
+    <Page Update="Pages\Branches\BranchesTable\BranchesTablePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

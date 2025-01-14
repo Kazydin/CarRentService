@@ -2,7 +2,7 @@
 
 using CarRentService.Common.Attributes;
 using CarRentService.Pages.Branches.ViewBranch;
-using CarRentService.Pages.Cars;
+using CarRentService.Pages.Cars.CarsTable;
 using CarRentService.Pages.Clients.ClientsTable;
 using CarRentService.Pages.Clients.ViewClient;
 using CarRentService.Pages.Welcome;
@@ -20,8 +20,10 @@ public enum PageTypeEnum
     [PageType(typeof(ViewClientPage))]
     EditClient,
 
-    [PageType(typeof(CarsPage))]
+    [PageType(typeof(CarsTablePage))]
     Cars,
+
+    EditCar,
 
     [Description("Договора")]
     Contracts,

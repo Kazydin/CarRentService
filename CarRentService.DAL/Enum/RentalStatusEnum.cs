@@ -4,7 +4,10 @@ namespace CarRentService.DAL.Enum;
 
 public enum RentalStatusEnum
 {
-    [Description("Активная")]
+    [Description("Создана")]
+    Created,
+
+    [Description("Активна")]
     Active,
 
     [Description("Завершена")]

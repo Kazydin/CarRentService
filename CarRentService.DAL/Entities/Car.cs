@@ -26,7 +26,7 @@ public partial class Car : Vehicle
     /// идентификатор филиала
     /// </summary>
     [ObservableProperty]
-    private int _branchId;
+    private int? _branchId;
 
     [ObservableProperty]
     private Branch? _branch;
