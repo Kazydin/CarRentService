@@ -33,4 +33,21 @@ public partial class Branch : IEntity
     /// </summary>
     [ObservableProperty]
     private string _contactDetails;
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Branch other)
+            return false;
+
+        // Сравниваем по уникальному идентификатору и ключевым полям
+        return Id == other.Id &&
+               Name == other.Name &&
+               Address == other.Address &&
+               ContactDetails == other.ContactDetails;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, Name, Address, ContactDetails);
+    }
 }
