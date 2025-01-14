@@ -111,15 +111,15 @@ public partial class ViewClientViewModel : BaseViewModel
         _navigationService.GoBack();
     }
 
-    public void SetClient(Client? client = null)
+    public void SetClient(int? entityId = null)
     {
-        if (client == null)
+        if (entityId == null)
         {
             Client = new ClientDto();
             return;
         }
 
-        Client = _clientService.GetClientDto(client.Id);
+        Client = _clientService.GetClientDto(entityId.Value);
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid, SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,

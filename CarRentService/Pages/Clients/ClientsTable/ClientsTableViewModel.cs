@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Extensions;
@@ -55,7 +56,7 @@ public partial class ClientsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditClient, parameter: record);
+            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id, record.Fio));
         }
     }
 

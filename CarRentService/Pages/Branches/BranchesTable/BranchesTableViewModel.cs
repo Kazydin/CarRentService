@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using AutoMapper;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -59,7 +60,7 @@ public partial class BranchesTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is BranchDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditBranch, parameter: record);
+            _navigationService.Navigate(PageTypeEnum.EditBranch, parameters: new CommonNavigationData(record.Id!.Value, record.Name));
         }
     }
 
@@ -67,7 +68,7 @@ public partial class BranchesTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is BranchDto record)
         {
-            _branchService.Remove(record.Id);
+            _branchService.Remove(record.Id!.Value);
             UpdateState();
         }
     }

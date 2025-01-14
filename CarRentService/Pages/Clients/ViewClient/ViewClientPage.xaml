@@ -12,7 +12,6 @@
     xmlns:editors="using:Syncfusion.UI.Xaml.Editors"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ViewClientViewModel }">
 
-
     <Pivot
         Margin="47, 20, 47, 20">
         <PivotItem

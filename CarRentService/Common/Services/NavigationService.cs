@@ -51,7 +51,7 @@ public class NavigationService : INavigationService
         _pages = factory.GetPages();
     }
 
-    public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, object? parameter = null)
+    public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, INavigationData? parameters = null)
     {
         Guard.NotNull(_frame, nameof(_frame), "Frame не задан");
 
@@ -65,7 +65,7 @@ public class NavigationService : INavigationService
             _backStack.Push(currentPage.Type);
         }
 
-        pageDto!.Page.OnNavigatedTo(parameter);
+        pageDto!.Page.OnNavigatedTo(parameters);
 
         _frame.Content = pageDto!.Page;
 

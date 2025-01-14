@@ -8,7 +8,7 @@ namespace CarRentService.DAL.Dtos;
 public partial class BranchDto
 {
     [ObservableProperty]
-    private int _id;
+    private int? _id;
 
     /// <summary>
     /// Название филиала.
@@ -23,7 +23,13 @@ public partial class BranchDto
     private string _address;
 
     [ObservableProperty]
-    private ObservableCollection<Car> _cars = new();
+    private ObservableCollection<CarDto> _cars = new();
+
+    [ObservableProperty]
+    private ObservableCollection<ManagerDto> _managers = new();
+
+    [ObservableProperty]
+    private ObservableCollection<Client> _clients = new();
 
     [ObservableProperty]
     private int numberOfCars;

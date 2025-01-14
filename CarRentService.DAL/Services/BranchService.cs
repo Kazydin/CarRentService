@@ -1,11 +1,15 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using AutoMapper;
+using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CarRentService.DAL.Extensions;
 using FluentValidation;
+using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
@@ -29,12 +33,28 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
         entity.Cars = new();
     }
 
+    public BranchDto GetBranchDto(int branchId)
+    {
+        var branch = _store.Branch.FirstOrDefault(p => p.Id == branchId);
+
+        Guard.NotNull(branch, nameof(branch), $"Филиал с ID {branch} не найден");
+
+        // Клонирование, чтобы не менять базовый объект
+        branch = _mapper.Map<Branch>(branch);
+
+        branch!.IncludeCars();
+
+        var dto = _mapper.Map<BranchDto>(branch);
+
+        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => p.BranchId == branch.Id));
+        dto.Clients = _mapper.Map<ObservableCollection<Client>>(_store.Client.Where(p => p.BranchId == branch.Id));
+        dto.Managers = _mapper.Map<ObservableCollection<ManagerDto>>(_store.Manager.Where(p => p.Role == ManagerRoleEnum.BranchManager && p.BranchIds.Contains(branch.Id)));
+
+        return dto;
+    }
+
     public ObservableCollection<BranchDto> GetAllBranchDtos()
     {
-        var branches = _mapper.Map<ObservableCollection<Branch>>(Table);
-
-        branches.IncludeCars();
-
-        return _mapper.Map<ObservableCollection<BranchDto>>(branches);
+        return Table.Select(p => GetBranchDto(p.Id)).ToObservableCollection();
     }
 }

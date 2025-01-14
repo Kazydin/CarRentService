@@ -1,11 +1,10 @@
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
-using CarRentService.Common.Attributes;
+using CarRentService.Common.Models;
 using CarRentService.DAL.Entities;
 
 namespace CarRentService.Pages.Clients.ViewClient;
 
-[InjectDI]
 public sealed partial class ViewClientPage : NavigationPage
 {
     private readonly ViewClientViewModel _viewModel;
@@ -18,14 +17,14 @@ public sealed partial class ViewClientPage : NavigationPage
         _viewModel = viewModel;
     }
 
-    public override void OnNavigatedTo(object? parameter)
+    public override void OnNavigatedTo(INavigationData? parameters)
     {
         _viewModel.SetGrids(RentalsDataGrid, CarsDataGrid, InsurancesDataGrid, PaymentsDataGrid);
 
-        if (parameter is Client client)
+        if (parameters is CommonNavigationData data)
         {
-            _viewModel.SetClient(client);
-            Header = client.Fio;
+            _viewModel.SetClient(data.EntityId);
+            Header = data.Header;
         }
         else
         {

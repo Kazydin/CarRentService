@@ -57,7 +57,6 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\Branches\ViewBranch\" />
     <Folder Include="Pages\Cars\CarsTable\" />
     <Folder Include="Pages\Cars\ViewCars\" />
     <Folder Include="Pages\Insurances\InsuracnesTable\" />
@@ -89,6 +88,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="Pages\Welcom\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Branches\ViewBranch\ViewBranchPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\Branches\BranchesTable\BranchesTable.xaml">

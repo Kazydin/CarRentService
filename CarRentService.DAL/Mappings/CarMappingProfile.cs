@@ -12,5 +12,7 @@ public class CarMappingProfile : Profile
     {
         CreateMap<Car, CarDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
+
+        CreateMap<CarDto, Car>();
     }
 }

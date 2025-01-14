@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
 using CarRentService.Common.Attributes;
+using CarRentService.Pages.Branches.ViewBranch;
 using CarRentService.Pages.Cars;
 using CarRentService.Pages.Clients.ClientsTable;
 using CarRentService.Pages.Clients.ViewClient;
@@ -34,7 +35,7 @@ public enum PageTypeEnum
     [Description("Филиалы")]
     Branches,
 
-    // [PageType(typeof(ViewBranchPage))]
+    [PageType(typeof(ViewBranchPage))]
     EditBranch,
 
     [Description("Управление персоналом")]

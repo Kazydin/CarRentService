@@ -1,14 +1,16 @@
 ﻿using System;
+using CarRentService.Common.Attributes;
 
 namespace CarRentService.Common.Abstract;
 
+[InjectDI]
 public abstract class NavigationPage : BasePage
 {
     public PageTypeEnum Type { get; }
 
     public string? Header { get; set; } = null;
 
-    public virtual void OnNavigatedTo(object? parameter)
+    public virtual void OnNavigatedTo(INavigationData? parameters)
     {
     }
 
