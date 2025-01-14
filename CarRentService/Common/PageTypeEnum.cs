@@ -25,8 +25,11 @@ public enum PageTypeEnum
 
     EditCar,
 
-    [Description("Договора")]
-    Contracts,
+    [Description("Аренды")]
+    Rentals,
+
+    // [PageType(typeof(ViewClientPage))]
+    EditRental,
 
     [Description("Платежи")]
     Payments,

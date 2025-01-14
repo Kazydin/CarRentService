@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<abstract:NavigationPage
+    x:Class="CarRentService.Pages.Rentals.RentalsTable.RentalsTablePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CarRentService.Pages.Rentals.RentalsTable"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:abstract="using:CarRentService.Common.Abstract"
+    xmlns:dataGrid="using:Syncfusion.UI.Xaml.DataGrid"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=local:RentalsTableViewModel}"
+    Loaded="RentalsTablePage_OnLoaded">
+
+    <StackPanel
+        Margin="57, 20, 57, 20"
+        Orientation="Vertical">
+        <CommandBar
+            DefaultLabelPosition="Right">
+            <AppBarButton
+                Icon="Add"
+                Command="{Binding AddRentalCommand}"
+                Label="Добавить" />
+            <AppBarButton
+                Icon="Clear"
+                Command="{Binding ClearFiltersAndSortCommand}"
+                CommandParameter="Rentals"
+                Label="Сбросить группировку, фильтры и сортировку" />
+        </CommandBar>
+
+        <dataGrid:SfDataGrid
+            x:Name="RentalsDataGrid"
+            AutoGenerateColumns="False"
+            AllowEditing="False"
+            AllowFiltering="True"
+            ShowGroupDropArea="True"
+            LiveDataUpdateMode="AllowDataShaping"
+            AllowDraggingColumns="True"
+            GridLinesVisibility="Both"
+            HeaderLinesVisibility="Both"
+            IsGroupDropAreaExpanded="True"
+            ColumnWidthMode="Star"
+            ItemsSource="{Binding Rentals}">
+            <dataGrid:SfDataGrid.Columns>
+                <dataGrid:GridNumericColumn
+                    HeaderText="ID аренды"
+                    MappingName="Id" />
+                <dataGrid:GridTextColumn
+                    HeaderText="Статус"
+                    MappingName="Status" />
+                <dataGrid:GridNumericColumn
+                    HeaderText="Цена"
+                    MappingName="Cost" />
+            </dataGrid:SfDataGrid.Columns>
+            <dataGrid:SfDataGrid.RecordContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem
+                        Text="Изменить"
+                        Command="{Binding Path=DataGrid.DataContext.EditRentalCommand}"
+                        CommandParameter="{Binding}" />
+                    <MenuFlyoutItem
+                        Text="Удалить"
+                        Command="{Binding Path=DataGrid.DataContext.DeleteRentalCommand}"
+                        CommandParameter="{Binding}" />
+                </MenuFlyout>
+            </dataGrid:SfDataGrid.RecordContextFlyout>
+        </dataGrid:SfDataGrid>
+    </StackPanel>
+</abstract:NavigationPage>

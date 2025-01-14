@@ -52,7 +52,7 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
         return dto;
     }
 
-    public ObservableCollection<BranchDto> GetAllBranchDtos()
+    public ObservableCollection<BranchDto> GetAllDtos()
     {
         return Table.Select(p => GetBranchDto(p.Id)).ToObservableCollection();
     }

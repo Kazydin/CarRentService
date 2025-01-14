@@ -113,11 +113,6 @@ public partial class ViewCarViewModel : BaseViewModel
     {
         try
         {
-            Car.Rental = null;
-            Car.Rentals.Clear();
-            Car.RentalId = null;
-            Car.Branch = null;
-
             _carService.Update(_mapper.Map<Car>(Car));
 
             _notificationService.ShowTip("Обновление автомобиля", "Сохранено успешно!");

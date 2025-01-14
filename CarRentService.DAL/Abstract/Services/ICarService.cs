@@ -8,7 +8,7 @@ namespace CarRentService.DAL.Abstract.Services;
 [InjectDI]
 public interface ICarService : ICrudService<Car>
 {
-    ObservableCollection<CarDto> GetAllCarDtos();
+    ObservableCollection<CarDto> GetAllDtos();
 
     CarDto GetCarDto(int entityId);
 }

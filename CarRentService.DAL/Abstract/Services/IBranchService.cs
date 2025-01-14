@@ -10,5 +10,5 @@ public interface IBranchService : ICrudService<Branch>
 {
     public BranchDto GetBranchDto(int branchId);
 
-    public ObservableCollection<BranchDto> GetAllBranchDtos();
+    public ObservableCollection<BranchDto> GetAllDtos();
 }

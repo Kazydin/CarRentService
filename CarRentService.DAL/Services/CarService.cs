@@ -33,7 +33,7 @@ public class CarService : BaseCrudService<Car>, ICarService
         entity.Rentals = new();
     }
 
-    public ObservableCollection<CarDto> GetAllCarDtos()
+    public ObservableCollection<CarDto> GetAllDtos()
     {
         return Table
             .Select(car => GetCarDto(car.Id))

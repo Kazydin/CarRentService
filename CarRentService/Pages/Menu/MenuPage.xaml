@@ -46,8 +46,8 @@
                 Content="Сделки" />
 
             <NavigationViewItem
-                Content="Договора"
-                Tag="{x:Bind common:PageTypeEnum.Contracts, Converter={StaticResource EnumToStringConverter}}">
+                Content="Аренды"
+                Tag="{x:Bind common:PageTypeEnum.Rentals, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/contract.png" />

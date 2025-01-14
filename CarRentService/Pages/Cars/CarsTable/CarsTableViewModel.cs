@@ -50,7 +50,7 @@ public partial class CarsTableViewModel : BaseViewModel
     {
         var cars = new ObservableCollection<Car>(_carService.Table);
 
-        Cars = _carService.GetAllCarDtos();
+        Cars = _carService.GetAllDtos();
     }
 
     private void AddCar()

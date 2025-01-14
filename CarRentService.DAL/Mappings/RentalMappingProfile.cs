@@ -9,6 +9,8 @@ public class RentalMappingProfile : Profile
 {
     public RentalMappingProfile()
     {
+        CreateMap<Rental, Rental>();
+
         CreateMap<Rental, RentalDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
