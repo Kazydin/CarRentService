@@ -29,6 +29,16 @@ public partial class ViewRentalViewModel : BaseViewModel
     // TODO: редактирование машины в системе
     public RelayCommand<object> EditCarCommand { get; }
 
+    public RelayCommand<object> EditClientCommand { get; }
+
+    public RelayCommand<object> AddPaymentCommand { get; }
+
+    public RelayCommand<object> DeletePaymentCommand { get; }
+
+    public RelayCommand<object> AddInsuranceCommand { get; }
+
+    public RelayCommand<object> DeleteInsuranceCommand { get; }
+
     public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
     [ObservableProperty] private RentalDto _rental;
@@ -68,9 +78,42 @@ public partial class ViewRentalViewModel : BaseViewModel
         AddCarCommand = new RelayCommand<object>(AddCar);
         EditCarCommand = new RelayCommand<object>(EditCar);
 
+        EditClientCommand = new RelayCommand<object>(EditClient);
+
+        AddPaymentCommand = new RelayCommand<object>(AddPayment);
+        DeletePaymentCommand = new RelayCommand<object>(EditPayment);
+
+        AddInsuranceCommand = new RelayCommand<object>(AddInsurance);
+        DeleteInsuranceCommand = new RelayCommand<object>(EditInsurance);
+
         Branches = _branchService.Table;
 
         _tariffs = typeof(RentalTariffEnum).GetDescriptions().ToObservableCollection();
+    }
+
+    private void AddInsurance(object? obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void EditInsurance(object? obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void AddPayment(object? obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void EditPayment(object? obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void EditClient(object? obj)
+    {
+        throw new System.NotImplementedException();
     }
 
     private void EditCar(object? obj)

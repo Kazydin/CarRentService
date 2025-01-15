@@ -48,8 +48,6 @@ public partial class CarsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        var cars = new ObservableCollection<Car>(_carService.Table);
-
         Cars = _carService.GetAllDtos();
     }
 

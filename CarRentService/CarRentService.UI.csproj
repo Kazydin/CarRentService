@@ -24,6 +24,7 @@
     <None Remove="Pages\Cars\CarsTable\CarsTablePage.xaml" />
     <None Remove="Pages\Cars\ViewCars\ViewCarPage.xaml" />
     <None Remove="Pages\ClientsPage.xaml" />
+    <None Remove="Pages\Payments\PaymentsTable\PaymentsTablePage.xaml" />
     <None Remove="Pages\Rentals\RentalsTable\RentalsTablePage.xaml" />
     <None Remove="Pages\Rentals\ViewRental\ViewRentalPage.xaml" />
     <None Remove="Pages\WelcomeHomePage.xaml" />
@@ -64,7 +65,6 @@
     <Folder Include="Pages\Insurances\ViewInsurance\" />
     <Folder Include="Pages\Manages\ManagersTable\" />
     <Folder Include="Pages\Manages\ViewManager\" />
-    <Folder Include="Pages\Payments\PaymentsTable\" />
     <Folder Include="Pages\Payments\ViewPayment\" />
     <Folder Include="Resources\ru-RU\" />
   </ItemGroup>
@@ -87,6 +87,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="Pages\Welcom\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Payments\PaymentsTable\PaymentsTablePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\Rentals\ViewRental\ViewRentalPage.xaml">

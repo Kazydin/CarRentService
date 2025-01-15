@@ -83,7 +83,7 @@
             </NavigationViewItem>
             <NavigationViewItem
                 Content="Управление персоналом"
-                Tag="{x:Bind common:PageTypeEnum.ManageAdmins, Converter={StaticResource EnumToStringConverter}}"
+                Tag="{x:Bind common:PageTypeEnum.Managers, Converter={StaticResource EnumToStringConverter}}"
                 Icon="Contact" />
 
         </NavigationView.MenuItems>

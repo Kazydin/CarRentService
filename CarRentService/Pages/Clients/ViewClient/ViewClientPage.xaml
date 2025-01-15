@@ -391,23 +391,20 @@
 
                     <dataGrid:SfDataGrid.Columns>
                         <dataGrid:GridNumericColumn
-                            HeaderText="ID страховки"
+                            HeaderText="ID платежа"
                             MappingName="Id" />
                         <dataGrid:GridNumericColumn
                             HeaderText="ID аренды"
                             MappingName="RentalId" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата"
+                            MappingName="Date" />
                         <dataGrid:GridTextColumn
-                            HeaderText="Покрытие, руб."
-                            MappingName="CoverageAmount" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата начала"
-                            MappingName="StartDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата завершение"
-                            MappingName="EndDate" />
+                            HeaderText="Метод"
+                            MappingName="Method" />
                         <dataGrid:GridNumericColumn
-                            HeaderText="Стоимость"
-                            MappingName="Cost" />
+                            HeaderText="Сумма, руб."
+                            MappingName="Amount" />
                     </dataGrid:SfDataGrid.Columns>
 
                     <dataGrid:SfDataGrid.RecordContextFlyout>
