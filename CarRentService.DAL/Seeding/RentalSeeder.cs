@@ -22,6 +22,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             Status = RentalStatusEnum.Completed,
             Cost = 5000,
             TotalCost = 5000,
+            Tariff = RentalTariffEnum.Default
         });
 
         service.Add(new Rental
@@ -35,6 +36,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             Status = RentalStatusEnum.Active,
             Cost = 7000,
             TotalCost = 7000,
+            Tariff = RentalTariffEnum.Seasonal
         });
 
         service.Add(new Rental
@@ -48,6 +50,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             Status = RentalStatusEnum.Completed,
             Cost = 3000,
             TotalCost = 3000,
+            Tariff = RentalTariffEnum.Vip
         });
 
         service.Add(new Rental
@@ -61,6 +64,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             Status = RentalStatusEnum.Active,
             Cost = 8000,
             TotalCost = 8000,
+            Tariff = RentalTariffEnum.Hybrid
         });
 
         service.Add(new Rental
@@ -74,6 +78,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             Status = RentalStatusEnum.Completed,
             Cost = 10000,
             TotalCost = 10000,
+            Tariff = RentalTariffEnum.Default
         });
     }
 }

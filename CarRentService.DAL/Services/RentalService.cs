@@ -5,6 +5,9 @@ using CarRentService.DAL.Entities;
 using FluentValidation;
 using System.Collections.ObjectModel;
 using CarRentService.DAL.Dtos;
+using CarRentService.Common.Extensions;
+using CarRentService.DAL.Extensions;
+using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
@@ -25,7 +28,32 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
 
     public ObservableCollection<RentalDto> GetAllDtos()
     {
-        return _mapper.Map<ObservableCollection<RentalDto>>(Table);
+        return Table
+            .Select(p => GetRentalDto(p.Id))
+            .ToObservableCollection();
+    }
+
+    public RentalDto GetRentalDto(int entityId)
+    {
+        var entity = _store.Rental.FirstOrDefault(p => p.Id == entityId);
+
+        Guard.NotNull(entity, nameof(entity), $"Аренда с ID {entityId} не найдена");
+
+        // Клонирование, чтобы не менять базовый объект
+        var rental = _mapper.Map<Rental>(entity);
+
+        rental.IncludeBranch();
+        rental.IncludeCars();
+
+        var dto = _mapper.Map<RentalDto>(rental);
+
+        var client = _mapper.Map<Client>(_store.Client.First(p => p.Id == rental.ClientId));
+
+        client.IncludeBranch();
+
+        dto.Client = _mapper.Map<ClientDto>(client);
+
+        return dto;
     }
 
     protected override void CleanEntity(Rental entity)

@@ -51,7 +51,7 @@
                     MappingName="Status" />
                 <dataGrid:GridNumericColumn
                     HeaderText="Цена"
-                    MappingName="Cost" />
+                    MappingName="TotalCost" />
             </dataGrid:SfDataGrid.Columns>
             <dataGrid:SfDataGrid.RecordContextFlyout>
                 <MenuFlyout>

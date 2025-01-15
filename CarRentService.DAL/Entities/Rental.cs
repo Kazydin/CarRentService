@@ -73,6 +73,9 @@ public partial class Rental : IEntity
     private double _totalCost;
 
     [ObservableProperty]
+    private RentalTariffEnum _tariff;
+
+    [ObservableProperty]
     private ObservableCollection<Payment> _payments = new();
     
     [ObservableProperty]

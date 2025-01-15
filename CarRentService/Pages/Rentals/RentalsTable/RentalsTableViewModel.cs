@@ -56,7 +56,7 @@ public partial class RentalsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id, "Rental#"));
+            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id!.Value, "Rental#"));
         }
     }
 
@@ -64,7 +64,7 @@ public partial class RentalsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            _rentalService.Remove(record.Id);
+            _rentalService.Remove(record.Id!.Value);
             UpdateState();
         }
     }

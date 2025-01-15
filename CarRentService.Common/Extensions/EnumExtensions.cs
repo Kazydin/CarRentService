@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Immutable;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace CarRentService.Common.Extensions;
@@ -61,4 +63,22 @@ public static class EnumExtensions
         // Если строка не соответствует ни одному значению enum, выбрасываем исключение
         throw new ArgumentException($"Невозможно преобразовать строку '{value}' в {typeof(T).Name}.");
     }
+
+    /// <summary>
+    /// Получает описания значений перечисления в виде IEnumerable.
+    /// </summary>
+    /// <param name="enumType">Тип перечисления</param>
+    /// <returns>IEnumerable строк с описаниями</returns>
+    public static IEnumerable<string> GetDescriptions(this Type enumType)
+    {
+        if (!enumType.IsEnum)
+        {
+            throw new ArgumentException("Тип должен быть перечислением (enum).", nameof(enumType));
+        }
+
+        return Enum.GetValues(enumType)
+            .Cast<Enum>()
+            .Select(value => value.GetDescription());
+    }
+
 }

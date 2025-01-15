@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<abstract:NavigationPage
+    x:Class="CarRentService.Pages.Rentals.ViewRental.ViewRentalPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CarRentService.Pages.Rentals.ViewRental"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:abstract="using:CarRentService.Common.Abstract"
+    xmlns:dataGrid="using:Syncfusion.UI.Xaml.DataGrid"
+    xmlns:editors="using:Syncfusion.UI.Xaml.Editors"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance local:ViewRentalViewModel }">
+
+    <Pivot
+        Margin="47, 20, 47, 20">
+        <PivotItem
+            Header="Основная информация">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <CommandBar
+                    DefaultLabelPosition="Right"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4">
+                    <AppBarButton
+                        Icon="Delete"
+                        Command="{Binding DeleteRentalCommand}"
+                        Label="Удалить аренду" />
+                </CommandBar>
+                <StackPanel
+                    Margin="0, 10, 5, 10"
+                    Grid.Row="1"
+                    Grid.Column="0">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        ID аренды
+                    </TextBlock>
+                    <TextBox
+                        Text="{Binding Rental.Id, Mode=TwoWay}"
+                        IsEnabled="False" />
+                </StackPanel>
+                <StackPanel
+                    Margin="5, 10, 5, 10"
+                    Grid.Row="1"
+                    Grid.Column="1">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Статус
+                    </TextBlock>
+                    <TextBox
+                        Text="{Binding Rental.Status, Mode=TwoWay}"
+                        IsEnabled="False" />
+                </StackPanel>
+                <StackPanel
+                    Margin="0, 10, 5, 10"
+                    Grid.Row="2"
+                    Grid.Column="0">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Итоговая стоимость
+                    </TextBlock>
+                    <TextBox
+                        Text="{Binding Rental.TotalCost, Mode=OneWay}"
+                        IsEnabled="False" />
+                </StackPanel>
+                <StackPanel
+                    Margin="5, 10, 0, 10"
+                    Grid.Row="2"
+                    Grid.Column="1">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Внесено платежей
+                    </TextBlock>
+                    <TextBox
+                        Text="{Binding Rental.TotalPaymentsSum, Mode=OneWay}"
+                        IsEnabled="False" />
+                </StackPanel>
+                <StackPanel
+                    Margin="0, 10, 5, 5"
+                    Grid.Row="3"
+                    Grid.Column="0">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Дата начала
+                    </TextBlock>
+                    <TextBox
+                        Text="{Binding Rental.StartDate, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel
+                    Margin="5, 10, 5, 10"
+                    Grid.Row="3"
+                    Grid.Column="1">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Дата окончания
+                    </TextBlock>
+                    <TextBox
+                        Text="{Binding Rental.EndDate, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel
+                    Margin="5, 10, 0, 10"
+                    Grid.Row="3"
+                    Grid.Column="2">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Стоимость
+                    </TextBlock>
+                    <TextBox
+                        Text="{Binding Rental.TotalCost, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel Grid.Row="4"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Orientation="Horizontal">
+                    <editors:SfComboBox
+                        ItemsSource="{Binding Tariffs, Mode=OneWay}"
+                        Header="Тариф"
+                        Margin="0, 10, 5, 10"
+                        SelectedItem="{Binding Rental.Tariff, Mode=TwoWay}"
+                        Width="200" />
+                    <editors:SfComboBox
+                        ItemsSource="{Binding Branches, Mode=OneWay}"
+                        Header="Филиал"
+                        Margin="5, 10, 0, 0"
+                        TextMemberPath="Name"
+                        DisplayMemberPath="Name"
+                        SelectedItem="{Binding Rental.Branch, Mode=TwoWay}"
+                        Width="200" />
+
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    Margin="0, 15, 0, 0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button
+                        Margin="0, 0, 10, 0"
+                        Command="{Binding SaveCommand}">
+                        Сохранить
+                    </Button>
+                    <Button
+                        Command="{Binding CancelEditCommand}">
+                        Отмена
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </PivotItem>
+        <PivotItem
+            Header="Клиент">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <CommandBar
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    DefaultLabelPosition="Right">
+                    <AppBarButton
+                        Icon="Clear"
+                        Command="{Binding EditClientCommand}"
+                        Label="Изменить клиента" />
+                </CommandBar>
+                <StackPanel
+                    Margin="0, 10, 5, 10"
+                    Grid.Row="1"
+                    Grid.Column="0">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        ID клиента
+                    </TextBlock>
+                    <TextBox
+                        Text="{Binding Rental.Client.Id, Mode=OneWay}"
+                        IsEnabled="False" />
+                </StackPanel>
+                <StackPanel
+                    Margin="0, 10, 5, 5"
+                    Grid.Row="2"
+                    Grid.Column="0">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Фамилия Имя Отчество
+                    </TextBlock>
+                    <TextBox
+                        IsEnabled="False"
+                        Text="{Binding Rental.Client.Fio, Mode=OneWay}" />
+                </StackPanel>
+                <StackPanel
+                    Margin="5, 10, 5, 10"
+                    Grid.Row="2"
+                    Grid.Column="1">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Возраст
+                    </TextBlock>
+                    <TextBox
+                        IsEnabled="False"
+                        Text="{Binding Rental.Client.Age, Mode=OneWay}" />
+                </StackPanel>
+                <StackPanel
+                    Margin="5, 10, 5, 10"
+                    Grid.Row="2"
+                    Grid.Column="2">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Телефон
+                    </TextBlock>
+                    <TextBox
+                        IsEnabled="False"
+                        Text="{Binding Rental.Client.Phone, Mode=OneWay}" />
+                </StackPanel>
+                <StackPanel
+                    Margin="5, 10, 0, 10"
+                    Grid.Row="2"
+                    Grid.Column="3">
+                    <TextBlock
+                        Margin="0, 0, 0, 10">
+                        Номер водительского удостоверения
+                    </TextBlock>
+                    <TextBox
+                        IsEnabled="False"
+                        Text="{Binding Rental.Client.DriverLicenseNumber, Mode=OneWay}" />
+                </StackPanel>
+                <StackPanel
+                    Margin="0, 10, 0, 0"
+                    Grid.Row="3"
+                    Grid.Column="0">
+                    <TextBlock Text="Филиал договора (основной)"
+                               Margin="0, 0, 0, 10" />
+                    <TextBox
+                        IsEnabled="False"
+                        Text="{Binding Rental.Client.Branch.Name, Mode=OneWay}" />
+                </StackPanel>
+            </Grid>
+        </PivotItem>
+        <PivotItem
+            Header="Автомобили">
+            <StackPanel>
+                <CommandBar
+                    DefaultLabelPosition="Right">
+                    <AppBarButton
+                        Icon="Add"
+                        Command="{Binding AddCarCommand}"
+                        Label="Добавить" />
+                    <AppBarButton
+                        Icon="Clear"
+                        Command="{Binding ClearFiltersAndSortCommand}"
+                        CommandParameter="Cars"
+                        Label="Сбросить группировку, фильтры и сортировку" />
+                </CommandBar>
+
+                <dataGrid:SfDataGrid
+                    x:Name="CarsDataGrid"
+                    AutoGenerateColumns="False"
+                    AllowEditing="False"
+                    AllowFiltering="True"
+                    ShowGroupDropArea="True"
+                    LiveDataUpdateMode="AllowDataShaping"
+                    MinHeight="400"
+                    AllowDraggingColumns="True"
+                    GridLinesVisibility="Both"
+                    HeaderLinesVisibility="Both"
+                    IsGroupDropAreaExpanded="True"
+                    ColumnWidthMode="Star"
+                    ItemsSource="{Binding Rental.Cars}">
+
+                    <dataGrid:SfDataGrid.Columns>
+                        <dataGrid:GridNumericColumn
+                            HeaderText="ID автомобиля"
+                            MappingName="Id" />
+                        <dataGrid:GridTextColumn
+                            HeaderText="Марка"
+                            MappingName="Make" />
+                        <dataGrid:GridTextColumn
+                            HeaderText="Модель"
+                            MappingName="Model" />
+                        <dataGrid:GridNumericColumn
+                            MappingName="Year"
+                            HeaderText="Год" />
+                    </dataGrid:SfDataGrid.Columns>
+
+                    <dataGrid:SfDataGrid.RecordContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                Text="Удалить"
+                                Command="{Binding Path=DataGrid.DataContext.DeleteCarCommand}"
+                                CommandParameter="{Binding}" />
+                        </MenuFlyout>
+                    </dataGrid:SfDataGrid.RecordContextFlyout>
+
+                </dataGrid:SfDataGrid>
+            </StackPanel>
+        </PivotItem>
+        <PivotItem
+            Header="Платежи">
+            <StackPanel>
+                <CommandBar
+                    DefaultLabelPosition="Right">
+                    <AppBarButton
+                        Icon="Add"
+                        Command="{Binding AddPaymentCommand}"
+                        Label="Добавить" />
+                    <AppBarButton
+                        Icon="Clear"
+                        Command="{Binding ClearFiltersAndSortCommand}"
+                        CommandParameter="Payments"
+                        Label="Сбросить группировку, фильтры и сортировку" />
+                </CommandBar>
+
+                <dataGrid:SfDataGrid
+                    x:Name="PaymentsDataGrid"
+                    AutoGenerateColumns="True"
+                    AllowEditing="False"
+                    AllowFiltering="True"
+                    ShowGroupDropArea="True"
+                    LiveDataUpdateMode="AllowDataShaping"
+                    AllowDraggingColumns="True"
+                    GridLinesVisibility="Both"
+                    HeaderLinesVisibility="Both"
+                    IsGroupDropAreaExpanded="True"
+                    MinHeight="400"
+                    ColumnWidthMode="Star"
+                    ItemsSource="{Binding Rental.Payments}">
+
+                    <dataGrid:SfDataGrid.Columns>
+                        <dataGrid:GridNumericColumn
+                            HeaderText="ID платежей"
+                            MappingName="Id" />
+                        <dataGrid:GridTextColumn
+                            HeaderText="Покрытие, руб."
+                            MappingName="CoverageAmount" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата начала"
+                            MappingName="StartDate" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата завершение"
+                            MappingName="EndDate" />
+                        <dataGrid:GridNumericColumn
+                            HeaderText="Стоимость"
+                            MappingName="Cost" />
+                    </dataGrid:SfDataGrid.Columns>
+
+                    <dataGrid:SfDataGrid.RecordContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                Text="Удалить"
+                                Command="{Binding Path=DataGrid.DataContext.DeletePaymentCommand}"
+                                CommandParameter="{Binding}" />
+                        </MenuFlyout>
+                    </dataGrid:SfDataGrid.RecordContextFlyout>
+                </dataGrid:SfDataGrid>
+            </StackPanel>
+        </PivotItem>
+        <PivotItem
+            Header="Страховки">
+            <StackPanel>
+                <CommandBar
+                    DefaultLabelPosition="Right">
+                    <AppBarButton
+                        Icon="Add"
+                        Command="{Binding AddInsuranceCommand}"
+                        Label="Добавить" />
+                    <AppBarButton
+                        Icon="Clear"
+                        Command="{Binding ClearFiltersAndSortCommand}"
+                        CommandParameter="Insurances"
+                        Label="Сбросить группировку, фильтры и сортировку" />
+                </CommandBar>
+
+                <dataGrid:SfDataGrid
+                    x:Name="InsurancesDataGrid"
+                    AutoGenerateColumns="True"
+                    AllowEditing="False"
+                    AllowFiltering="True"
+                    ShowGroupDropArea="True"
+                    MinHeight="400"
+                    LiveDataUpdateMode="AllowDataShaping"
+                    AllowDraggingColumns="True"
+                    GridLinesVisibility="Both"
+                    HeaderLinesVisibility="Both"
+                    IsGroupDropAreaExpanded="True"
+                    ColumnWidthMode="Star"
+                    ItemsSource="{Binding Rental.Insurances}">
+
+                    <dataGrid:SfDataGrid.Columns>
+                        <dataGrid:GridNumericColumn
+                            HeaderText="ID страховки"
+                            MappingName="Id" />
+                        <dataGrid:GridTextColumn
+                            HeaderText="Покрытие, руб."
+                            MappingName="CoverageAmount" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата начала"
+                            MappingName="StartDate" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата завершение"
+                            MappingName="EndDate" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Стоимость"
+                            MappingName="Cost" />
+                    </dataGrid:SfDataGrid.Columns>
+
+                    <dataGrid:SfDataGrid.RecordContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                Text="Удалить"
+                                Command="{Binding Path=DataGrid.DataContext.DeleteInsuranceCommand}"
+                                CommandParameter="{Binding}" />
+                        </MenuFlyout>
+                    </dataGrid:SfDataGrid.RecordContextFlyout>
+                </dataGrid:SfDataGrid>
+            </StackPanel>
+        </PivotItem>
+    </Pivot>
+</abstract:NavigationPage>

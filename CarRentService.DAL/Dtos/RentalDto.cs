@@ -1,4 +1,5 @@
 ﻿using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using System.Collections.ObjectModel;
@@ -9,13 +10,16 @@ namespace CarRentService.DAL.Dtos;
 public partial class RentalDto
 {
     [ObservableProperty]
-    private int _id;
+    private int? _id;
 
     [ObservableProperty]
-    private ObservableCollection<CarDto> _cars;
+    private ObservableCollection<CarDto> _cars = new();
 
     [ObservableProperty]
     private Branch? _branch;
+
+    [ObservableProperty]
+    private ClientDto? _client;
 
     /// <summary>
     /// Дата начала аренды.
@@ -36,10 +40,10 @@ public partial class RentalDto
     private string _status;
 
     /// <summary>
-    /// Цена
+    /// Сумма платежей
     /// </summary>
     [ObservableProperty]
-    private double _cost;
+    private double _totalPaymentsSum;
 
     /// <summary>
     /// Итоговая стоимость аренды.
@@ -47,4 +51,13 @@ public partial class RentalDto
     /// </summary>
     [ObservableProperty]
     private double _totalCost;
+
+    [ObservableProperty]
+    private string _tariff;
+
+    [ObservableProperty]
+    private ObservableCollection<Payment> _payments = new();
+
+    [ObservableProperty]
+    private ObservableCollection<Insurance> _insurances = new();
 }
