@@ -8,7 +8,7 @@ namespace CarRentService.DAL.Abstract.Services;
 [InjectDI]
 public interface IRentalService : ICrudService<Rental>
 {
-    ObservableCollection<RentalDto> GetAllDtos();
+    ObservableCollection<RentalDto> GetDtos();
 
-    RentalDto GetRentalDto(int entityId);
+    RentalDto GetDto(int entityId);
 }

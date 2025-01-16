@@ -170,7 +170,7 @@ public partial class ViewRentalViewModel : BaseViewModel
             return;
         }
 
-        Rental = _rentalService.GetRentalDto(entityId.Value);
+        Rental = _rentalService.GetDto(entityId.Value);
     }
 
     public void SetGrids(SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,

@@ -43,6 +43,9 @@ public partial class CarDto
     [ObservableProperty]
     private Branch _branch;
 
+    [ObservableProperty]
+    private string _name;
+
     /// <summary>
     /// Текущая аренда
     /// </summary>
@@ -60,11 +63,6 @@ public partial class CarDto
     /// </summary>
     [ObservableProperty]
     private int? _rentalId;
-
-    public string GetCarHeader()
-    {
-        return $"{Make} {Model} ({RegistrationNumber})";
-    }
 
     partial void OnRentalChanged(RentalDto? value)
     {

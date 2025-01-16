@@ -37,5 +37,5 @@ public partial class PaymentDto
     /// Аренда, связанная с этим платежом.
     /// </summary>
     [ObservableProperty]
-    private Rental? _rental;
+    private RentalDto? _rental;
 }

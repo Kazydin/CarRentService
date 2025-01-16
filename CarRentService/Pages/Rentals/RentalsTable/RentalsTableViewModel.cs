@@ -44,7 +44,7 @@ public partial class RentalsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Rentals = _rentalService.GetAllDtos();
+        Rentals = _rentalService.GetDtos();
     }
 
     private void AddRental()
@@ -56,7 +56,7 @@ public partial class RentalsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id!.Value, "Rental#"));
+            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id!.Value, record.Name));
         }
     }
 

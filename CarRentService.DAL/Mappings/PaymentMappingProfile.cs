@@ -13,7 +13,8 @@ public class PaymentMappingProfile : Profile
         CreateMap<Payment, Payment>();
 
         CreateMap<Payment, PaymentDto>()
-            .ForMember(dest => dest.Method, opt => opt.MapFrom(src => src.Method.GetDescription()));
+            .ForMember(dest => dest.Method, opt => opt.MapFrom(src => src.Method.GetDescription()))
+            .ForMember(dest => dest.Rental, opt => opt.MapFrom(src => src.Rental));
 
         CreateMap<PaymentDto, Payment>()
             .ForMember(dest => dest.Method, opt => opt.MapFrom(src => src.Method.ToEnumFromDescription<PaymentMethodEnum>()));

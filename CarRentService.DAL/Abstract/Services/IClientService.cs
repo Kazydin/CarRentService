@@ -8,5 +8,5 @@ namespace CarRentService.DAL.Abstract.Services;
 [InjectDI]
 public interface IClientService : ICrudService<Client>
 {
-    ClientDto GetClientDto(int clientId);
+    ClientDto GetDto(int clientId);
 }

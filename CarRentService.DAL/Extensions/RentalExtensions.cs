@@ -36,8 +36,25 @@ public static class RentalExtensions
         var dataStore = DataStoreContextProvider.Current;
 
         entity.Cars = dataStore.Car
-            .Where(p => entity.CarIds.Contains(p.Id))
+            .Where(r => entity.CarIds.Contains(r.Id))
             .ToObservableCollection();
+
+        return entity;
+    }
+
+    public static void IncludeClient(this IEnumerable<Rental> entities)
+    {
+        foreach (var entity in entities)
+        {
+            entity.IncludeBranch();
+        }
+    }
+
+    public static Rental IncludeClient(this Rental entity)
+    {
+        var dataStore = DataStoreContextProvider.Current;
+
+        entity.Client = dataStore.Client.Single(p => p.Id == entity.ClientId);
 
         return entity;
     }

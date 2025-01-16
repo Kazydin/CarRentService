@@ -48,7 +48,7 @@ public partial class CarsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Cars = _carService.GetAllDtos();
+        Cars = _carService.GetDtos();
     }
 
     private void AddCar()
@@ -60,7 +60,7 @@ public partial class CarsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Id!.Value, record.GetCarHeader()));
+            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Id!.Value, record.Name));
         }
     }
 

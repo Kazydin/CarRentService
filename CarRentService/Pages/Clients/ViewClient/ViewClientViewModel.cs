@@ -119,7 +119,7 @@ public partial class ViewClientViewModel : BaseViewModel
             return;
         }
 
-        Client = _clientService.GetClientDto(entityId.Value);
+        Client = _clientService.GetDto(entityId.Value);
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid, SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,

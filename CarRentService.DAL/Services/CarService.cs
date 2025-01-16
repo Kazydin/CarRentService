@@ -33,14 +33,14 @@ public class CarService : BaseCrudService<Car>, ICarService
         entity.Rentals = new();
     }
 
-    public ObservableCollection<CarDto> GetAllDtos()
+    public ObservableCollection<CarDto> GetDtos()
     {
         return Table
-            .Select(car => GetCarDto(car.Id))
+            .Select(car => GetDto(car.Id))
             .ToObservableCollection();
     }
 
-    public CarDto GetCarDto(int entityId)
+    public CarDto GetDto(int entityId)
     {
         var entity = _store.Car.FirstOrDefault(p => p.Id == entityId);
 

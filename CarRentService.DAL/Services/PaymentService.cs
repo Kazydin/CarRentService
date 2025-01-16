@@ -44,6 +44,8 @@ public class PaymentService : BaseCrudService<Payment>, IPaymentService
         var entityCopy = _mapper.Map<Payment>(entity);
 
         entityCopy.IncludeRental();
+        entityCopy.Rental!.IncludeCars();
+        entityCopy.Rental!.IncludeClient();
 
         var dto = _mapper.Map<PaymentDto>(entityCopy);
 

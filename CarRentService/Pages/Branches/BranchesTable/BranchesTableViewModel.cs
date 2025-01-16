@@ -48,7 +48,7 @@ public partial class BranchesTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Branches = _branchService.GetAllDtos();
+        Branches = _branchService.GetDtos();
     }
 
     private void AddBranch()

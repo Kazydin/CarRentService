@@ -8,7 +8,7 @@ namespace CarRentService.DAL.Abstract.Services;
 [InjectDI]
 public interface IBranchService : ICrudService<Branch>
 {
-    BranchDto GetBranchDto(int branchId);
+    BranchDto GetDto(int branchId);
 
-    ObservableCollection<BranchDto> GetAllDtos();
+    ObservableCollection<BranchDto> GetDtos();
 }

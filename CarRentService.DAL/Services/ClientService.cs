@@ -27,7 +27,7 @@ public class ClientService : BaseCrudService<Client>, IClientService
         return _store.Client.FirstOrDefault(p => p.Id == id);
     }
 
-    public ClientDto GetClientDto(int clientId)
+    public ClientDto GetDto(int clientId)
     {
         var client = _store.Client.FirstOrDefault(p => p.Id == clientId);
 

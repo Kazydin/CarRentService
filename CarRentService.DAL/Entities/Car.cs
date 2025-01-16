@@ -22,6 +22,9 @@ public partial class Car : Vehicle
     [ObservableProperty]
     private CarStatusEnum _status;
 
+    [ObservableProperty]
+    private string _name;
+
     /// <summary>
     /// идентификатор филиала
     /// </summary>
@@ -33,4 +36,14 @@ public partial class Car : Vehicle
 
     [ObservableProperty]
     private ObservableCollection<Rental> _rentals = new();
+
+    partial void OnRegistrationNumberChanged(string value)
+    {
+        UpdateName();
+    }
+
+    private new void UpdateName()
+    {
+        Name = $"{Make} {Model} ({RegistrationNumber})";
+    }
 }

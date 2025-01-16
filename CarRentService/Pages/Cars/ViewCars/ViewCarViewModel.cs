@@ -151,7 +151,7 @@ public partial class ViewCarViewModel : BaseViewModel
             return;
         }
 
-        Car = _carService.GetCarDto(entityId.Value);
+        Car = _carService.GetDto(entityId.Value);
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid)

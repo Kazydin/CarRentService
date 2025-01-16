@@ -32,7 +32,7 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
         entity.Cars = new();
     }
 
-    public BranchDto GetBranchDto(int branchId)
+    public BranchDto GetDto(int branchId)
     {
         var branch = _store.Branch.FirstOrDefault(p => p.Id == branchId);
 
@@ -52,8 +52,8 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
         return dto;
     }
 
-    public ObservableCollection<BranchDto> GetAllDtos()
+    public ObservableCollection<BranchDto> GetDtos()
     {
-        return Table.Select(p => GetBranchDto(p.Id)).ToObservableCollection();
+        return Table.Select(p => GetDto(p.Id)).ToObservableCollection();
     }
 }

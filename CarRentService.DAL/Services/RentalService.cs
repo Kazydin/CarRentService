@@ -26,14 +26,14 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
         return _store.Rental.FirstOrDefault(p => p.Id == id);
     }
 
-    public ObservableCollection<RentalDto> GetAllDtos()
+    public ObservableCollection<RentalDto> GetDtos()
     {
         return Table
-            .Select(p => GetRentalDto(p.Id))
+            .Select(p => GetDto(p.Id))
             .ToObservableCollection();
     }
 
-    public RentalDto GetRentalDto(int entityId)
+    public RentalDto GetDto(int entityId)
     {
         var entity = _store.Rental.FirstOrDefault(p => p.Id == entityId);
 

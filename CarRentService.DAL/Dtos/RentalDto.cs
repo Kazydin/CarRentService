@@ -1,5 +1,4 @@
 ﻿using CarRentService.DAL.Entities;
-using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using System.Collections.ObjectModel;
@@ -44,6 +43,9 @@ public partial class RentalDto
     /// </summary>
     [ObservableProperty]
     private double _totalPaymentsSum;
+
+    [ObservableProperty]
+    private string _name;
 
     /// <summary>
     /// Итоговая стоимость аренды.

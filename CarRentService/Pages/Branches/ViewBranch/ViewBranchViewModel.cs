@@ -148,7 +148,7 @@ public partial class ViewBranchViewModel : BaseViewModel
             return;
         }
 
-        Branch = _branchService.GetBranchDto(entityId.Value);
+        Branch = _branchService.GetDto(entityId.Value);
     }
 
     public void SetGrids(SfDataGrid carsDataGrid,
