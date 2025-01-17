@@ -10,5 +10,5 @@ public interface IPaymentService : ICrudService<Payment>
 {
     ObservableCollection<PaymentDto> GetAllDtos();
 
-    public PaymentDto GetDto(int entityId);
+    PaymentDto GetDto(int entityId);
 }

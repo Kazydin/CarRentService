@@ -10,6 +10,8 @@ public class ManagerMappingProfile : Profile
 {
     public ManagerMappingProfile()
     {
+        CreateMap<Manager, Manager>();
+
         CreateMap<Manager, ManagerDto>()
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.GetDescription()));
 

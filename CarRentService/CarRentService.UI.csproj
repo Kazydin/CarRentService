@@ -25,6 +25,7 @@
     <None Remove="Pages\Cars\ViewCars\ViewCarPage.xaml" />
     <None Remove="Pages\ClientsPage.xaml" />
     <None Remove="Pages\Insurances\InsurancesTable\InsurancesTablePage.xaml" />
+    <None Remove="Pages\Manages\ManagersTable\ManagersTablePage.xaml" />
     <None Remove="Pages\Payments\PaymentsTable\PaymentsTablePage.xaml" />
     <None Remove="Pages\Payments\ViewPayment\ViewPaymentPage.xaml" />
     <None Remove="Pages\Rentals\RentalsTable\RentalsTablePage.xaml" />
@@ -63,7 +64,6 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\Manages\ManagersTable\" />
     <Folder Include="Pages\Manages\ViewManager\" />
     <Folder Include="Resources\ru-RU\" />
   </ItemGroup>
@@ -86,6 +86,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="Pages\Welcom\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Manages\ManagersTable\ManagersTablePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\Insurances\ViewInsurance\ViewInsurancePage.xaml">

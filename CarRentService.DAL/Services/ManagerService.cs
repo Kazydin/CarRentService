@@ -7,6 +7,11 @@ using CarRentService.DAL.Entities;
 using FluentValidation;
 
 using System.Collections.ObjectModel;
+using CarRentService.DAL.Dtos;
+using CarRentService.Common.Extensions;
+using CarRentService.DAL.Enum;
+using CarRentService.DAL.Extensions;
+using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
@@ -28,5 +33,24 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
     protected override void CleanEntity(Manager entity)
     {
         entity.Branches = new();
+    }
+
+    public ManagerDto GetDto(int entityId)
+    {
+        var entity = _store.Manager.FirstOrDefault(p => p.Id == entityId);
+
+        Guard.NotNull(entity, nameof(entity), $"Менеджер с ID {entityId} не найден");
+
+        // Клонирование, чтобы не менять базовый объект
+        entity = _mapper.Map<Manager>(entity);
+
+        var dto = _mapper.Map<ManagerDto>(entity);
+
+        return dto;
+    }
+
+    public ObservableCollection<ManagerDto> GetDtos()
+    {
+        return Table.Select(p => GetDto(p.Id)).ToObservableCollection();
     }
 }
