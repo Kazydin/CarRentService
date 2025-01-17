@@ -3,9 +3,9 @@ using CarRentService.DAL.Store;
 
 namespace CarRentService.DAL.Extensions;
 
-public static class PaymentExtensions
+public static class InsuranceExtensions
 {
-    public static void IncludeRental(this IEnumerable<Payment> entities)
+    public static void IncludeRental(this IEnumerable<Insurance> entities)
     {
         foreach (var entity in entities)
         {
@@ -13,7 +13,7 @@ public static class PaymentExtensions
         }
     }
 
-    public static void IncludeRental(this Payment entity)
+    public static void IncludeRental(this Insurance entity)
     {
         var dataStore = DataStoreContextProvider.Current;
 

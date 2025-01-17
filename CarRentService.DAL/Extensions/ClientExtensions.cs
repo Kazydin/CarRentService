@@ -14,33 +14,27 @@ public static class ClientExtensions
         }
     }
 
-    public static Client IncludeRentals(this Client client)
+    public static void IncludeRentals(this Client client)
     {
         var dataStore = DataStoreContextProvider.Current;
 
         client.Rentals = dataStore.Rental
             .Where(r => r.ClientId == client.Id)
             .ToObservableCollection();
-
-        return client;
     }
 
-    public static IEnumerable<Client> IncludeBranch(this IEnumerable<Client> clients)
+    public static void IncludeBranch(this IEnumerable<Client> clients)
     {
         foreach (var client in clients)
         {
             client.IncludeBranch();
-
-            yield return client;
         }
     }
 
-    public static Client IncludeBranch(this Client client)
+    public static void IncludeBranch(this Client client)
     {
         var dataStore = DataStoreContextProvider.Current;
 
         client.Branch = dataStore.Branch.FirstOrDefault(p => p.Id == client.BranchId);
-
-        return client;
     }
 }

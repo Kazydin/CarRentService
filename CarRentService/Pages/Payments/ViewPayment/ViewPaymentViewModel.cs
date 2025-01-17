@@ -27,7 +27,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     [ObservableProperty] private PaymentDto _payment;
 
-    [ObservableProperty] private readonly ObservableCollection<string> _methods;
+    [ObservableProperty] private ObservableCollection<string> _methods;
 
     private readonly INavigationService _navigationService;
 

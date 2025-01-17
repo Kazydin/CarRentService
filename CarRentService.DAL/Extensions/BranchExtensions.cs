@@ -14,14 +14,12 @@ public static class BranchExtensions
         }
     }
 
-    public static Branch IncludeCars(this Branch branch)
+    public static void IncludeCars(this Branch branch)
     {
         var dataStore = DataStoreContextProvider.Current;
 
         branch.Cars = dataStore.Car
             .Where(r => r.BranchId == branch.Id)
             .ToObservableCollection();
-
-        return branch;
     }
 }

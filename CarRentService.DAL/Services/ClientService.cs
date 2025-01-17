@@ -33,9 +33,7 @@ public class ClientService : BaseCrudService<Client>, IClientService
 
         Guard.NotNull(client, nameof(client), $"Клиент с ID {client} не найден");
 
-        client!
-            .IncludeBranch()
-            .IncludeRentals();
+        client!.IncludeBranch();
         client!.Rentals.IncludeBranch();
         client.Rentals.IncludeCars();
 

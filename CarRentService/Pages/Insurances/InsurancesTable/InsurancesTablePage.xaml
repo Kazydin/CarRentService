@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<abstract:NavigationPage
+    x:Class="CarRentService.Pages.Insurances.InsurancesTable.InsurancesTablePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CarRentService.Pages.Insurances.InsurancesTable"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:abstract="using:CarRentService.Common.Abstract"
+    xmlns:dataGrid="using:Syncfusion.UI.Xaml.DataGrid"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=local:InsurancesTableViewModel}"
+    Loaded="InsurancesTablePage_OnLoaded">
+
+    <StackPanel
+        Margin="57, 20, 57, 20"
+        Orientation="Vertical">
+        <CommandBar
+            DefaultLabelPosition="Right">
+            <AppBarButton
+                Icon="Add"
+                Command="{Binding AddInsuranceCommand}"
+                Label="Добавить" />
+            <AppBarButton
+                Icon="Clear"
+                Command="{Binding ClearFiltersAndSortCommand}"
+                CommandParameter="Insurances"
+                Label="Сбросить группировку, фильтры и сортировку" />
+        </CommandBar>
+
+        <dataGrid:SfDataGrid
+            x:Name="InsurancesDataGrid"
+            AutoGenerateColumns="False"
+            AllowEditing="False"
+            AllowFiltering="True"
+            ShowGroupDropArea="True"
+            LiveDataUpdateMode="AllowDataShaping"
+            AllowDraggingColumns="True"
+            GridLinesVisibility="Both"
+            HeaderLinesVisibility="Both"
+            IsGroupDropAreaExpanded="True"
+            ColumnWidthMode="Star"
+            ItemsSource="{Binding Insurances}">
+            <dataGrid:SfDataGrid.Columns>
+                <dataGrid:GridNumericColumn
+                    HeaderText="ID страховки"
+                    MappingName="Id" />
+                <dataGrid:GridTextColumn
+                    HeaderText="ID аренды"
+                    MappingName="Rental.Name" />
+                <dataGrid:GridNumericColumn
+                    HeaderText="Стоимость"
+                    MappingName="Cost" />
+            </dataGrid:SfDataGrid.Columns>
+            <dataGrid:SfDataGrid.RecordContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem
+                        Text="Изменить"
+                        Command="{Binding Path=DataGrid.DataContext.EditInsuranceCommand}"
+                        CommandParameter="{Binding}" />
+                    <MenuFlyoutItem
+                        Text="Удалить"
+                        Command="{Binding Path=DataGrid.DataContext.DeleteInsuranceCommand}"
+                        CommandParameter="{Binding}" />
+                </MenuFlyout>
+            </dataGrid:SfDataGrid.RecordContextFlyout>
+        </dataGrid:SfDataGrid>
+    </StackPanel>
+</abstract:NavigationPage>

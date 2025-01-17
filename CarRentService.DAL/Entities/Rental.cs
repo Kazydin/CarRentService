@@ -88,13 +88,7 @@ public partial class Rental : IEntity
 
     private void UpdateName()
     {
-        // Формируем заголовок с ограничением на отображение машин
-        var carHeaders = Cars.Count <= 2
-            ? string.Join(", ", Cars.Select(car => car.Name))
-            : string.Join(", ", Cars.Take(2).Select(car => car.Name)) + " ...";
-
-        // Обновляем имя с лаконичным форматом
-        Name = $"{StartDate:dd.MM.yyyy} - {(Client?.Fio ?? "Клиент не указан")} - {carHeaders}";
+        Name = $"{Id}";
     }
 
     public override bool Equals(object? obj)
