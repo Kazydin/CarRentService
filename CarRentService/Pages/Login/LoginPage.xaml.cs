@@ -1,25 +1,29 @@
-using CarRentService.Common;
+using System;
 using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Pages.Login
 {
     public sealed partial class LoginPage : BasePage
     {
-        public LoginViewModel ViewModel { get; }
+        private readonly LoginViewModel _viewModel;
 
-        public ContentDialog Dialog;
-
-        private readonly INavigationService _navigationService;
-
-        public LoginPage(LoginViewModel viewModel, INavigationService navigationService)
+        public LoginPage(LoginViewModel viewModel)
         {
             InitializeComponent();
 
-            ViewModel = viewModel;
-            _navigationService = navigationService;
-            DataContext = ViewModel;
+            _viewModel = viewModel;
+            DataContext = _viewModel;
+
+            Login.Text = "admin";
+            PasswordBox.Password = "Admin123!";
+            _viewModel.Login = "admin";
+            _viewModel.Password = "Admin123!";
+        }
+
+        public void SetCloseWindow(Action closeWindow)
+        {
+            _viewModel.CloseWindow = closeWindow;
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -30,44 +34,9 @@ namespace CarRentService.Pages.Login
             }
         }
 
-        public void LoginButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void LoginPage_OnLoaded(object sender, RoutedEventArgs e)
         {
-            args.Cancel = true;
-
-            if (ViewModel.Authenticate())
-            {
-                sender.Hide();
-                _navigationService.Navigate(PageTypeEnum.Welcome);
-            }
-            else
-            {
-                ViewModel.IsErrorVisible = true;
-            }
-        }
-
-        private void CheckCredentialsChanged()
-        {
-            if (!string.IsNullOrWhiteSpace(Login.Text) && !string.IsNullOrWhiteSpace(PasswordBox.Password))
-            {
-                // Если логин и пароль заполнены, то можем разрешать авторизоваться
-                Dialog.IsPrimaryButtonEnabled = true;
-                ViewModel.IsErrorVisible = false;
-            }
-            else
-            {
-                ViewModel.IsErrorVisible = false;
-                Dialog.IsPrimaryButtonEnabled = false;
-            }
-        }
-
-        private void PasswordBox_OnPasswordChanging(PasswordBox sender, PasswordBoxPasswordChangingEventArgs args)
-        {
-            CheckCredentialsChanged();
-        }
-
-        private void Login_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            CheckCredentialsChanged();
+            _viewModel.SetXamlRoot(LoginGrid);
         }
     }
 }

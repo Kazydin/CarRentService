@@ -6,22 +6,20 @@ namespace CarRentService;
 
 public sealed partial class AuthWindow : InjectedWindow
 {
-    private MainWindow w;
+    private readonly MainWindow _mainWindow;
 
-    private LoginPage loginPage;
-
-    public AuthWindow(MainWindow w, LoginPage loginPage)
+    public AuthWindow(MainWindow mainWindow, LoginPage loginPage)
     {
-        this.w = w;
-        this.loginPage = loginPage;
-        this.InitializeComponent();
+        InitializeComponent();
+        _mainWindow = mainWindow;
 
+        loginPage.SetCloseWindow(CloseWindow);
         Content = loginPage;
     }
 
-    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    public void CloseWindow()
     {
-        this.Close();
-        w.Activate();
+        Close();
+        _mainWindow.Activate();
     }
 }

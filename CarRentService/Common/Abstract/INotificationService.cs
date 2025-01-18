@@ -10,7 +10,7 @@ namespace CarRentService.Common.Abstract;
 [InjectDI(ServiceLifetime.Singleton)]
 public interface INotificationService
 {
-    void Init(Frame contentFrame);
+    void Init(FrameworkElement contentFrame);
 
     Task ShowErrorDialogAsync(string title, string errorMessage);
 

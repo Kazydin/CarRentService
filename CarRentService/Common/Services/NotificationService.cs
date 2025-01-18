@@ -29,7 +29,7 @@ public class NotificationService : INotificationService
         await dialog.ShowAsync();
     }
 
-    public void Init(Frame contentFrame)
+    public void Init(FrameworkElement contentFrame)
     {
         _targetElement = contentFrame;
     }

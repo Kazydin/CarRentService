@@ -56,10 +56,8 @@ public sealed partial class MenuPage : BasePage
     {
         ViewModel.XamlRoot = XamlRoot;
         _navigationService.SetFrame(ContentFrame);
-        ViewModel.ShowLoginDialogCommand.Execute(null);
 
         _service.Init(ContentFrame);
-        // _navigationService.Navigate(PageTypeEnum.Welcome, false);
     }
 
     private void Navi_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
