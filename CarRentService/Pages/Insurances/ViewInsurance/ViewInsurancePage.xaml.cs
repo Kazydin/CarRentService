@@ -8,7 +8,7 @@ public sealed partial class ViewInsurancePage : NavigationPage
 {
     private readonly ViewInsuranceViewModel _viewModel;
 
-    public ViewInsurancePage(ViewInsuranceViewModel viewModel) : base(PageTypeEnum.EditInsurance, "Редактирование страховки")
+    public ViewInsurancePage(ViewInsuranceViewModel viewModel) : base(PageTypeEnum.EditInsurance)
     {
         InitializeComponent();
 
@@ -21,7 +21,7 @@ public sealed partial class ViewInsurancePage : NavigationPage
         if (parameters is CommonNavigationData data)
         {
             _viewModel.SetInsurance(data.EntityId);
-            Header = $"Редактирование страховки #{_viewModel.Insurance.Id}";
+            Header = $"Редактирование страховки № {_viewModel.Insurance.Id}";
         }
         else
         {

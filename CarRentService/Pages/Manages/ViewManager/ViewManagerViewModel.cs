@@ -29,7 +29,7 @@ public partial class ViewManagerViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<Branch> _branches;
 
-    [ObservableProperty] private ObservableCollection<string> _roles;
+    [ObservableProperty] private ObservableCollection<ManagerRoleEnum> _roles;
 
     [ObservableProperty] private ObservableCollection<Branch> _selectedBranches = new();
 
@@ -62,7 +62,7 @@ public partial class ViewManagerViewModel : BaseViewModel
         DeleteManagerCommand = new RelayCommand(DeleteManager, CanDeleteManager);
 
         Branches = branchService.Table;
-        Roles = typeof(ManagerRoleEnum).GetDescriptions().ToObservableCollection();
+        Roles = EnumExtensions.GetValues<ManagerRoleEnum>().ToObservableCollection();
     }
 
     private async void Save()
@@ -151,9 +151,7 @@ public partial class ViewManagerViewModel : BaseViewModel
 
     private void UpdateStateFromManager()
     {
-        IsBranchesEnabled = Manager.Role == ManagerRoleEnum.BranchManager.GetDescription();
-
-        if (Manager.Role == ManagerRoleEnum.BranchManager.GetDescription())
+        if (Manager.Role == ManagerRoleEnum.BranchManager)
         {
             IsBranchesEnabled = true;
         }

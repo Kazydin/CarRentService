@@ -55,7 +55,8 @@
                     MappingName="Date" />
                 <dataGrid:GridTextColumn
                     HeaderText="Метод"
-                    MappingName="Method" />
+                    DisplayBinding="{Binding Path=Method,
+                 Converter={StaticResource EnumToDescriptionConverter}}" />
                 <dataGrid:GridNumericColumn
                     HeaderText="Сумма, руб."
                     MappingName="Amount" />

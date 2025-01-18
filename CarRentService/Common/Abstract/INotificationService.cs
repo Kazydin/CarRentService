@@ -14,5 +14,7 @@ public interface INotificationService
 
     Task ShowErrorDialogAsync(string title, string errorMessage);
 
+    Task<bool> ShowConfirmDialogAsync(string title, string message);
+
     void ShowTip(string title, string message, Symbol icon = Symbol.Accept);
 }

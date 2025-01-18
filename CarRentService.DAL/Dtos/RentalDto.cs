@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using System.Collections.ObjectModel;
+using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Dtos;
 
@@ -36,7 +37,7 @@ public partial class RentalDto
     /// Статус аренды.
     /// </summary>
     [ObservableProperty]
-    private string _status;
+    private RentalStatusEnum _status;
 
     /// <summary>
     /// Сумма платежей
@@ -55,7 +56,7 @@ public partial class RentalDto
     private double _totalCost;
 
     [ObservableProperty]
-    private string _tariff;
+    private RentalTariffEnum _tariff;
 
     [ObservableProperty]
     private ObservableCollection<Payment> _payments = new();

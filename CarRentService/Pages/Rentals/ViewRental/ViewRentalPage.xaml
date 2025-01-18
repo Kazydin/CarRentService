@@ -49,6 +49,14 @@
                     Grid.ColumnSpan="4">
                     <AppBarButton
                         Icon="Delete"
+                        Command="{Binding MoveToActiveStatusCommand}"
+                        Label="Начать аренду" />
+                    <AppBarButton
+                        Icon="Delete"
+                        Command="{Binding MoveToCompletedStatusCommand}"
+                        Label="Завершить аренду" />
+                    <AppBarButton
+                        Icon="Delete"
                         Command="{Binding DeleteRentalCommand}"
                         Label="Удалить аренду" />
                 </CommandBar>
@@ -73,7 +81,7 @@
                         Статус
                     </TextBlock>
                     <TextBox
-                        Text="{Binding Rental.Status, Mode=TwoWay}"
+                        Text="{Binding Rental.Status, Converter={StaticResource EnumToStringConverter}, Mode=TwoWay}"
                         IsEnabled="False" />
                 </StackPanel>
                 <StackPanel
@@ -94,7 +102,7 @@
                     Grid.Column="1">
                     <TextBlock
                         Margin="0, 0, 0, 10">
-                        Внесено платежей
+                        Внесено средств, руб.
                     </TextBlock>
                     <TextBox
                         Text="{Binding Rental.TotalPaymentsSum, Mode=OneWay}"
@@ -368,20 +376,18 @@
 
                     <dataGrid:SfDataGrid.Columns>
                         <dataGrid:GridNumericColumn
-                            HeaderText="ID платежей"
+                            HeaderText="ID платежа"
                             MappingName="Id" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата"
+                            MappingName="Date" />
                         <dataGrid:GridTextColumn
-                            HeaderText="Покрытие, руб."
-                            MappingName="CoverageAmount" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата начала"
-                            MappingName="StartDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата завершение"
-                            MappingName="EndDate" />
+                            HeaderText="Метод"
+                            DisplayBinding="{Binding Path=Method,
+                                            Converter={StaticResource EnumToDescriptionConverter}}" />
                         <dataGrid:GridNumericColumn
-                            HeaderText="Стоимость"
-                            MappingName="Cost" />
+                            HeaderText="Сумма, руб."
+                            MappingName="Amount" />
                     </dataGrid:SfDataGrid.Columns>
 
                     <dataGrid:SfDataGrid.RecordContextFlyout>
@@ -430,15 +436,6 @@
                         <dataGrid:GridNumericColumn
                             HeaderText="ID страховки"
                             MappingName="Id" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Покрытие, руб."
-                            MappingName="CoverageAmount" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата начала"
-                            MappingName="StartDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата завершение"
-                            MappingName="EndDate" />
                         <dataGrid:GridDateColumn
                             HeaderText="Стоимость"
                             MappingName="Cost" />

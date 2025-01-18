@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
     xmlns:editors="using:Syncfusion.UI.Xaml.Editors"
+    xmlns:converters="using:CarRentService.Common.Converters"
     mc:Ignorable="d">
 
     <Grid Margin="47, 20, 47, 20">
@@ -80,15 +81,15 @@
                 IsEnabled="False" />
         </StackPanel>
         <editors:SfComboBox
-            ItemsSource="{Binding Types, Mode=OneWay}"
+            ItemsSource="{Binding Types, Converter={StaticResource EnumCollectionToDescriptionsConverter}, Mode=OneWay}"
             Header="Тип"
             Margin="0, 11, 5, 10"
             Grid.Row="2"
             HorizontalAlignment="Stretch"
             Width="Auto"
             Grid.Column="0"
-            SelectedItem="{Binding Insurance.Type, Mode=TwoWay}" />
-        <StackPanel
+            SelectedItem="{Binding Insurance.Type, Converter={StaticResource EnumToDescriptionConverter}, Mode=TwoWay}"/>
+            <StackPanel
             Margin="5, 10, 5, 10"
             Grid.Row="2"
             Grid.Column="1">

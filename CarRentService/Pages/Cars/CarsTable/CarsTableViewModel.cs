@@ -60,13 +60,16 @@ public partial class CarsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Id!.Value, record.Name));
+            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Id!.Value));
         }
     }
 
     private void EditCurrentRental(object? param)
     {
-        throw new NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Rental!.Id!.Value));
+        }
     }
 
     private void DeleteCar(object? param)

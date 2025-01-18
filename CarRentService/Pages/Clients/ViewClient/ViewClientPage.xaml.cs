@@ -8,7 +8,7 @@ public sealed partial class ViewClientPage : NavigationPage
 {
     private readonly ViewClientViewModel _viewModel;
 
-    public ViewClientPage(ViewClientViewModel viewModel) : base(PageTypeEnum.EditClient, "Редактирование клиента")
+    public ViewClientPage(ViewClientViewModel viewModel) : base(PageTypeEnum.EditClient)
     {
         InitializeComponent();
 
@@ -23,7 +23,7 @@ public sealed partial class ViewClientPage : NavigationPage
         if (parameters is CommonNavigationData data)
         {
             _viewModel.SetClient(data.EntityId);
-            Header = data.Header;
+            Header = $"Редактирование клиента № {_viewModel.Client.Id!.Value}";
         }
         else
         {

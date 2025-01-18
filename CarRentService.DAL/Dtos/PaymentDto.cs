@@ -1,4 +1,5 @@
 ﻿using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Dtos;
@@ -25,7 +26,7 @@ public partial class PaymentDto
     /// Метод оплаты (например, наличные, карта).
     /// </summary>
     [ObservableProperty]
-    private string _method;
+    private PaymentMethodEnum _method;
 
     /// <summary>
     /// Аренда, связанная с этим платежом.

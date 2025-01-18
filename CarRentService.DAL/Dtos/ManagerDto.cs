@@ -2,6 +2,7 @@
 using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Dtos;
 
@@ -33,7 +34,7 @@ public partial class ManagerDto
     /// Роль
     /// </summary>
     [ObservableProperty]
-    private string _role;
+    private ManagerRoleEnum _role;
 
     [ObservableProperty]
     private ObservableCollection<int> _branchIds = new();

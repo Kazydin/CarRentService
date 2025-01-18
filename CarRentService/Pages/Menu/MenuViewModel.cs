@@ -1,9 +1,9 @@
 ﻿using System.Windows.Input;
-using CarRentService.BLL;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Services;
+using CarRentService.DAL;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
@@ -27,7 +27,7 @@ namespace CarRentService.Pages.Menu
         public MenuViewModel(INavigationService navigationService, AppState appState)
         {
             _navigationService = navigationService;
-            this._appState = appState;
+            _appState = appState;
             NavigateCommand = new RelayCommand<string>(Navigate);
         }
 

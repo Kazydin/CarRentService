@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
@@ -12,6 +13,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using CarRentService.Common.Extensions;
+using CarRentService.Common;
+using CarRentService.DAL.Constants;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 
@@ -41,11 +44,15 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
+    public RelayCommand MoveToActiveStatusCommand { get; }
+
+    public RelayCommand MoveToCompletedStatusCommand { get; }
+
     [ObservableProperty] private RentalDto _rental;
 
     [ObservableProperty] private ObservableCollection<Branch> _branches;
 
-    [ObservableProperty] private ObservableCollection<string> _tariffs;
+    [ObservableProperty] private ObservableCollection<RentalTariffEnum> _tariffs;
 
     private readonly INavigationService _navigationService;
 
@@ -86,14 +93,45 @@ public partial class ViewRentalViewModel : BaseViewModel
         AddInsuranceCommand = new RelayCommand<object>(AddInsurance);
         DeleteInsuranceCommand = new RelayCommand<object>(EditInsurance);
 
+        MoveToActiveStatusCommand = new RelayCommand(MoveToActiveStatus, CanMoveToActiveStatus);
+        MoveToCompletedStatusCommand = new RelayCommand(MoveToCompletedStatus, CanMoveToCompletedStatus);
+
         Branches = _branchService.Table;
 
-        _tariffs = typeof(RentalTariffEnum).GetDescriptions().ToObservableCollection();
+        _tariffs = EnumExtensions.GetValues<RentalTariffEnum>().ToObservableCollection();
+    }
+
+    private bool CanMoveToCompletedStatus()
+    {
+        return Rental.Status == RentalStatusEnum.Active;
+    }
+
+    private bool CanMoveToActiveStatus()
+    {
+        return Rental.Status == RentalStatusEnum.Created && Math.Abs(Rental.TotalCost - Rental.TotalPaymentsSum) < MainConstants.DOUBLE_TOLERANCE;
+    }
+
+    private void ChangeRentalStatus(RentalStatusEnum status)
+    {
+        Rental.Status = status;
+
+        MoveToActiveStatusCommand.NotifyCanExecuteChanged();
+        MoveToCompletedStatusCommand.NotifyCanExecuteChanged();
+    }
+
+    private void MoveToCompletedStatus()
+    {
+        ChangeRentalStatus(RentalStatusEnum.Completed);
+    }
+
+    private void MoveToActiveStatus()
+    {
+        ChangeRentalStatus(RentalStatusEnum.Active);
     }
 
     private void AddInsurance(object? obj)
     {
-        throw new System.NotImplementedException();
+        _navigationService.Navigate(PageTypeEnum.EditInsurance);
     }
 
     private void EditInsurance(object? obj)
@@ -103,7 +141,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     private void AddPayment(object? obj)
     {
-        throw new System.NotImplementedException();
+        _navigationService.Navigate(PageTypeEnum.EditPayment);
     }
 
     private void EditPayment(object? obj)
@@ -144,12 +182,19 @@ public partial class ViewRentalViewModel : BaseViewModel
         }
     }
 
-    private void DeleteRental()
+    private async void DeleteRental()
     {
         Guard.NotNull(Rental, "Нельзя удалить аренду, которая еще не сохранена");
 
-        _rentalService.Remove(Rental.Id!.Value);
-        _navigationService.GoBack();
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Удаление аренды",
+                "Вы действительно хотите удалить аренду?");
+
+        if (result)
+        {
+            _rentalService.Remove(Rental.Id!.Value);
+            _navigationService.GoBack();
+        }
     }
 
     public bool CanDeleteRental()

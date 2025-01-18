@@ -14,6 +14,10 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:EnumToStringConverter
                 x:Key="EnumToStringConverter" />
+            <converters:EnumToDescriptionConverter
+                x:Key="EnumToDescriptionConverter" />
+            <converters:EnumCollectionToDescriptionsConverter
+                x:Key="EnumCollectionToDescriptionsConverter" />
             <converters:BooleanToBackgroundConverter
                 x:Key="BooleanToBackgroundConverter" />
             <converters:MatchValuesBackgroundConverter

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using CarRentService.Common.Extensions;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
-using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Mappings;
 
@@ -12,10 +10,8 @@ public class InsuranceMappingProfile : Profile
     {
         CreateMap<Insurance, Insurance>();
 
-        CreateMap<Insurance, InsuranceDto>()
-            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.GetDescription()));
+        CreateMap<Insurance, InsuranceDto>();
 
-        CreateMap<InsuranceDto, Insurance>()
-            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToEnumFromDescription<InsuranceTypeEnum>()));
+        CreateMap<InsuranceDto, Insurance>();
     }
 }

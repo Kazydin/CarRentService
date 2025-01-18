@@ -8,7 +8,7 @@ public sealed partial class ViewPaymentPage : NavigationPage
 {
     private readonly ViewPaymentViewModel _viewModel;
 
-    public ViewPaymentPage(ViewPaymentViewModel viewModel) : base(PageTypeEnum.EditPayment, "Редактирование платежа")
+    public ViewPaymentPage(ViewPaymentViewModel viewModel) : base(PageTypeEnum.EditPayment)
     {
         InitializeComponent();
 
@@ -21,7 +21,7 @@ public sealed partial class ViewPaymentPage : NavigationPage
         if (parameters is CommonNavigationData data)
         {
             _viewModel.SetPayment(data.EntityId);
-            Header = data.Header;
+            Header = $"Редактирование платежа № {_viewModel.Payment.Id!.Value}";
         }
         else
         {

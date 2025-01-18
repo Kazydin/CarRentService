@@ -12,6 +12,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Enum;
+using CarRentService.Common;
+using CarRentService.Common.Models;
 
 namespace CarRentService.Pages.Cars.ViewCars;
 
@@ -71,14 +73,15 @@ public partial class ViewCarViewModel : BaseViewModel
     }
     private void AddRental(object? obj)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        _navigationService.Navigate(PageTypeEnum.EditRental);
     }
 
-    private void EditRental(object? obj)
+    private void EditRental(object? param)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id!.Value));
+        }
     }
 
     private void SendToRepair()

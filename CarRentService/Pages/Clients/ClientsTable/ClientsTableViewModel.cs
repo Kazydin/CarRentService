@@ -56,7 +56,7 @@ public partial class ClientsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id, record.Fio));
+            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id));
         }
     }
 

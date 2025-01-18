@@ -18,10 +18,13 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
 {
     public override ObservableCollection<Manager> Table => _store.Manager;
 
+    private readonly AppState _appState;
+
     public ManagerService(IDataStoreContext store,
         IValidator<Manager> validator,
-        IMapper mapper) : base(store, validator, mapper)
+        IMapper mapper, AppState appState) : base(store, validator, mapper)
     {
+        _appState = appState;
     }
 
     public override Manager? TryFindById(int id)
@@ -52,6 +55,6 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
 
     public ObservableCollection<ManagerDto> GetDtos()
     {
-        return Table.Select(p => GetDto(p.Id)).ToObservableCollection();
+        return Table.Where(p => _appState.CurrentUser!.Id != p.Id).Select(p => GetDto(p.Id)).ToObservableCollection();
     }
 }

@@ -2,7 +2,6 @@
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract.Services;
-using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Syncfusion.UI.Xaml.DataGrid;
@@ -22,18 +21,21 @@ public partial class RentalsTableViewModel : BaseViewModel
 
     public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
 
-    [ObservableProperty]
-    private ObservableCollection<RentalDto> _rentals;
+    [ObservableProperty] private ObservableCollection<RentalDto> _rentals;
 
     private readonly IRentalService _rentalService;
 
     private readonly INavigationService _navigationService;
 
+    private readonly INotificationService _notificationService;
+
     public RentalsTableViewModel(IRentalService rentalService,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        INotificationService notificationService)
     {
         _rentalService = rentalService;
         _navigationService = navigationService;
+        _notificationService = notificationService;
 
         // Настройка команд
         AddRentalCommand = new RelayCommand(AddRental);
@@ -56,16 +58,23 @@ public partial class RentalsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id!.Value, record.Name));
+            _navigationService.Navigate(PageTypeEnum.EditRental,
+                parameters: new CommonNavigationData(record.Id!.Value));
         }
     }
 
-    private void DeleteRental(object? param)
+    private async void DeleteRental(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            _rentalService.Remove(record.Id!.Value);
-            UpdateState();
+            var result = await _notificationService.ShowConfirmDialogAsync($"Удаление аренды №{record.Id!.Value}",
+                "Вы действительно хотите удалить аренду?");
+
+            if (result)
+            {
+                _rentalService.Remove(record.Id!.Value);
+                UpdateState();
+            }
         }
     }
 

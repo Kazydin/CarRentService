@@ -81,4 +81,14 @@ public static class EnumExtensions
             .Select(value => value.GetDescription());
     }
 
+
+    /// <summary>
+    /// Получить значения перечисления как IEnumerable.
+    /// </summary>
+    /// <typeparam name="TEnum">Тип перечисления.</typeparam>
+    /// <returns>IEnumerable со значениями перечисления.</returns>
+    public static IEnumerable<TEnum> GetValues<TEnum>() where TEnum : Enum
+    {
+        return Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
+    }
 }

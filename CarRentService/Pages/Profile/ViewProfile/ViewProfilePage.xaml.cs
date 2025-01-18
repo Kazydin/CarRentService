@@ -12,7 +12,7 @@ public sealed partial class ViewProfilePage : NavigationPage
 {
     private readonly ViewProfileViewModel _viewModel;
 
-    private object _branchesPage;
+    private readonly object _branchesPage;
 
     public ViewProfilePage(ViewProfileViewModel viewModel) : base(PageTypeEnum.EditProfile, "Редактирование профиля")
     {
@@ -28,12 +28,12 @@ public sealed partial class ViewProfilePage : NavigationPage
     {
         _viewModel.ReloadState();
 
-        if (_viewModel.Manager.Role == ManagerRoleEnum.Admin.GetDescription()
+        if (_viewModel.Manager.Role == ManagerRoleEnum.Admin
             && ProfilePivot.Items.Contains(_branchesPage))
         {
             ProfilePivot.Items.Remove(_branchesPage);
         }
-        else if (_viewModel.Manager.Role == ManagerRoleEnum.BranchManager.GetDescription()
+        else if (_viewModel.Manager.Role == ManagerRoleEnum.BranchManager
                  && !ProfilePivot.Items.Contains(_branchesPage))
         {
             ProfilePivot.Items.Add(_branchesPage);

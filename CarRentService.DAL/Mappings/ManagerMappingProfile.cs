@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using CarRentService.Common.Extensions;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
-using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Mappings;
 
@@ -12,10 +10,8 @@ public class ManagerMappingProfile : Profile
     {
         CreateMap<Manager, Manager>();
 
-        CreateMap<Manager, ManagerDto>()
-            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.GetDescription()));
+        CreateMap<Manager, ManagerDto>();
 
-        CreateMap<ManagerDto, Manager>()
-            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToEnumFromDescription<ManagerRoleEnum>()));
+        CreateMap<ManagerDto, Manager>();
     }
 }

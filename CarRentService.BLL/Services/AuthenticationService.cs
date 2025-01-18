@@ -1,4 +1,5 @@
 ﻿using CarRentService.BLL.Services.Abstract;
+using CarRentService.DAL;
 using CarRentService.DAL.Abstract;
 
 namespace CarRentService.BLL.Services

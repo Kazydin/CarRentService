@@ -11,7 +11,7 @@ public sealed partial class ViewManagerPage : NavigationPage
 {
     private readonly ViewManagerViewModel _viewModel;
 
-    public ViewManagerPage(ViewManagerViewModel viewModel) : base(PageTypeEnum.EditManager, "Редактирование менеджера")
+    public ViewManagerPage(ViewManagerViewModel viewModel) : base(PageTypeEnum.EditManager)
     {
         InitializeComponent();
 
@@ -27,7 +27,7 @@ public sealed partial class ViewManagerPage : NavigationPage
 
             PasswordBox.Password =  _viewModel.Manager.Password;
 
-            Header = data.Header;
+            Header = $"Редактирование менеджера № {_viewModel.Manager.Id!.Value}";
         }
         else
         {

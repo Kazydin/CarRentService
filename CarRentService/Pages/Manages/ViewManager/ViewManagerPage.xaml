@@ -56,13 +56,13 @@
                 IsEnabled="False" />
         </StackPanel>
         <editors:SfComboBox
-            ItemsSource="{Binding Roles, Mode=OneWay}"
+            ItemsSource="{Binding Roles, Converter={StaticResource EnumCollectionToDescriptionsConverter}, Mode=OneWay}"
             Header="Роль"
             Grid.Row="1"
             HorizontalAlignment="Stretch"
             Grid.Column="1"
             Margin="5, 10, 5, 0"
-            SelectedItem="{Binding Manager.Role, Mode=TwoWay}"
+            SelectedItem="{Binding Manager.Role, Converter={StaticResource EnumToDescriptionConverter}, Mode=TwoWay}"
             Width="Auto" />
         <StackPanel Grid.Row="1" Grid.Column="2">
             <editors:SfComboBox

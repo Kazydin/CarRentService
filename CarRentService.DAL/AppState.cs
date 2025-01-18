@@ -2,7 +2,7 @@
 using CarRentService.DAL.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CarRentService.BLL;
+namespace CarRentService.DAL;
 
 [InjectDI(ServiceLifetime.Singleton)]
 public class AppState

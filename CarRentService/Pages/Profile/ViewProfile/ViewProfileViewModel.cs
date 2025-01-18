@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel.DataAnnotations;
 using CarRentService.BLL;
+using CarRentService.DAL;
 
 namespace CarRentService.Pages.Profile.ViewProfile;
 

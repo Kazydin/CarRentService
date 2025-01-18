@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
@@ -72,38 +74,41 @@ public partial class ViewBranchViewModel : BaseViewModel
 
     private void AddCar()
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        _navigationService.Navigate(PageTypeEnum.EditCar);
     }
 
-    private void EditCar(object? obj)
+    private void EditCar(object? param)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Id!.Value));
+        }
     }
 
     private void AddClient()
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        _navigationService.Navigate(PageTypeEnum.EditClient);
     }
 
-    private void EditClient(object? obj)
+    private void EditClient(object? param)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id));
+        }
     }
 
     private void AddManager()
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        _navigationService.Navigate(PageTypeEnum.EditManager);
     }
 
-    private void EditManager(object? obj)
+    private void EditManager(object? param)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is ManagerDto record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditManager, parameters: new CommonNavigationData(record.Id!.Value));
+        }
     }
 
     private async void Save()

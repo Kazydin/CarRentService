@@ -13,9 +13,11 @@ public class NotificationService : INotificationService
 {
     private FrameworkElement _targetElement = null!;
 
+    private static readonly TimeSpan _tipShowingTime = TimeSpan.FromSeconds(5);
+
     public async Task ShowErrorDialogAsync(string title, string errorMessage)
     {
-        Guard.NotNull(_targetElement, nameof(_targetElement), "Контейнер для Tip не инициализирован");
+        Guard.NotNull(_targetElement, nameof(_targetElement), "Контейнер для ContentDialog не инициализирован");
 
         var dialog = new ContentDialog
         {
@@ -29,12 +31,33 @@ public class NotificationService : INotificationService
         await dialog.ShowAsync();
     }
 
+    public async Task<bool> ShowConfirmDialogAsync(string title, string message)
+    {
+        Guard.NotNull(_targetElement, nameof(_targetElement), "Контейнер для ContentDialog не инициализирован");
+
+        var dialog = new ContentDialog
+        {
+            Title = title,
+            Content = message,
+            PrimaryButtonText = "OK",
+            CloseButtonText = "Отмена",
+            DefaultButton = ContentDialogButton.Close,
+            XamlRoot = _targetElement.XamlRoot
+        };
+
+        // Показываем диалог и проверяем результат
+        var result = await dialog.ShowAsync();
+
+        // Возвращаем true, если пользователь нажал "OK"
+        return result == ContentDialogResult.Primary;
+    }
+
     public void Init(FrameworkElement contentFrame)
     {
         _targetElement = contentFrame;
     }
 
-    public void ShowTip(string title, string message, Symbol icon = Symbol.Accept)
+    public async void ShowTip(string title, string message, Symbol icon = Symbol.Accept)
     {
         Guard.NotNull(_targetElement, nameof(_targetElement), "Контейнер для Tip не инициализирован");
 
@@ -48,10 +71,11 @@ public class NotificationService : INotificationService
             Title = title,
             Subtitle = message,
             IsLightDismissEnabled = false, // Закрывается при клике вне
-            PreferredPlacement = TeachingTipPlacementMode.Auto,
+            PreferredPlacement = TeachingTipPlacementMode.BottomRight,
             // Устанавливаем XamlRoot для корректного отображения
             XamlRoot = _targetElement.XamlRoot,
             IconSource = iconSource,
+            IsOpen = true
         };
 
         tip.Closed += (sender, args) =>
@@ -59,12 +83,19 @@ public class NotificationService : INotificationService
             // Попытка удаления, если возможно
             RemoveFromVisualTree(tip);
         };
-
+        
         // Добавляем в визуальное дерево
         AddToVisualTree(_targetElement, tip);
 
         // Показываем TeachingTip
         tip.IsOpen = true;
+
+        await Task.Delay(_tipShowingTime);
+
+        if (tip.IsOpen)
+        {
+            tip.IsOpen = false;
+        }
     }
 
     private static void AddToVisualTree(FrameworkElement targetElement, TeachingTip tip)

@@ -333,15 +333,6 @@
                         <dataGrid:GridNumericColumn
                             HeaderText="ID аренды"
                             MappingName="RentalId" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Покрытие, руб."
-                            MappingName="CoverageAmount" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата начала"
-                            MappingName="StartDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата завершение"
-                            MappingName="EndDate" />
                         <dataGrid:GridDateColumn
                             HeaderText="Стоимость"
                             MappingName="Cost" />
@@ -401,7 +392,7 @@
                             MappingName="Date" />
                         <dataGrid:GridTextColumn
                             HeaderText="Метод"
-                            MappingName="Method" />
+                            DisplayBinding="{Binding Path=Method, Converter={StaticResource EnumToDescriptionConverter}}" />
                         <dataGrid:GridNumericColumn
                             HeaderText="Сумма, руб."
                             MappingName="Amount" />

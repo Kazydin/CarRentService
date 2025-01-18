@@ -10,6 +10,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Enum;
+using CarRentService.Common.Models;
+using CarRentService.Common;
+using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Insurances.ViewInsurance;
 
@@ -27,7 +30,7 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
     [ObservableProperty] private InsuranceDto _insurance;
 
-    [ObservableProperty] private ObservableCollection<string> _types;
+    [ObservableProperty] private ObservableCollection<InsuranceTypeEnum> _types;
 
     private readonly INavigationService _navigationService;
 
@@ -55,13 +58,15 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
         EditRentalCommand = new RelayCommand<object>(EditRental);
 
-        Types = typeof(InsuranceTypeEnum).GetDescriptions().ToObservableCollection();
+        Types = EnumExtensions.GetValues<InsuranceTypeEnum>().ToObservableCollection();
     }
 
-    private void EditRental(object? obj)
+    private void EditRental(object? param)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is InsuranceDto record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id!.Value));
+        }
     }
 
     private async void Save()

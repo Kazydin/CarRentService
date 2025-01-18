@@ -8,7 +8,7 @@ public sealed partial class ViewCarPage : NavigationPage
 {
     private readonly ViewCarViewModel _viewModel;
 
-    public ViewCarPage(ViewCarViewModel viewModel) : base(PageTypeEnum.EditCar, "Редактирование автоиобиля")
+    public ViewCarPage(ViewCarViewModel viewModel) : base(PageTypeEnum.EditCar)
     {
         InitializeComponent();
 
@@ -23,7 +23,7 @@ public sealed partial class ViewCarPage : NavigationPage
         if (parameters is CommonNavigationData data)
         {
             _viewModel.SetCar(data.EntityId);
-            Header = data.Header;
+            Header = $"Редактирование автомобиля № {_viewModel.Car.Id!.Value}";
         }
         else
         {

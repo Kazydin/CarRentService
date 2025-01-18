@@ -59,13 +59,17 @@ public partial class PaymentsTableViewModel : BaseViewModel
         if ((param as GridRecordContextFlyoutInfo)?.Record is PaymentDto record)
         {
             _navigationService.Navigate(PageTypeEnum.EditPayment,
-                parameters: new CommonNavigationData(record.Id!.Value, "Payment#123"));
+                parameters: new CommonNavigationData(record.Id!.Value)) ;
         }
     }
 
     private void EditRental(object? param)
     {
-        throw new NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is PaymentDto record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditRental,
+                parameters: new CommonNavigationData(record.Rental!.Id!.Value));
+        }
     }
 
     private void DeletePayment(object? param)

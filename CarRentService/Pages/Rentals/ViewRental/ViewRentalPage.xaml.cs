@@ -8,7 +8,7 @@ public sealed partial class ViewRentalPage : NavigationPage
 {
     private readonly ViewRentalViewModel _viewModel;
 
-    public ViewRentalPage(ViewRentalViewModel viewModel) : base(PageTypeEnum.EditRental, "Редактирование аренды")
+    public ViewRentalPage(ViewRentalViewModel viewModel) : base(PageTypeEnum.EditRental)
     {
         InitializeComponent();
 
@@ -23,7 +23,7 @@ public sealed partial class ViewRentalPage : NavigationPage
         if (parameters is CommonNavigationData data)
         {
             _viewModel.SetRental(data.EntityId);
-            Header = data.Header;
+            Header = $"Редактирование аренды № {_viewModel.Rental.Id!.Value}";
         }
         else
         {

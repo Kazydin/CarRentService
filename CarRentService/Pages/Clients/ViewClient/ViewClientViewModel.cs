@@ -2,7 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
@@ -65,16 +67,17 @@ public partial class ViewClientViewModel : BaseViewModel
         Branches = _branchService.Table;
     }
 
-    private void EditRental(object? obj)
+    private void EditRental(object? param)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id!.Value));
+        }
     }
 
     private void AddRental(object? obj)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        _navigationService.Navigate(PageTypeEnum.EditRental);
     }
 
     private async void Save()

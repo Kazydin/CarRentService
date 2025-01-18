@@ -12,6 +12,8 @@ using GuardNet;
 using System.ComponentModel.DataAnnotations;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Enum;
+using CarRentService.Common;
+using CarRentService.Common.Models;
 
 namespace CarRentService.Pages.Payments.ViewPayment;
 
@@ -91,7 +93,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     private void EditRental()
     {
-        throw new NotImplementedException();
+        _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(Payment.Rental!.Id!.Value));
     }
 
     public void SetPayment(int? entityId = null)

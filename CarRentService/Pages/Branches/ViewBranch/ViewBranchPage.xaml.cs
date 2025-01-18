@@ -8,7 +8,7 @@ public sealed partial class ViewBranchPage : NavigationPage
 {
     private readonly ViewBranchViewModel _viewModel;
 
-    public ViewBranchPage(ViewBranchViewModel viewModel) : base(PageTypeEnum.EditBranch, "Редактирование филиала")
+    public ViewBranchPage(ViewBranchViewModel viewModel) : base(PageTypeEnum.EditBranch)
     {
         InitializeComponent();
 
@@ -23,7 +23,7 @@ public sealed partial class ViewBranchPage : NavigationPage
         if (parameters is CommonNavigationData data)
         {
             _viewModel.SetBranch(data.EntityId);
-            Header = data.Header;
+            Header = $"Редактирование филиала № {_viewModel.Branch.Id!.Value}";
         }
         else
         {
