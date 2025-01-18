@@ -49,6 +49,9 @@ public partial class ManagerDto
     #region LinkedEntities
 
     [ObservableProperty]
+    private ObservableCollection<int> _branchIds = new();
+
+    [ObservableProperty]
     private ObservableCollection<BranchDto> _branches = new();
 
     #endregion

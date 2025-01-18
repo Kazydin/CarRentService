@@ -49,10 +49,16 @@ public partial class RentalDto
     #region LinkedEntities
 
     [ObservableProperty]
+    private ObservableCollection<int> _carIds = new();
+
+    [ObservableProperty]
     private ObservableCollection<CarDto> _cars = new();
 
     [ObservableProperty]
     private BranchDto? _branch;
+
+    [ObservableProperty]
+    private int? _clientId;
 
     [ObservableProperty]
     private ClientDto? _client;

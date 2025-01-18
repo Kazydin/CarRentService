@@ -51,9 +51,19 @@ public class InsuranceService : BaseCrudService<Insurance>, IInsuranceService
 
         var dto = _mapper.Map<InsuranceDto>(entity);
 
-        dto.Rental = _mapper.Map<RentalDto>(_store.Rental.FirstOrDefault(p => entity.RentalId == p.Id));
-        dto.Car = _mapper.Map<CarDto>(_store.Car.FirstOrDefault(p => p.Id == entity.CarId));
+        IncludeRental(dto);
+        IncludeCar(dto);
 
         return dto;
+    }
+
+    public void IncludeRental(InsuranceDto dto)
+    {
+        dto.Rental = _mapper.Map<RentalDto>(_store.Rental.FirstOrDefault(p => dto.RentalId == p.Id));
+    }
+
+    public void IncludeCar(InsuranceDto dto)
+    {
+        dto.Car = _mapper.Map<CarDto>(_store.Car.FirstOrDefault(p => p.Id == dto.CarId));
     }
 }

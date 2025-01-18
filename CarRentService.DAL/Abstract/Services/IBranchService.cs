@@ -11,4 +11,10 @@ public interface IBranchService : ICrudService<Branch>
     BranchDto GetDto(int branchId);
 
     ObservableCollection<BranchDto> GetDtos();
+
+    void IncludeCars(BranchDto dto);
+
+    void IncludeClients(BranchDto dto);
+
+    void IncludeManagers(BranchDto dto);
 }

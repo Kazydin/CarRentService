@@ -16,10 +16,13 @@ public class ClientService : BaseCrudService<Client>, IClientService
 {
     public override ObservableCollection<Client> Table => _store.Client;
 
+    private readonly IRentalService _rentalService;
+
     public ClientService(IDataStoreContext store,
         ClientValidator validator,
-        IMapper mapper) : base(store, validator, mapper)
+        IMapper mapper, IRentalService rentalService) : base(store, validator, mapper)
     {
+        _rentalService = rentalService;
     }
 
     public override Client? TryFindById(int id)
@@ -35,19 +38,39 @@ public class ClientService : BaseCrudService<Client>, IClientService
 
         entity = _mapper.Map<Client>(entity);
 
-        var clientDto = _mapper.Map<ClientDto>(entity);
+        var dto = _mapper.Map<ClientDto>(entity);
 
-        clientDto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == entity.BranchId));
-        clientDto.Rentals =
-            _mapper.Map<ObservableCollection<RentalDto>>(_store.Rental.Where(p => p.ClientId == clientDto.Id));
+        IncludeBranch(dto);
+        IncludeRentals(dto);
+        IncludeCurrentCars(dto);
+
+        return dto;
+    }
+
+    public void IncludeBranch(ClientDto dto)
+    {
+        dto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == dto.BranchId));
+    }
+
+    public void IncludeRentals(ClientDto dto)
+    {
+        dto.Rentals =
+            _mapper.Map<ObservableCollection<RentalDto>>(_store.Rental.Where(p => p.ClientId == dto.Id));
+    }
+
+    public void IncludeCurrentCars(ClientDto dto)
+    {
+        if (!dto.Rentals.Any())
+        {
+            IncludeRentals(dto);
+            _rentalService.IncludeCars(dto.Rentals);
+        }
 
         var currentRentals =
-            _store.Rental.Where(p => p.ClientId == clientDto.Id && p.Status == RentalStatusEnum.Active);
-        clientDto.CurrentCars =
-            _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p =>
-                currentRentals.SelectMany(p => p.CarIds).Contains(p.Id)));
+            dto.Rentals.Where(p => p.Status == RentalStatusEnum.Active);
 
-        return clientDto;
+        dto.CurrentCars =
+            _mapper.Map<ObservableCollection<CarDto>>(currentRentals.SelectMany(p => p.Cars));
     }
 
     protected override void CleanEntity(Client entity)

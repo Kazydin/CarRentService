@@ -37,6 +37,11 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
        
     }
 
+    public ObservableCollection<ManagerDto> GetDtos()
+    {
+        return Table.Where(p => _appState.CurrentUser!.Id != p.Id).Select(p => GetDto(p.Id)).ToObservableCollection();
+    }
+
     public ManagerDto GetDto(int entityId)
     {
         var entity = _store.Manager.FirstOrDefault(p => p.Id == entityId);
@@ -48,14 +53,14 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
 
         var dto = _mapper.Map<ManagerDto>(entity);
 
-        dto.Branches =
-            _mapper.Map<ObservableCollection<BranchDto>>(_store.Branch.Where(p => entity.BranchIds.Contains(p.Id)));
+        IncludeBranches(dto);
 
         return dto;
     }
 
-    public ObservableCollection<ManagerDto> GetDtos()
+    public void IncludeBranches(ManagerDto dto)
     {
-        return Table.Where(p => _appState.CurrentUser!.Id != p.Id).Select(p => GetDto(p.Id)).ToObservableCollection();
+        dto.Branches =
+            _mapper.Map<ObservableCollection<BranchDto>>(_store.Branch.Where(p => dto.BranchIds.Contains(p.Id)));
     }
 }

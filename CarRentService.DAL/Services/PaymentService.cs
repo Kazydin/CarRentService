@@ -26,7 +26,7 @@ public class PaymentService : BaseCrudService<Payment>, IPaymentService
         return _store.Payment.FirstOrDefault(p => p.Id == id);
     }
 
-    public ObservableCollection<PaymentDto> GetAllDtos()
+    public ObservableCollection<PaymentDto> GetDtos()
     {
         return Table
             .Select(p => GetDto(p.Id))
@@ -44,12 +44,20 @@ public class PaymentService : BaseCrudService<Payment>, IPaymentService
 
         var dto = _mapper.Map<PaymentDto>(entity);
 
-        var rentalEntity = _store.Rental.FirstOrDefault(p => p.Id == entity.RentalId);
-
-        dto.Rental = _mapper.Map<RentalDto>(rentalEntity);
-        dto.Rental.Client = _mapper.Map<ClientDto>(_store.Client.FirstOrDefault(p => p.Id == rentalEntity?.ClientId));
+        IncludeRental(dto);
+        IncludeClient(dto.Rental!);
 
         return dto;
+    }
+
+    private void IncludeClient(RentalDto dto)
+    {
+        dto.Client = _mapper.Map<ClientDto>(_store.Client.FirstOrDefault(p => p.Id == dto.ClientId));
+    }
+
+    public void IncludeRental(PaymentDto dto)
+    {
+        dto.Rental = _mapper.Map<RentalDto>(_store.Rental.FirstOrDefault(p => p.Id == dto.RentalId));
     }
 
     protected override void CleanEntity(Payment entity)

@@ -46,7 +46,7 @@ public partial class PaymentsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Payments = _paymentService.GetAllDtos();
+        Payments = _paymentService.GetDtos();
     }
 
     private void AddPayment()

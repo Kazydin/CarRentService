@@ -138,7 +138,7 @@ public partial class ViewCarViewModel : BaseViewModel
 
     public bool CanDeleteCar()
     {
-        return Car.Id.HasValue && Car.Rental == null;
+        return Car.Id.HasValue && Car.ActiveRental == null;
     }
 
     private void CancelEdit()

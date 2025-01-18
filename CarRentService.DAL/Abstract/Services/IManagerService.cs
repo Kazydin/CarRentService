@@ -11,4 +11,6 @@ public interface IManagerService : ICrudService<Manager>
     ObservableCollection<ManagerDto> GetDtos();
 
     ManagerDto GetDto(int entityId);
+
+    void IncludeBranches(ManagerDto dto);
 }

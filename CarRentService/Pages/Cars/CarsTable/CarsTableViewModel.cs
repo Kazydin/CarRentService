@@ -68,7 +68,7 @@ public partial class CarsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Rental!.Id!.Value));
+            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.ActiveRental!.Id!.Value));
         }
     }
 

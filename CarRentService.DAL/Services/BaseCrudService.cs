@@ -27,8 +27,6 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
         _store = store;
         _mapper = mapper;
     }
-
-
     public abstract T? TryFindById(int id);
 
     protected abstract void CleanEntity(T entity);

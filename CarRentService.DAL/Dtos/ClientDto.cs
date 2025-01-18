@@ -37,6 +37,9 @@ public partial class ClientDto
     private ObservableCollection<InsuranceDto> _insurances = new();
 
     [ObservableProperty]
+    private int? _branchId;
+
+    [ObservableProperty]
     private BranchDto? _branch;
 
     #endregion

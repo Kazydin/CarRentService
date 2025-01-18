@@ -8,7 +8,9 @@ namespace CarRentService.DAL.Abstract.Services;
 [InjectDI]
 public interface IPaymentService : ICrudService<Payment>
 {
-    ObservableCollection<PaymentDto> GetAllDtos();
+    ObservableCollection<PaymentDto> GetDtos();
 
     PaymentDto GetDto(int entityId);
+
+    void IncludeRental(PaymentDto dto);
 }

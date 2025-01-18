@@ -50,10 +50,30 @@ public class CarService : BaseCrudService<Car>, ICarService
 
         var dto = _mapper.Map<CarDto>(entity);
 
-        dto.Rentals = _mapper.Map<ObservableCollection<RentalDto>>(_store.Rental.Where(p => p.CarIds.Contains(entity.Id)));
-        dto.Rental = _mapper.Map<RentalDto>(dto.Rentals.FirstOrDefault(p => p.Status == RentalStatusEnum.Active));
-        dto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == entity.BranchId));
+        IncludeRentals(dto);
+        IncludeActiveRental(dto);
+        IncludeBranch(dto);
 
         return dto;
+    }
+
+    public void IncludeRentals(CarDto dto)
+    {
+        dto.Rentals = _mapper.Map<ObservableCollection<RentalDto>>(_store.Rental.Where(p => p.CarIds.Contains(dto.Id!.Value)));
+    }
+
+    public void IncludeActiveRental(CarDto dto)
+    {
+        if (!dto.Rentals.Any())
+        {
+            IncludeRentals(dto);
+        }
+
+        dto.ActiveRental = _mapper.Map<RentalDto>(dto.Rentals.FirstOrDefault(p => p.Status == RentalStatusEnum.Active));
+    }
+
+    public void IncludeBranch(CarDto dto)
+    {
+        dto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == dto.BranchId));
     }
 }

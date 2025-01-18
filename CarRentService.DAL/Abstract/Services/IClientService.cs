@@ -8,4 +8,10 @@ namespace CarRentService.DAL.Abstract.Services;
 public interface IClientService : ICrudService<Client>
 {
     ClientDto GetDto(int clientId);
+
+    void IncludeBranch(ClientDto dto);
+
+    void IncludeRentals(ClientDto dto);
+
+    void IncludeCurrentCars(ClientDto dto);
 }

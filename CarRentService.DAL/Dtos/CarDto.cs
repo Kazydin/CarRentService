@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -53,10 +52,13 @@ public partial class CarDto
     /// Текущая аренда
     /// </summary>
     [ObservableProperty]
-    private RentalDto? _rental;
+    private RentalDto? _activeRental;
 
     [ObservableProperty]
-    private BranchDto _branch;
+    private int? _branchId;
+
+    [ObservableProperty]
+    private BranchDto? _branch;
 
     #endregion
 
@@ -65,7 +67,7 @@ public partial class CarDto
         UpdateName();
     }
 
-    private new void UpdateName()
+    private void UpdateName()
     {
         Name = $"{Make} {Model} ({RegistrationNumber})";
     }

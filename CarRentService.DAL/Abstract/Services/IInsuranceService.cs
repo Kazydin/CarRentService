@@ -11,4 +11,8 @@ public interface IInsuranceService : ICrudService<Insurance>
     ObservableCollection<InsuranceDto> GetDtos();
 
     InsuranceDto GetDto(int entityId);
+
+    void IncludeRental(InsuranceDto dto);
+
+    void IncludeCar(InsuranceDto dto);
 }

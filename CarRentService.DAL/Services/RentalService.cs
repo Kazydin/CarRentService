@@ -44,15 +44,34 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
 
         var dto = _mapper.Map<RentalDto>(entity);
 
-        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => entity.CarIds.Contains(p.Id)));
-
-        var client = _mapper.Map<Client>(_store.Client.First(p => p.Id == entity.ClientId));
-
-        dto.Client = _mapper.Map<ClientDto>(client);
-
-        dto.Client.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == client.BranchId));
+        IncludeCars(dto);
+        IncludeClient(dto);
+        IncludeBranch(dto.Client!);
 
         return dto;
+    }
+
+    private void IncludeBranch(ClientDto dto)
+    {
+        dto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == dto.BranchId));
+    }
+
+    public void IncludeClient(RentalDto dto)
+    {
+        dto.Client = _mapper.Map<ClientDto>(_store.Client.FirstOrDefault(p => p.Id == dto.ClientId));
+    }
+
+    public void IncludeCars(RentalDto dto)
+    {
+        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => dto.CarIds.Contains(p.Id)));
+    }
+
+    public void IncludeCars(IEnumerable<RentalDto> dtos)
+    {
+        foreach (var dto in dtos)
+        {
+            IncludeCars(dto);
+        }
     }
 
     protected override void CleanEntity(Rental entity)

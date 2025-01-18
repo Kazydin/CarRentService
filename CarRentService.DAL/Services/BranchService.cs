@@ -41,10 +41,10 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
 
         var dto = _mapper.Map<BranchDto>(entity);
 
-        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => p.BranchId == entity.Id));
-        dto.Clients = _mapper.Map<ObservableCollection<ClientDto>>(_store.Client.Where(p => p.BranchId == entity.Id));
-        dto.Managers = _mapper.Map<ObservableCollection<ManagerDto>>(_store.Manager.Where(p =>
-            p.Role == ManagerRoleEnum.BranchManager && p.BranchIds.Contains(entity.Id)));
+        IncludeCars(dto);
+        IncludeClients(dto);
+        IncludeClients(dto);
+        IncludeManagers(dto);
 
         dto.NumberOfCars = dto.Cars.Count;
 
@@ -54,5 +54,21 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
     public ObservableCollection<BranchDto> GetDtos()
     {
         return Table.Select(p => GetDto(p.Id)).ToObservableCollection();
+    }
+
+    public void IncludeCars(BranchDto dto)
+    {
+        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => p.BranchId == dto.Id));
+    }
+
+    public void IncludeClients(BranchDto dto)
+    {
+        dto.Clients = _mapper.Map<ObservableCollection<ClientDto>>(_store.Client.Where(p => p.BranchId == dto.Id));
+    }
+
+    public void IncludeManagers(BranchDto dto)
+    {
+        dto.Managers = _mapper.Map<ObservableCollection<ManagerDto>>(_store.Manager.Where(p =>
+            p.Role == ManagerRoleEnum.BranchManager && p.BranchIds.Contains(dto.Id!.Value)));
     }
 }

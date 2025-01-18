@@ -11,4 +11,10 @@ public interface IRentalService : ICrudService<Rental>
     ObservableCollection<RentalDto> GetDtos();
 
     RentalDto GetDto(int entityId);
+
+    void IncludeClient(RentalDto dto);
+
+    void IncludeCars(RentalDto dto);
+
+    void IncludeCars(IEnumerable<RentalDto> dtos);
 }
