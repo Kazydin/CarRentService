@@ -1,4 +1,3 @@
-using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -7,7 +6,7 @@ namespace CarRentService.Pages.Menu;
 
 public sealed partial class MenuPage : BasePage
 {
-    public MenuViewModel ViewModel { get; set; }
+    public readonly MenuViewModel _viewModel;
 
     private readonly INavigationService _navigationService;
 
@@ -21,7 +20,7 @@ public sealed partial class MenuPage : BasePage
         _service = service;
         InitializeComponent();
 
-        ViewModel = viewModel;
+        _viewModel = viewModel;
         DataContext = viewModel;
 
         navigationService.PageChanged += header =>
@@ -52,9 +51,9 @@ public sealed partial class MenuPage : BasePage
         }
     }
 
-    private void HomePage_OnLoaded(object sender, RoutedEventArgs e)
+    private void MenuPage_OnLoaded(object sender, RoutedEventArgs e)
     {
-        ViewModel.XamlRoot = XamlRoot;
+        _viewModel.XamlRoot = XamlRoot;
         _navigationService.SetFrame(ContentFrame);
 
         _service.Init(ContentFrame);
@@ -64,7 +63,12 @@ public sealed partial class MenuPage : BasePage
     {
         if (args.SelectedItem is NavigationViewItem selectedItem)
         {
-            ViewModel.NavigateCommand.Execute(selectedItem.Tag.ToString());
+            _viewModel.NavigateCommand.Execute(selectedItem.Tag.ToString());
         }
+    }
+
+    public void UpdateState()
+    {
+        _viewModel.UpdateState();
     }
 }

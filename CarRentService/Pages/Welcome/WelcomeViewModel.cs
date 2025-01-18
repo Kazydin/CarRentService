@@ -17,8 +17,8 @@ public partial class WelcomeViewModel : IViewModel
         _appState = appState;
     }
 
-    partial void OnAppStateChanged(AppState value)
+    public void UpdateAppState()
     {
-        UserName = value.CurrentUser?.Fio;
+        UserName = _appState?.CurrentUser?.Fio;
     }
 }

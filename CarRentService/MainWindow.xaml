@@ -8,5 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
     mc:Ignorable="d"
-    Title="АО ХУЙ ЗНАЕТ - Сервис Аренды Авто">
+    Title="Сервис аренды авто"
+    Activated="MainWindow_OnActivated">
 </abstract:InjectedWindow>

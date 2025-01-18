@@ -12,7 +12,7 @@
     d:DataContext="{d:DesignInstance Type=menu:MenuViewModel}"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loaded="HomePage_OnLoaded">
+    Loaded="MenuPage_OnLoaded">
 
     <NavigationView
         x:Name="Navi"
@@ -89,7 +89,7 @@
         </NavigationView.MenuItems>
         <NavigationView.FooterMenuItems>
             <NavigationViewItem
-                Content="Иванов Иван Иванович"
+                Content="{Binding CurrentUserFio}"
                 Tag="{x:Bind common:PageTypeEnum.Account, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
