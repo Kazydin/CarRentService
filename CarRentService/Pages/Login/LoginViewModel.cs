@@ -1,5 +1,4 @@
-﻿using System;
-using CarRentService.BLL.Services.Abstract;
+﻿using CarRentService.BLL.Services.Abstract;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -16,8 +15,6 @@ public partial class LoginViewModel : IViewModel
     [ObservableProperty]
     private string _password;
 
-    public Action CloseWindow;
-
     public RelayCommand AuthCommand { get; }
 
     private readonly IAuthenticationService _authenticationService;
@@ -26,20 +23,23 @@ public partial class LoginViewModel : IViewModel
 
     private readonly INotificationService _notificationService;
 
-    public LoginViewModel(INavigationService navigationService, INotificationService notificationService, IAuthenticationService authenticationService)
+    private readonly IWindowManager _windowManager;
+
+    public LoginViewModel(INavigationService navigationService, INotificationService notificationService, IAuthenticationService authenticationService, IWindowManager windowManager)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
         _authenticationService = authenticationService;
+        _windowManager = windowManager;
         AuthCommand = new RelayCommand(Authenticate, CanAuthenticate);
     }
 
-    public async void Authenticate()
+    public void Authenticate()
     {
         if (_authenticationService.Authenticate(Login, Password))
         {
-            CloseWindow();
-            _navigationService.Navigate(PageTypeEnum.Welcome);
+            _windowManager.OpenMainWindow();
+            return;
         }
 
         _notificationService.ShowTip("Авторизация", "Неверный логин или пароль", Symbol.Cancel);

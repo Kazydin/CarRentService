@@ -18,9 +18,10 @@ public interface INavigationService
 
     void SetFrame(Frame frame);
 
-    void InitAllPages();
+    void Init();
 
     void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, INavigationData? parameters = null);
 
     void GoBack();
+    void ResetNavigation();
 }

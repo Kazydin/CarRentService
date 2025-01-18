@@ -5,6 +5,7 @@ using CarRentService.DAL.Seeding;
 using CarRentService.Extensions;
 using System.Reflection;
 using FluentValidation;
+using CarRentService.Common.Abstract;
 
 namespace CarRentService;
 
@@ -27,8 +28,9 @@ public partial class App : Application
 
         SeedData();
 
-        var navigationService = ServiceProvider.GetRequiredService<AuthWindow>();
-        navigationService.Activate();
+        var windowManager = ServiceProvider.GetRequiredService<IWindowManager>();
+        windowManager.Init();
+        windowManager.OpenAuthWindow();
     }
 
     private static void SeedData()

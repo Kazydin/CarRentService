@@ -21,11 +21,6 @@ namespace CarRentService.Pages.Login
             _viewModel.Password = "Admin123!";
         }
 
-        public void SetCloseWindow(Action closeWindow)
-        {
-            _viewModel.CloseWindow = closeWindow;
-        }
-
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is LoginViewModel viewModel)

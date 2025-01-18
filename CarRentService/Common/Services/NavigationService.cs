@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 
@@ -15,6 +14,12 @@ namespace CarRentService.Common.Services;
 
 public class NavigationService : INavigationService
 {
+    public event Action<string>? PageChanged;
+
+    public event Action<bool> CanGoBackChanged;
+
+    public bool CanGoBack() => _backStack.Count > 0;
+
     private Frame _frame = null!;
 
     private ImmutableArray<PageDto> _pages;
@@ -22,6 +27,10 @@ public class NavigationService : INavigationService
     private readonly Stack<PageTypeEnum> _backStack = new();
 
     private readonly IServiceProvider _serviceProvider;
+
+    private IWindowManager _windowManager;
+
+    private Dictionary<PageTypeEnum, Action> _pageWithActions;
 
     public NavigationService(IServiceProvider serviceProvider)
     {
@@ -33,26 +42,31 @@ public class NavigationService : INavigationService
         _frame = frame;
     }
 
-    public event Action<string>? PageChanged;
-
-    public event Action<bool> CanGoBackChanged;
-
-    public bool CanGoBack() => _backStack.Count > 0;
-
-    public void InitAllPages()
+    public void Init()
     {
-        if (_pages != null)
+        if (_pages == null)
         {
-            throw new InvalidOperationException("Страницы уже инициализированы");
+            var factory = _serviceProvider.GetRequiredService<IPageFactory>();
+
+            _pages = factory.GetPages();
+
+            _windowManager = _serviceProvider.GetRequiredService<IWindowManager>();
+
+            _pageWithActions = new Dictionary<PageTypeEnum, Action>
+            {
+                { PageTypeEnum.Logout, _windowManager.Logout }
+            };
         }
-
-        var factory = _serviceProvider.GetRequiredService<IPageFactory>();
-
-        _pages = factory.GetPages();
     }
 
     public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, INavigationData? parameters = null)
     {
+        if (_pageWithActions.TryGetValue(pageTypeEnum, out var action))
+        {
+            action();
+            return;
+        }
+
         Guard.NotNull(_frame, nameof(_frame), "Frame не задан");
 
         var pageDto = _pages.FirstOrDefault(p => p.PageTypeEnum == pageTypeEnum);
@@ -85,5 +99,10 @@ public class NavigationService : INavigationService
 
             CanGoBackChanged?.Invoke(CanGoBack());
         }
+    }
+
+    public void ResetNavigation()
+    {
+        _frame.Content = null;
     }
 }

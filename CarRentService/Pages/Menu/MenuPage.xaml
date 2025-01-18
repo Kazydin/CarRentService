@@ -98,7 +98,7 @@
             </NavigationViewItem>
             <NavigationViewItem
                 Content="Выйти"
-                Tag="{x:Bind common:PageTypeEnum.Exit, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.Logout, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/switch.png" />

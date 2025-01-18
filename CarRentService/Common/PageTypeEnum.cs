@@ -38,5 +38,5 @@ public enum PageTypeEnum
 
     EditProfile,
 
-    Exit,
+    Logout,
 }

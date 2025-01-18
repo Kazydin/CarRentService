@@ -14,7 +14,7 @@
         x:Name="ProfilePivot">
         <PivotItem
             Header="Основная информация">
-            <Grid>
+            <Grid Margin="0, 10, 0, 0">
                 <Grid.RowDefinitions>
                     <RowDefinition
                         Height="Auto" />
@@ -134,10 +134,10 @@
         </PivotItem>
         <PivotItem
             Header="Филиалы">
-            <ListBox MinWidth="200" ItemsSource="{Binding Manager.Branches}" Background="Transparent">
+            <ListBox Margin="0, 10, 0, 0" MinWidth="200" ItemsSource="{Binding Manager.Branches}" Background="Transparent">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock>123</TextBlock>
+                        <TextBlock Text="{Binding Name}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

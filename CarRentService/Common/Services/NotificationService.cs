@@ -47,11 +47,11 @@ public class NotificationService : INotificationService
         {
             Title = title,
             Subtitle = message,
-            IsLightDismissEnabled = true, // Закрывается при клике вне
-            PreferredPlacement = TeachingTipPlacementMode.BottomRight,
+            IsLightDismissEnabled = false, // Закрывается при клике вне
+            PreferredPlacement = TeachingTipPlacementMode.Auto,
             // Устанавливаем XamlRoot для корректного отображения
             XamlRoot = _targetElement.XamlRoot,
-            IconSource = iconSource
+            IconSource = iconSource,
         };
 
         tip.Closed += (sender, args) =>

@@ -1,3 +1,4 @@
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -10,14 +11,14 @@ public sealed partial class MenuPage : BasePage
 
     private readonly INavigationService _navigationService;
 
-    private readonly INotificationService _service;
+    private readonly INotificationService _notificationService;
 
     public MenuPage(MenuViewModel viewModel,
         INavigationService navigationService,
-        INotificationService service)
+        INotificationService notificationService)
     {
         _navigationService = navigationService;
-        _service = service;
+        _notificationService = notificationService;
         InitializeComponent();
 
         _viewModel = viewModel;
@@ -33,8 +34,6 @@ public sealed partial class MenuPage : BasePage
 
         // Инициализация состояния кнопки
         Navi.IsBackEnabled = _navigationService.CanGoBack();
-
-        _navigationService.InitAllPages();
     }
 
     private void OnCanGoBackChanged(bool canGoBack)
@@ -56,7 +55,9 @@ public sealed partial class MenuPage : BasePage
         _viewModel.XamlRoot = XamlRoot;
         _navigationService.SetFrame(ContentFrame);
 
-        _service.Init(ContentFrame);
+        _notificationService.Init(ContentFrame);
+
+        _navigationService.Navigate(PageTypeEnum.Welcome);
     }
 
     private void Navi_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

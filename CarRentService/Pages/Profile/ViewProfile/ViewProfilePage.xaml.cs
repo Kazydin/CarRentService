@@ -12,21 +12,31 @@ public sealed partial class ViewProfilePage : NavigationPage
 {
     private readonly ViewProfileViewModel _viewModel;
 
+    private object _branchesPage;
+
     public ViewProfilePage(ViewProfileViewModel viewModel) : base(PageTypeEnum.EditProfile, "Редактирование профиля")
     {
         InitializeComponent();
 
         DataContext = viewModel;
         _viewModel = viewModel;
+
+        _branchesPage = ProfilePivot.Items.First(p => ((PivotItem)p).Header.ToString() == "Филиалы");
     }
 
     public override void OnNavigatedTo(INavigationData? parameters)
     {
         _viewModel.ReloadState();
 
-        if (_viewModel.Manager.Role == ManagerRoleEnum.Admin.GetDescription())
+        if (_viewModel.Manager.Role == ManagerRoleEnum.Admin.GetDescription()
+            && ProfilePivot.Items.Contains(_branchesPage))
         {
-            ProfilePivot.Items.Remove(ProfilePivot.Items.First(p => ((PivotItem)p).Header.ToString() == "Филиалы"));
+            ProfilePivot.Items.Remove(_branchesPage);
+        }
+        else if (_viewModel.Manager.Role == ManagerRoleEnum.BranchManager.GetDescription()
+                 && !ProfilePivot.Items.Contains(_branchesPage))
+        {
+            ProfilePivot.Items.Add(_branchesPage);
         }
 
         PasswordBox.Password = _viewModel.Manager.Password;
