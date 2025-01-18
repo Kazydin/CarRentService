@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\logout.png" />
+    <None Remove="AuthWindow.xaml" />
     <None Remove="Pages\CarsPage.xaml" />
     <None Remove="Pages\Cars\CarsTable\CarsTablePage.xaml" />
     <None Remove="Pages\Cars\ViewCars\ViewCarPage.xaml" />
     <None Remove="Pages\ClientsPage.xaml" />
     <None Remove="Pages\Insurances\InsurancesTable\InsurancesTablePage.xaml" />
     <None Remove="Pages\Manages\ManagersTable\ManagersTablePage.xaml" />
+    <None Remove="Pages\Manages\ViewManager\ViewManagerPage.xaml" />
     <None Remove="Pages\Payments\PaymentsTable\PaymentsTablePage.xaml" />
     <None Remove="Pages\Payments\ViewPayment\ViewPaymentPage.xaml" />
     <None Remove="Pages\Rentals\RentalsTable\RentalsTablePage.xaml" />
@@ -64,7 +66,6 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\Manages\ViewManager\" />
     <Folder Include="Resources\ru-RU\" />
   </ItemGroup>
 
@@ -86,6 +87,16 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="Pages\Welcom\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="AuthWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Manages\ViewManager\ViewManagerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\Manages\ManagersTable\ManagersTablePage.xaml">

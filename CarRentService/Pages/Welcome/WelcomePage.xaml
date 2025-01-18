@@ -8,10 +8,9 @@
     xmlns:abstract="using:CarRentService.Common.Abstract"
     xmlns:welcome="using:CarRentService.Pages.Welcome"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=welcome:WelcomeViewModel}"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    d:DataContext="{d:DesignInstance Type=welcome:WelcomeViewModel}">
 
-    <StackPanel Margin="30">
+    <StackPanel Margin="47, 20, 47, 20">
         <TextBlock FontSize="70">Добро пожаловать,</TextBlock>
         <TextBlock
             FontSize="35" Text="{Binding UserName}" />

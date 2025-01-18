@@ -1,3 +1,4 @@
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -10,11 +11,14 @@ namespace CarRentService.Pages.Login
 
         public ContentDialog Dialog;
 
-        public LoginPage(LoginViewModel viewModel)
+        private readonly INavigationService _navigationService;
+
+        public LoginPage(LoginViewModel viewModel, INavigationService navigationService)
         {
             InitializeComponent();
 
             ViewModel = viewModel;
+            _navigationService = navigationService;
             DataContext = ViewModel;
         }
 
@@ -33,6 +37,7 @@ namespace CarRentService.Pages.Login
             if (ViewModel.Authenticate())
             {
                 sender.Hide();
+                _navigationService.Navigate(PageTypeEnum.Welcome);
             }
             else
             {

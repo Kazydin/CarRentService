@@ -27,7 +27,7 @@ public partial class App : Application
 
         SeedData();
 
-        var navigationService = ServiceProvider.GetRequiredService<MainWindow>();
+        var navigationService = ServiceProvider.GetRequiredService<AuthWindow>();
         navigationService.Activate();
     }
 

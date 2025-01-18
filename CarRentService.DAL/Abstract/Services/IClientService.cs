@@ -1,5 +1,4 @@
 ﻿using CarRentService.DAL.Entities;
-using System.Collections.ObjectModel;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Dtos;
 

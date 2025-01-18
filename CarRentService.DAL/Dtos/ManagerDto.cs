@@ -1,4 +1,5 @@
-﻿using CarRentService.DAL.Entities;
+﻿using CarRentService.Common.Extensions;
+using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 
@@ -35,6 +36,9 @@ public partial class ManagerDto
     private string _role;
 
     [ObservableProperty]
+    private ObservableCollection<int> _branchIds = new();
+
+    [ObservableProperty]
     private ObservableCollection<Branch> _branches = new();
 
     /// <summary>
@@ -48,4 +52,9 @@ public partial class ManagerDto
     /// </summary>
     [ObservableProperty]
     private string _password;
+
+    partial void OnBranchesChanged(ObservableCollection<Branch> value)
+    {
+        _branchIds = value.Select(p => p.Id).ToObservableCollection();
+    }
 }

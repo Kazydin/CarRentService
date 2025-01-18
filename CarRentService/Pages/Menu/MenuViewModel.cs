@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
@@ -54,10 +55,9 @@ namespace CarRentService.Pages.Menu
             // TODO: удалить позже
             _loginPage.ViewModel.Login = "admin";
             _loginPage.ViewModel.Password = "admin123";
-            _loginPage.ViewModel.Authenticate();
 
             // Открываем ContentDialog
-            // await dialog.ShowAsync();
+            await dialog.ShowAsync();
         }
 
         private void Navigate(string? pageKey)

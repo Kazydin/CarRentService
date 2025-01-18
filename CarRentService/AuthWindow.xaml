@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <abstract:InjectedWindow
-    x:Class="CarRentService.MainWindow"
+    x:Class="CarRentService.AuthWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CarRentService"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
+    xmlns:converters="using:CarRentService.Common.Converters"
     mc:Ignorable="d"
-    Title="АО ХУЙ ЗНАЕТ - Сервис Аренды Авто">
+    Title="Авторизация">
 </abstract:InjectedWindow>

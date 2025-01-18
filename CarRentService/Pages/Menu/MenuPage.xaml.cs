@@ -26,10 +26,7 @@ public sealed partial class MenuPage : BasePage
 
         navigationService.PageChanged += header =>
         {
-            if (!string.IsNullOrEmpty(header))
-            {
-                Navi.Header = header;
-            }
+            Navi.Header = header;
         };
 
         // Подписка на изменение состояния CanGoBack
@@ -62,7 +59,7 @@ public sealed partial class MenuPage : BasePage
         ViewModel.ShowLoginDialogCommand.Execute(null);
 
         _service.Init(ContentFrame);
-        _navigationService.Navigate(PageTypeEnum.Welcome, false);
+        // _navigationService.Navigate(PageTypeEnum.Welcome, false);
     }
 
     private void Navi_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

@@ -4,6 +4,8 @@ namespace CarRentService.Common;
 
 public enum PageTypeEnum
 {
+    Auth,
+
     Welcome,
 
     Clients,

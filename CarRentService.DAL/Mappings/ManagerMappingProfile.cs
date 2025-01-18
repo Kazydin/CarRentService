@@ -16,6 +16,6 @@ public class ManagerMappingProfile : Profile
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.GetDescription()));
 
         CreateMap<ManagerDto, Manager>()
-            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToEnum<ManagerRoleEnum>()));
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToEnumFromDescription<ManagerRoleEnum>()));
     }
 }

@@ -44,6 +44,8 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
         // Клонирование, чтобы не менять базовый объект
         entity = _mapper.Map<Manager>(entity);
 
+        entity.IncludeBranches();
+
         var dto = _mapper.Map<ManagerDto>(entity);
 
         return dto;
