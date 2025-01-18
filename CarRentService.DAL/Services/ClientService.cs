@@ -29,37 +29,28 @@ public class ClientService : BaseCrudService<Client>, IClientService
 
     public ClientDto GetDto(int clientId)
     {
-        var client = _store.Client.FirstOrDefault(p => p.Id == clientId);
+        var entity = _store.Client.FirstOrDefault(p => p.Id == clientId);
 
-        Guard.NotNull(client, nameof(client), $"Клиент с ID {client} не найден");
+        Guard.NotNull(entity, nameof(entity), $"Клиент с ID {entity} не найден");
 
-        client!.IncludeBranch();
-        client!.Rentals.IncludeBranch();
-        client.Rentals.IncludeCars();
+        entity = _mapper.Map<Client>(entity);
 
-        var clientDto = _mapper.Map<ClientDto>(client);
+        var clientDto = _mapper.Map<ClientDto>(entity);
 
-        clientDto.CurrentCars = client.Rentals
-            .Where(p => p.Status == RentalStatusEnum.Active)
-            .SelectMany(rental =>
-                rental.Cars.SelectMany(
-                    _ =>
-                    {
-                        var currentCars = _mapper.Map<ObservableCollection<CarDto>>(rental.Cars);
+        clientDto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == entity.BranchId));
+        clientDto.Rentals =
+            _mapper.Map<ObservableCollection<RentalDto>>(_store.Rental.Where(p => p.ClientId == clientDto.Id));
 
-                        foreach (var currentCar in currentCars)
-                        {
-                            currentCar.Rental = _mapper.Map<RentalDto>(rental);
-                        }
-
-                        return currentCars;
-                    })).ToObservableCollection();
+        var currentRentals =
+            _store.Rental.Where(p => p.ClientId == clientDto.Id && p.Status == RentalStatusEnum.Active);
+        clientDto.CurrentCars =
+            _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p =>
+                currentRentals.SelectMany(p => p.CarIds).Contains(p.Id)));
 
         return clientDto;
     }
 
     protected override void CleanEntity(Client entity)
     {
-        entity.Rentals = new();
     }
 }

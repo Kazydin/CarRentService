@@ -34,7 +34,7 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
 
     protected override void CleanEntity(Manager entity)
     {
-        entity.Branches = new();
+       
     }
 
     public ManagerDto GetDto(int entityId)
@@ -46,9 +46,10 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
         // Клонирование, чтобы не менять базовый объект
         entity = _mapper.Map<Manager>(entity);
 
-        entity.IncludeBranches();
-
         var dto = _mapper.Map<ManagerDto>(entity);
+
+        dto.Branches =
+            _mapper.Map<ObservableCollection<BranchDto>>(_store.Branch.Where(p => entity.BranchIds.Contains(p.Id)));
 
         return dto;
     }

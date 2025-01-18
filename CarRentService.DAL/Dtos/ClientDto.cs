@@ -1,6 +1,4 @@
-﻿using CarRentService.DAL.Entities;
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 using System.Collections.ObjectModel;
 
@@ -24,6 +22,8 @@ public partial class ClientDto
     [ObservableProperty]
     private string _driverLicenseNumber;
 
+    #region LinkedEntities
+
     [ObservableProperty]
     private ObservableCollection<RentalDto> _rentals = new();
 
@@ -31,11 +31,13 @@ public partial class ClientDto
     private ObservableCollection<CarDto> _currentCars = new();
 
     [ObservableProperty]
-    private ObservableCollection<Payment> _payments = new();
+    private ObservableCollection<PaymentDto> _payments = new();
 
     [ObservableProperty]
-    private ObservableCollection<Insurance> _insurances = new();
+    private ObservableCollection<InsuranceDto> _insurances = new();
 
     [ObservableProperty]
-    private Branch? _branch;
+    private BranchDto? _branch;
+
+    #endregion
 }

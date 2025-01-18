@@ -36,7 +36,7 @@ public partial class ViewCarViewModel : BaseViewModel
 
     [ObservableProperty] private CarDto _car;
 
-    [ObservableProperty] private ObservableCollection<Branch> _branches;
+    [ObservableProperty] private ObservableCollection<BranchDto> _branches;
 
     private readonly INavigationService _navigationService;
 
@@ -69,7 +69,7 @@ public partial class ViewCarViewModel : BaseViewModel
         AddRentalCommand = new RelayCommand<object>(AddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
 
-        Branches = branchService.Table;
+        Branches = _mapper.Map<ObservableCollection<BranchDto>>(branchService.Table);
     }
     private void AddRental(object? obj)
     {
@@ -96,12 +96,12 @@ public partial class ViewCarViewModel : BaseViewModel
 
     private bool CanSendToRepair()
     {
-        return Car.Id.HasValue && Car.Status == CarStatusEnum.Available.GetDescription();
+        return Car.Id.HasValue && Car.Status == CarStatusEnum.Available;
     }
 
     private void ChangeCarStatus(CarStatusEnum status)
     {
-        Car.Status = status.GetDescription();
+        Car.Status = status;
 
         SendToRepairCommand.NotifyCanExecuteChanged();
         ReturnFromRepairCommand.NotifyCanExecuteChanged();
@@ -109,7 +109,7 @@ public partial class ViewCarViewModel : BaseViewModel
 
     private bool CanReturnFromRepair()
     {
-        return Car.Id.HasValue && Car.Status == CarStatusEnum.InRepair.GetDescription();
+        return Car.Id.HasValue && Car.Status == CarStatusEnum.InRepair;
     }
 
     private async void Save()

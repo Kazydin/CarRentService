@@ -14,9 +14,6 @@ public partial class Manager : Person
     private ManagerRoleEnum _role;
 
     [ObservableProperty]
-    private ObservableCollection<Branch> _branches = new();
-
-    [ObservableProperty]
     private ObservableCollection<int> _branchIds = new();
 
     /// <summary>

@@ -7,36 +7,46 @@ namespace CarRentService.DAL.Dtos;
 [ObservableObject]
 public partial class BranchDto
 {
-    [ObservableProperty]
-    private int? _id;
+    [ObservableProperty] private int? _id;
 
     /// <summary>
     /// Название филиала.
     /// </summary>
-    [ObservableProperty]
-    private string _name;
+    [ObservableProperty] private string _name;
 
     /// <summary>
     /// Адрес филиала.
     /// </summary>
-    [ObservableProperty]
-    private string _address;
+    [ObservableProperty] private string _address;
 
-    [ObservableProperty]
-    private ObservableCollection<CarDto> _cars = new();
-
-    [ObservableProperty]
-    private ObservableCollection<ManagerDto> _managers = new();
-
-    [ObservableProperty]
-    private ObservableCollection<Client> _clients = new();
-
-    [ObservableProperty]
-    private int numberOfCars;
+    [ObservableProperty] private int numberOfCars;
 
     /// <summary>
     /// Контактные данные филиала.
     /// </summary>
-    [ObservableProperty]
-    private string _contactDetails;
+    [ObservableProperty] private string _contactDetails;
+
+    #region LinkedEntities
+
+    [ObservableProperty] private ObservableCollection<CarDto> _cars = new();
+
+    [ObservableProperty] private ObservableCollection<ManagerDto> _managers = new();
+
+    [ObservableProperty] private ObservableCollection<ClientDto> _clients = new();
+
+    #endregion
+
+    public override bool Equals(object? obj)
+    {
+        return obj is BranchDto other &&
+               Id == other.Id &&
+               Name == other.Name &&
+               Address == other.Address &&
+               ContactDetails == other.ContactDetails;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, Name, Address, ContactDetails);
+    }
 }

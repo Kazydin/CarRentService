@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Dtos;
@@ -17,7 +18,7 @@ public partial class CarDto
     /// статус автомобиля (например, доступен, в ремонте)
     /// </summary>
     [ObservableProperty]
-    private string _status;
+    private CarStatusEnum _status;
 
     /// <summary>
     /// Марка транспортного средства.
@@ -38,13 +39,9 @@ public partial class CarDto
     private int? _year;
 
     [ObservableProperty]
-    private int? _branchId;
-
-    [ObservableProperty]
-    private Branch _branch;
-
-    [ObservableProperty]
     private string _name;
+
+    #region LinkedEntities
 
     /// <summary>
     /// Текущая аренда
@@ -58,19 +55,28 @@ public partial class CarDto
     [ObservableProperty]
     private RentalDto? _rental;
 
-    /// <summary>
-    /// Текущая аренда
-    /// </summary>
     [ObservableProperty]
-    private int? _rentalId;
+    private BranchDto _branch;
 
-    partial void OnRentalChanged(RentalDto? value)
+    #endregion
+
+    partial void OnRegistrationNumberChanged(string value)
     {
-        RentalId = value?.Id;
+        UpdateName();
     }
 
-    partial void OnBranchChanged(Branch? value)
+    private new void UpdateName()
     {
-        BranchId = value?.Id;
+        Name = $"{Make} {Model} ({RegistrationNumber})";
+    }
+
+    partial void OnMakeChanged(string value)
+    {
+        UpdateName();
+    }
+
+    partial void OnModelChanged(string value)
+    {
+        UpdateName();
     }
 }

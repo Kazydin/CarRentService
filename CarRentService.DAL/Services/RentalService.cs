@@ -40,28 +40,22 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
         Guard.NotNull(entity, nameof(entity), $"Аренда с ID {entityId} не найдена");
 
         // Клонирование, чтобы не менять базовый объект
-        var rental = _mapper.Map<Rental>(entity);
+        entity = _mapper.Map<Rental>(entity);
 
-        rental.IncludeBranch();
-        rental.IncludeCars();
+        var dto = _mapper.Map<RentalDto>(entity);
 
-        var dto = _mapper.Map<RentalDto>(rental);
+        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => entity.CarIds.Contains(p.Id)));
 
-        var client = _mapper.Map<Client>(_store.Client.First(p => p.Id == rental.ClientId));
-
-        client.IncludeBranch();
+        var client = _mapper.Map<Client>(_store.Client.First(p => p.Id == entity.ClientId));
 
         dto.Client = _mapper.Map<ClientDto>(client);
+
+        dto.Client.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == client.BranchId));
 
         return dto;
     }
 
     protected override void CleanEntity(Rental entity)
     {
-        entity.Cars = new();
-        entity.Client = null;
-        entity.Branch = null;
-        entity.Payments = new();
-        entity.Insurances = new();
     }
 }

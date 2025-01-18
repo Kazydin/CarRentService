@@ -6,7 +6,6 @@ using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
-using CarRentService.DAL.Extensions;
 using FluentValidation;
 using GuardNet;
 
@@ -29,25 +28,25 @@ public class BranchService : BaseCrudService<Branch>, IBranchService
 
     protected override void CleanEntity(Branch entity)
     {
-        entity.Cars = new();
     }
 
     public BranchDto GetDto(int branchId)
     {
-        var branch = _store.Branch.FirstOrDefault(p => p.Id == branchId);
+        var entity = _store.Branch.FirstOrDefault(p => p.Id == branchId);
 
-        Guard.NotNull(branch, nameof(branch), $"Филиал с ID {branchId} не найден");
+        Guard.NotNull(entity, nameof(entity), $"Филиал с ID {branchId} не найден");
 
         // Клонирование, чтобы не менять базовый объект
-        branch = _mapper.Map<Branch>(branch);
+        entity = _mapper.Map<Branch>(entity);
 
-        branch!.IncludeCars();
+        var dto = _mapper.Map<BranchDto>(entity);
 
-        var dto = _mapper.Map<BranchDto>(branch);
+        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => p.BranchId == entity.Id));
+        dto.Clients = _mapper.Map<ObservableCollection<ClientDto>>(_store.Client.Where(p => p.BranchId == entity.Id));
+        dto.Managers = _mapper.Map<ObservableCollection<ManagerDto>>(_store.Manager.Where(p =>
+            p.Role == ManagerRoleEnum.BranchManager && p.BranchIds.Contains(entity.Id)));
 
-        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => p.BranchId == branch.Id));
-        dto.Clients = _mapper.Map<ObservableCollection<Client>>(_store.Client.Where(p => p.BranchId == branch.Id));
-        dto.Managers = _mapper.Map<ObservableCollection<ManagerDto>>(_store.Manager.Where(p => p.Role == ManagerRoleEnum.BranchManager && p.BranchIds.Contains(branch.Id)));
+        dto.NumberOfCars = dto.Cars.Count;
 
         return dto;
     }

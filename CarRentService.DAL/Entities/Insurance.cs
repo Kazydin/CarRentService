@@ -20,13 +20,7 @@ public partial class Insurance : IEntity
     private int _rentalId;
 
     [ObservableProperty]
-    private Rental? _rental;
-
-    [ObservableProperty]
     private int _carId;
-
-    [ObservableProperty]
-    private Car? _car;
 
     /// <summary>
     /// Тип страховки (например, полное или частичное покрытие).

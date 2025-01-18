@@ -22,24 +22,8 @@ public partial class Branch : IEntity
     /// </summary>
     [ObservableProperty] private string _address;
 
-    [ObservableProperty] private ObservableCollection<Car> _cars = new();
-
     /// <summary>
     /// Контактные данные филиала.
     /// </summary>
     [ObservableProperty] private string _contactDetails;
-
-    public override bool Equals(object? obj)
-    {
-        return obj is Branch other &&
-               Id == other.Id &&
-               Name == other.Name &&
-               Address == other.Address &&
-               ContactDetails == other.ContactDetails;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Id, Name, Address, ContactDetails);
-    }
 }

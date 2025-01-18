@@ -11,10 +11,9 @@ public class ClientMappingProfile : Profile
     {
         CreateMap<Client, Client>();
 
+        // TODO: попробовать удалить
         CreateMap<Client, ClientDto>()
-            .ForMember(dest => dest.CurrentCars, opt => opt.Ignore())
-            .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Rentals.SelectMany(r => r.Payments)))
-            .ForMember(dest => dest.Insurances, opt => opt.MapFrom(src => src.Rentals.SelectMany(r => r.Insurances)));
+            .ForMember(dest => dest.CurrentCars, opt => opt.Ignore());
 
         CreateMap<ClientDto, Client>();
     }

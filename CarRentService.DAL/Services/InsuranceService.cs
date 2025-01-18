@@ -9,7 +9,6 @@ using FluentValidation;
 
 using System.Collections.ObjectModel;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Extensions;
 using GuardNet;
 
 namespace CarRentService.DAL.Services;
@@ -31,7 +30,7 @@ public class InsuranceService : BaseCrudService<Insurance>, IInsuranceService
 
     protected override void CleanEntity(Insurance entity)
     {
-        entity.Rental = null;
+        
     }
 
     public ObservableCollection<InsuranceDto> GetDtos()
@@ -48,12 +47,12 @@ public class InsuranceService : BaseCrudService<Insurance>, IInsuranceService
         Guard.NotNull(entity, nameof(entity), $"Страховка с ID {entityId} не найдена");
 
         // Клонирование, чтобы не менять базовый объект
-        var entityCopy = _mapper.Map<Insurance>(entity);
+        entity = _mapper.Map<Insurance>(entity);
 
-        entityCopy.IncludeRental();
-        entityCopy.Rental?.IncludeClient();
+        var dto = _mapper.Map<InsuranceDto>(entity);
 
-        var dto = _mapper.Map<InsuranceDto>(entityCopy);
+        dto.Rental = _mapper.Map<RentalDto>(_store.Rental.FirstOrDefault(p => entity.RentalId == p.Id));
+        dto.Car = _mapper.Map<CarDto>(_store.Car.FirstOrDefault(p => p.Id == entity.CarId));
 
         return dto;
     }

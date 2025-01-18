@@ -29,8 +29,7 @@ public class CarService : BaseCrudService<Car>, ICarService
 
     protected override void CleanEntity(Car entity)
     {
-        entity.Branch = null;
-        entity.Rentals = new();
+        
     }
 
     public ObservableCollection<CarDto> GetDtos()
@@ -47,14 +46,13 @@ public class CarService : BaseCrudService<Car>, ICarService
         Guard.NotNull(entity, nameof(entity), $"Автомобиль с ID {entityId} не найден");
 
         // Клонирование, чтобы не менять базовый объект
-        var car = _mapper.Map<Car>(entity);
+        entity = _mapper.Map<Car>(entity);
 
-        car.IncludeRentals();
-        car.IncludeBranch();
+        var dto = _mapper.Map<CarDto>(entity);
 
-        var dto = _mapper.Map<CarDto>(car);
-
-        dto.Rental = _mapper.Map<RentalDto>(car.Rentals.FirstOrDefault(p => p.Status == RentalStatusEnum.Active));
+        dto.Rentals = _mapper.Map<ObservableCollection<RentalDto>>(_store.Rental.Where(p => p.CarIds.Contains(entity.Id)));
+        dto.Rental = _mapper.Map<RentalDto>(dto.Rentals.FirstOrDefault(p => p.Status == RentalStatusEnum.Active));
+        dto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == entity.BranchId));
 
         return dto;
     }

@@ -69,7 +69,7 @@ public partial class ViewManagerViewModel : BaseViewModel
     {
         try
         {
-            Manager.Branches = SelectedBranches;
+            Manager.Branches = _mapper.Map<ObservableCollection<BranchDto>>(SelectedBranches);
 
             _managerService.Update(_mapper.Map<Manager>(Manager));
 

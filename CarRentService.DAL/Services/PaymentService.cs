@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using CarRentService.DAL.Dtos;
 using FluentValidation;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Extensions;
 using GuardNet;
 
 namespace CarRentService.DAL.Services;
@@ -41,19 +40,19 @@ public class PaymentService : BaseCrudService<Payment>, IPaymentService
         Guard.NotNull(entity, nameof(entity), $"Платеж с ID {entityId} не найден");
 
         // Клонирование, чтобы не менять базовый объект
-        var entityCopy = _mapper.Map<Payment>(entity);
+        entity = _mapper.Map<Payment>(entity);
 
-        entityCopy.IncludeRental();
-        entityCopy.Rental!.IncludeCars();
-        entityCopy.Rental!.IncludeClient();
+        var dto = _mapper.Map<PaymentDto>(entity);
 
-        var dto = _mapper.Map<PaymentDto>(entityCopy);
+        var rentalEntity = _store.Rental.FirstOrDefault(p => p.Id == entity.RentalId);
+
+        dto.Rental = _mapper.Map<RentalDto>(rentalEntity);
+        dto.Rental.Client = _mapper.Map<ClientDto>(_store.Client.FirstOrDefault(p => p.Id == rentalEntity?.ClientId));
 
         return dto;
     }
 
     protected override void CleanEntity(Payment entity)
     {
-        entity.Rental = null;
     }
 }

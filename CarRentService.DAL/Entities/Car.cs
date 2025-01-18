@@ -22,28 +22,9 @@ public partial class Car : Vehicle
     [ObservableProperty]
     private CarStatusEnum _status;
 
-    [ObservableProperty]
-    private string _name;
-
     /// <summary>
     /// идентификатор филиала
     /// </summary>
     [ObservableProperty]
-    private int? _branchId;
-
-    [ObservableProperty]
-    private Branch? _branch;
-
-    [ObservableProperty]
-    private ObservableCollection<Rental> _rentals = new();
-
-    partial void OnRegistrationNumberChanged(string value)
-    {
-        UpdateName();
-    }
-
-    private new void UpdateName()
-    {
-        Name = $"{Make} {Model} ({RegistrationNumber})";
-    }
+    private int _branchId;
 }

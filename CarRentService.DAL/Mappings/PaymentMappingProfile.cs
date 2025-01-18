@@ -10,8 +10,7 @@ public class PaymentMappingProfile : Profile
     {
         CreateMap<Payment, Payment>();
 
-        CreateMap<Payment, PaymentDto>()
-            .ForMember(dest => dest.Rental, opt => opt.MapFrom(src => src.Rental));
+        CreateMap<Payment, PaymentDto>();
 
         CreateMap<PaymentDto, Payment>();
     }

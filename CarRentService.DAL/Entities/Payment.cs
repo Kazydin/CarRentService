@@ -37,10 +37,4 @@ public partial class Payment : IEntity
     /// </summary>
     [ObservableProperty]
     private int _rentalId;
-
-    /// <summary>
-    /// Аренда, связанная с этим платежом.
-    /// </summary>
-    [ObservableProperty]
-    private Rental? _rental;
 }

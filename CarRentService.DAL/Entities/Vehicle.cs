@@ -29,22 +29,4 @@ public abstract partial class Vehicle : IEntity
     /// </summary>
     [ObservableProperty]
     private int _year;
-
-    [ObservableProperty]
-    private string _name;
-
-    partial void OnMakeChanged(string value)
-    {
-        UpdateName();
-    }
-
-    partial void OnModelChanged(string value)
-    {
-        UpdateName();
-    }
-
-    protected void UpdateName()
-    {
-        Name = $"{Make} {Model}";
-    }
 }

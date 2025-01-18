@@ -1,6 +1,4 @@
-﻿using CarRentService.Common.Extensions;
-using CarRentService.DAL.Entities;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using CarRentService.DAL.Enum;
 
@@ -36,12 +34,6 @@ public partial class ManagerDto
     [ObservableProperty]
     private ManagerRoleEnum _role;
 
-    [ObservableProperty]
-    private ObservableCollection<int> _branchIds = new();
-
-    [ObservableProperty]
-    private ObservableCollection<Branch> _branches = new();
-
     /// <summary>
     /// Логин для авторизации
     /// </summary>
@@ -54,8 +46,10 @@ public partial class ManagerDto
     [ObservableProperty]
     private string _password;
 
-    partial void OnBranchesChanged(ObservableCollection<Branch> value)
-    {
-        _branchIds = value.Select(p => p.Id).ToObservableCollection();
-    }
+    #region LinkedEntities
+
+    [ObservableProperty]
+    private ObservableCollection<BranchDto> _branches = new();
+
+    #endregion
 }
