@@ -90,7 +90,7 @@
         <NavigationView.FooterMenuItems>
             <NavigationViewItem
                 Content="{Binding CurrentUserFio}"
-                Tag="{x:Bind common:PageTypeEnum.Account, Converter={StaticResource EnumToStringConverter}}">
+                Tag="{x:Bind common:PageTypeEnum.EditProfile, Converter={StaticResource EnumToStringConverter}}">
                 <NavigationViewItem.Icon>
                     <BitmapIcon
                         UriSource="ms-appx:///Assets/user.png" />

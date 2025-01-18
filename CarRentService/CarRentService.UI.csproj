@@ -30,6 +30,7 @@
     <None Remove="Pages\Manages\ViewManager\ViewManagerPage.xaml" />
     <None Remove="Pages\Payments\PaymentsTable\PaymentsTablePage.xaml" />
     <None Remove="Pages\Payments\ViewPayment\ViewPaymentPage.xaml" />
+    <None Remove="Pages\Profile\ViewProfile\ViewProfilePage.xaml" />
     <None Remove="Pages\Rentals\RentalsTable\RentalsTablePage.xaml" />
     <None Remove="Pages\Rentals\ViewRental\ViewRentalPage.xaml" />
     <None Remove="Pages\WelcomeHomePage.xaml" />
@@ -87,6 +88,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="Pages\Welcom\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Profile\ViewProfile\ViewProfilePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="AuthWindow.xaml">

@@ -9,56 +9,57 @@
     xmlns:converters="using:CarRentService.Common.Converters"
     xmlns:abstract="using:CarRentService.Common.Abstract"
     xmlns:login="using:CarRentService.Pages.Login"
+    xmlns:core="using:Syncfusion.UI.Xaml.Core"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     d:DataContext="{d:DesignInstance Type=login:LoginViewModel}"
     mc:Ignorable="d"
     Loaded="LoginPage_OnLoaded">
 
-    <Border BorderBrush="Gray" BorderThickness="2" Width="350" Height="210" Padding="15" CornerRadius="6">
-        <Grid x:Name="LoginGrid">
-            <Grid.RowDefinitions>
-                <RowDefinition
-                    Height="Auto" />
-                <RowDefinition
-                    Height="Auto" />
-                <RowDefinition
-                    Height="Auto" />
-                <RowDefinition
-                    Height="Auto" />
-                <RowDefinition />
-                <RowDefinition
-                    Height="Auto" />
-            </Grid.RowDefinitions>
+    <core:SfShadow OffsetX="10" OffsetY="10">
+        <Border BorderBrush="Gray" Background="#202020" BorderThickness="2" Width="350" Height="210" Padding="15" CornerRadius="6">
+            <Grid x:Name="LoginGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <!-- Логин -->
-            <TextBlock
-                Grid.Row="0"
-                Text="Логин:"
-                Margin="0,0,0,10" />
+                <TextBlock
+                    Grid.Row="0"
+                    Text="Логин"
+                    Margin="0,0,0,10" />
 
-            <TextBox
-                Grid.Row="1"
-                x:Name="Login"
-                Text="{Binding Login, Mode=TwoWay}"
-                PlaceholderText="Введите логин" />
+                <TextBox
+                    Grid.Row="1"
+                    x:Name="Login"
+                    Text="{Binding Login, Mode=TwoWay}"
+                    PlaceholderText="Введите логин" />
 
-            <!-- Пароль -->
-            <TextBlock
-                Grid.Row="2"
-                Text="Пароль:"
-                Margin="0,15,0,10" />
+                <TextBlock
+                    Grid.Row="2"
+                    Text="Пароль"
+                    Margin="0,15,0,10" />
 
-            <PasswordBox
-                Grid.Row="3"
-                x:Name="PasswordBox"
-                PasswordRevealMode="Peek"
-                PlaceholderText="Введите пароль"
-                PasswordChanged="PasswordBox_PasswordChanged" />
+                <PasswordBox
+                    Grid.Row="3"
+                    x:Name="PasswordBox"
+                    PasswordRevealMode="Peek"
+                    PlaceholderText="Введите пароль"
+                    PasswordChanged="PasswordBox_PasswordChanged" />
 
-            <Button Grid.Row="4" HorizontalAlignment="Center" Command="{Binding AuthCommand}"
-                    Margin="0,10,0,0">
-                Войти
-            </Button>
-        </Grid>
-    </Border>
+                <Button Grid.Row="4" HorizontalAlignment="Center" Command="{Binding AuthCommand}"
+                        Margin="0,10,0,0">
+                    Войти
+                </Button>
+            </Grid>
+        </Border>
+    </core:SfShadow>
 </abstract:BasePage>

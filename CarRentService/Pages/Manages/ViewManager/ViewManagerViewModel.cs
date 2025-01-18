@@ -25,8 +25,6 @@ public partial class ViewManagerViewModel : BaseViewModel
 
     public RelayCommand SaveCommand { get; }
 
-    public RelayCommand<object> ClearFiltersAndSortCommand { get; }
-
     [ObservableProperty] private ManagerDto _manager;
 
     [ObservableProperty] private ObservableCollection<Branch> _branches;
@@ -63,8 +61,6 @@ public partial class ViewManagerViewModel : BaseViewModel
         CancelEditCommand = new RelayCommand(CancelEdit);
         DeleteManagerCommand = new RelayCommand(DeleteManager, CanDeleteManager);
 
-        ClearFiltersAndSortCommand = new RelayCommand<object>(ClearFiltersAndSort);
-
         Branches = branchService.Table;
         Roles = typeof(ManagerRoleEnum).GetDescriptions().ToObservableCollection();
     }
@@ -75,9 +71,7 @@ public partial class ViewManagerViewModel : BaseViewModel
         {
             Manager.Branches = SelectedBranches;
 
-            var d = _mapper.Map<Manager>(Manager);
-
-            _managerService.Update(d);
+            _managerService.Update(_mapper.Map<Manager>(Manager));
 
             _notificationService.ShowTip("Обновление менеджера", "Сохранено успешно!");
 

@@ -36,7 +36,7 @@ public enum PageTypeEnum
 
     EditManager,
 
-    Account,
+    EditProfile,
 
     Exit,
 }

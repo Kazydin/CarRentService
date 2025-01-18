@@ -9,7 +9,6 @@ using FluentValidation;
 using System.Collections.ObjectModel;
 using CarRentService.DAL.Dtos;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Enum;
 using CarRentService.DAL.Extensions;
 using GuardNet;
 
