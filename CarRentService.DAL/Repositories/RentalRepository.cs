@@ -88,6 +88,22 @@ public class RentalRepository : BaseCrudRepository<Rental>, IRentalRepository
         dto.Insurances = _mapper.Map<ObservableCollection<InsuranceDto>>(_store.Insurance.Where(p => p.RentalId == dto.Id));
     }
 
+    public void IncludePayments(IEnumerable<RentalDto> dtos)
+    {
+        foreach (var dto in dtos)
+        {
+            IncludePayments(dto);
+        }
+    }
+
+    public void IncludeInsurances(IEnumerable<RentalDto> dtos)
+    {
+        foreach (var dto in dtos)
+        {
+            IncludeInsurances(dto);
+        }
+    }
+
     protected override void CleanEntity(Rental entity)
     {
     }

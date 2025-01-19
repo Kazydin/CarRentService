@@ -195,7 +195,7 @@
 
                 <dataGrid:SfDataGrid
                     x:Name="ClientsDataGrid"
-                    AutoGenerateColumns="True"
+                    AutoGenerateColumns="False"
                     AllowEditing="False"
                     AllowFiltering="True"
                     ShowGroupDropArea="True"

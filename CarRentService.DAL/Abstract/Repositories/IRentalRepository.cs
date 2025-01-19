@@ -18,4 +18,12 @@ public interface IRentalRepository : ICrudRepository<Rental>
     void IncludeCars(RentalDto dto);
 
     void IncludeCars(IEnumerable<RentalDto> dtos);
+
+    void IncludePayments(RentalDto dto);
+
+    void IncludeInsurances(RentalDto dto);
+
+    void IncludePayments(IEnumerable<RentalDto> dtos);
+
+    void IncludeInsurances(IEnumerable<RentalDto> dtos);
 }

@@ -64,4 +64,12 @@ public class InsuranceRepository : BaseCrudRepository<Insurance>, IInsuranceRepo
     {
         dto.Car = _mapper.Map<CarDto>(_store.Car.FirstOrDefault(p => p.Id == dto.CarId));
     }
+
+    public void IncludeCars(IEnumerable<InsuranceDto> dtos)
+    {
+        foreach (var dto in dtos)
+        {
+            IncludeCar(dto);
+        }
+    }
 }

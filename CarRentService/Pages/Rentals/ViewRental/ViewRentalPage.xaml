@@ -353,7 +353,7 @@
 
                 <dataGrid:SfDataGrid
                     x:Name="PaymentsDataGrid"
-                    AutoGenerateColumns="True"
+                    AutoGenerateColumns="False"
                     AllowEditing="False"
                     AllowFiltering="True"
                     ShowGroupDropArea="True"
@@ -411,7 +411,7 @@
 
                 <dataGrid:SfDataGrid
                     x:Name="InsurancesDataGrid"
-                    AutoGenerateColumns="True"
+                    AutoGenerateColumns="False"
                     AllowEditing="False"
                     AllowFiltering="True"
                     ShowGroupDropArea="True"

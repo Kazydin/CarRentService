@@ -15,4 +15,6 @@ public interface IInsuranceRepository : ICrudRepository<Insurance>
     void IncludeRental(InsuranceDto dto);
 
     void IncludeCar(InsuranceDto dto);
+
+    void IncludeCars(IEnumerable<InsuranceDto> dtos);
 }

@@ -111,6 +111,7 @@
                     Margin="5, 11, 5, 0"
                     TextMemberPath="Name"
                     DisplayMemberPath="Name"
+                    SelectedValuePath="Name"
                     SelectedItem="{Binding Client.Branch, Mode=TwoWay}"
                     Width="Auto"
                     HorizontalAlignment="Stretch"/>
@@ -270,10 +271,6 @@
                     ColumnWidthMode="Star"
                     ItemsSource="{Binding Cars}">
 
-                    <dataGrid:SfDataGrid.GroupColumnDescriptions>
-                        <dataGrid:GroupColumnDescription ColumnName="RentalId" />
-                    </dataGrid:SfDataGrid.GroupColumnDescriptions>
-
                     <dataGrid:SfDataGrid.Columns>
                         <dataGrid:GridNumericColumn
                             HeaderText="ID автомобиля"
@@ -304,15 +301,6 @@
                             MappingName="HorsePower" />
                     </dataGrid:SfDataGrid.Columns>
 
-                    <dataGrid:SfDataGrid.RecordContextFlyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem
-                                Text="Изменить аренду"
-                                Command="{Binding Path=DataGrid.DataContext.EditRentalCommand}"
-                                CommandParameter="{Binding}" />
-                        </MenuFlyout>
-                    </dataGrid:SfDataGrid.RecordContextFlyout>
-
                 </dataGrid:SfDataGrid>
             </StackPanel>
         </PivotItem>
@@ -330,7 +318,6 @@
 
                 <dataGrid:SfDataGrid
                     x:Name="InsurancesDataGrid"
-                    AutoGenerateColumns="True"
                     AllowEditing="False"
                     AllowFiltering="True"
                     ShowGroupDropArea="True"
@@ -342,10 +329,6 @@
                     IsGroupDropAreaExpanded="True"
                     ColumnWidthMode="Star"
                     ItemsSource="{Binding Insurances}">
-
-                    <dataGrid:SfDataGrid.GroupColumnDescriptions>
-                        <dataGrid:GroupColumnDescription ColumnName="RentalId" />
-                    </dataGrid:SfDataGrid.GroupColumnDescriptions>
 
                     <dataGrid:SfDataGrid.Columns>
                         <dataGrid:GridNumericColumn
@@ -373,15 +356,6 @@
                             HeaderText="Стоимость"
                             MappingName="Cost" />
                     </dataGrid:SfDataGrid.Columns>
-
-                    <dataGrid:SfDataGrid.RecordContextFlyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem
-                                Text="Изменить аренду"
-                                Command="{Binding Path=DataGrid.DataContext.EditRentalCommand}"
-                                CommandParameter="{Binding}" />
-                        </MenuFlyout>
-                    </dataGrid:SfDataGrid.RecordContextFlyout>
                 </dataGrid:SfDataGrid>
             </StackPanel>
         </PivotItem>
@@ -399,7 +373,7 @@
 
                 <dataGrid:SfDataGrid
                     x:Name="PaymentsDataGrid"
-                    AutoGenerateColumns="True"
+                    AutoGenerateColumns="False"
                     AllowEditing="False"
                     AllowFiltering="True"
                     ShowGroupDropArea="True"
@@ -411,10 +385,6 @@
                     MinHeight="400"
                     ColumnWidthMode="Star"
                     ItemsSource="{Binding Payments}">
-
-                    <dataGrid:SfDataGrid.GroupColumnDescriptions>
-                        <dataGrid:GroupColumnDescription ColumnName="RentalId" />
-                    </dataGrid:SfDataGrid.GroupColumnDescriptions>
 
                     <dataGrid:SfDataGrid.Columns>
                         <dataGrid:GridNumericColumn
@@ -439,15 +409,6 @@
                             HeaderText="Сумма, руб."
                             MappingName="Amount" />
                     </dataGrid:SfDataGrid.Columns>
-
-                    <dataGrid:SfDataGrid.RecordContextFlyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem
-                                Text="Изменить аренду"
-                                Command="{Binding Path=DataGrid.DataContext.EditRentalCommand}"
-                                CommandParameter="{Binding}" />
-                        </MenuFlyout>
-                    </dataGrid:SfDataGrid.RecordContextFlyout>
                 </dataGrid:SfDataGrid>
             </StackPanel>
         </PivotItem>

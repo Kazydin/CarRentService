@@ -11,21 +11,21 @@ public class RentalService : IRentalService
 {
     private readonly IRentalRepository _rentalRepository;
 
-    private readonly ICarRepository _carRepository;
-
     private readonly IInsuranceRepository _insuranceRepository;
+
+    private readonly IPaymentRepository _paymentRepository;
 
     private readonly IMapper _mapper;
 
     public RentalService(IRentalRepository rentalRepository,
-        ICarRepository carRepository,
         IInsuranceRepository insuranceRepository,
-        IMapper mapper)
+        IMapper mapper,
+        IPaymentRepository paymentRepository)
     {
         _rentalRepository = rentalRepository;
-        _carRepository = carRepository;
         _insuranceRepository = insuranceRepository;
         _mapper = mapper;
+        _paymentRepository = paymentRepository;
     }
 
     public void RemoveCar(RentalDto rental, CarDto car)
@@ -51,6 +51,15 @@ public class RentalService : IRentalService
         _insuranceRepository.Remove(insurance.Id!.Value);
 
         rental.Insurances.Remove(insurance);
+
+        _rentalRepository.Update(_mapper.Map<Rental>(rental));
+    }
+
+    public void RemovePayment(RentalDto rental, PaymentDto payment)
+    {
+        _paymentRepository.Remove(payment.Id!.Value);
+
+        rental.Payments.Remove(payment);
 
         _rentalRepository.Update(_mapper.Map<Rental>(rental));
     }

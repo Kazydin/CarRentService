@@ -55,13 +55,16 @@ public partial class ViewClientViewModel : BaseViewModel
 
     private readonly IMapper _mapper;
 
+    private readonly IInsuranceRepository _insuranceRepository;
+
     public ViewClientViewModel(INavigationService navigationService,
         INotificationService notificationService,
         IClientRepository clientRepository,
         IMapper mapper,
         IBranchRepository branchRepository,
         IRentalRepository rentalRepository,
-        ICarRepository carRepository)
+        ICarRepository carRepository,
+        IInsuranceRepository insuranceRepository)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
@@ -70,6 +73,7 @@ public partial class ViewClientViewModel : BaseViewModel
         _branchRepository = branchRepository;
         _rentalRepository = rentalRepository;
         _carRepository = carRepository;
+        _insuranceRepository = insuranceRepository;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -79,8 +83,6 @@ public partial class ViewClientViewModel : BaseViewModel
 
         AddRentalCommand = new RelayCommand<object>(AddRental, CanAddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
-
-        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchRepository.Table);
     }
 
     private bool CanAddRental(object? obj)
@@ -138,6 +140,8 @@ public partial class ViewClientViewModel : BaseViewModel
 
     public void SetClient(int? entityId = null)
     {
+        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchRepository.Table);
+
         if (entityId == null)
         {
             Client = new ClientDto();
@@ -146,6 +150,9 @@ public partial class ViewClientViewModel : BaseViewModel
 
         Client = _clientRepository.GetDto(entityId.Value);
         _rentalRepository.IncludeCars(Client.Rentals);
+        _rentalRepository.IncludeInsurances(Client.Rentals);
+        _insuranceRepository.IncludeCars(Client.Rentals.SelectMany(p => p.Insurances));
+        _rentalRepository.IncludePayments(Client.Rentals);
         _carRepository.IncludeBranches(Client.Rentals.SelectMany(p => p.Cars));
         SetDtos();
     }

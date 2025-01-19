@@ -9,4 +9,6 @@ public interface IRentalService
     void RemoveCar(RentalDto rental, CarDto car);
 
     void RemoveInsurance(RentalDto rental, InsuranceDto insurance);
+
+    void RemovePayment(RentalDto rental, PaymentDto payment);
 }
