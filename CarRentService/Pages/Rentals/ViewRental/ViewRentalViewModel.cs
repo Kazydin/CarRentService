@@ -101,8 +101,6 @@ public partial class ViewRentalViewModel : BaseViewModel
         MoveToActiveStatusCommand = new RelayCommand(MoveToActiveStatus, CanMoveToActiveStatus);
         MoveToCompletedStatusCommand = new RelayCommand(MoveToCompletedStatus, CanMoveToCompletedStatus);
 
-        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchService.Table);
-
         _tariffs = EnumExtensions.GetValues<RentalTariffEnum>().ToObservableCollection();
     }
 
@@ -221,6 +219,7 @@ public partial class ViewRentalViewModel : BaseViewModel
         }
 
         Rental = _rentalService.GetDto(entityId.Value);
+        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchService.Table);
     }
 
     public void SetGrids(SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,
