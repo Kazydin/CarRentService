@@ -57,6 +57,12 @@
                 <dataGrid:GridTextColumn
                     HeaderText="Номер водительского удостоверения"
                     MappingName="DriverLicenseNumber" />
+                <dataGrid:GridTextColumn
+                    HeaderText="ID филиала"
+                    MappingName="Branch.Id" />
+                <dataGrid:GridTextColumn
+                    HeaderText="Название филиала"
+                    MappingName="Branch.Name" />
             </dataGrid:SfDataGrid.Columns>
             <dataGrid:SfDataGrid.RecordContextFlyout>
                 <MenuFlyout>

@@ -1,23 +1,26 @@
 ﻿using CarRentService.Common.Attributes;
 using CarRentService.DAL.Entities;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRentService.DAL;
 
 [InjectDI(ServiceLifetime.Singleton)]
-public class AppState
+[ObservableObject]
+public partial class AppState
 {
-    private Manager _currentUser = null!;
-
-    public Manager? CurrentUser
-    {
-        get => _currentUser;
-        set
-        {
-            _currentUser = value!;
-            OnUserChanged?.Invoke(this, EventArgs.Empty);
-        }
-    }
+    [ObservableProperty]
+    private Manager _currentUser;
 
     public event EventHandler? OnUserChanged;
+
+    // partial void OnCurrentUserChanged(Manager value)
+    // {
+    //     OnUserChanged?.Invoke(this, EventArgs.Empty);
+    // }
+
+    partial void OnCurrentUserChanged(Manager? oldValue, Manager newValue)
+    {
+        OnUserChanged?.Invoke(this, EventArgs.Empty);
+    }
 }

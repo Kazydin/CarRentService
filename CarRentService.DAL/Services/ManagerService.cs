@@ -9,14 +9,13 @@ using FluentValidation;
 using System.Collections.ObjectModel;
 using CarRentService.DAL.Dtos;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Extensions;
 using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
 public class ManagerService : BaseCrudService<Manager>, IManagerService
 {
-    public override ObservableCollection<Manager> Table => _store.Manager;
+    public sealed override ObservableCollection<Manager> Table { get; set; }
 
     private readonly AppState _appState;
 
@@ -24,6 +23,7 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
         IValidator<Manager> validator,
         IMapper mapper, AppState appState) : base(store, validator, mapper)
     {
+        Table = _store.Manager;
         _appState = appState;
     }
 

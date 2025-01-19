@@ -13,12 +13,13 @@ namespace CarRentService.DAL.Services;
 
 public class RentalService : BaseCrudService<Rental>, IRentalService
 {
-    public override ObservableCollection<Rental> Table => _store.Rental;
+    public sealed override ObservableCollection<Rental> Table { get; set; }
 
     public RentalService(IDataStoreContext store,
         IValidator<Rental> validator,
         IMapper mapper) : base(store, validator, mapper)
     {
+        Table = _store.Rental;
     }
 
     public override Rental? TryFindById(int id)

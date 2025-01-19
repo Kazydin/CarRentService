@@ -4,6 +4,7 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -23,7 +24,7 @@ public partial class ClientsTableViewModel : BaseViewModel
     public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
 
     [ObservableProperty]
-    private ObservableCollection<Client> _clients;
+    private ObservableCollection<ClientDto> _clients;
 
     private readonly IClientService _clientService;
 
@@ -44,7 +45,7 @@ public partial class ClientsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Clients = new ObservableCollection<Client>(_clientService.Table);
+        Clients = _clientService.GetDtos();
     }
 
     private void AddClient()
@@ -54,17 +55,17 @@ public partial class ClientsTableViewModel : BaseViewModel
 
     private void EditClient(object? param)
     {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
+        if ((param as GridRecordContextFlyoutInfo)?.Record is ClientDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id));
+            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id!.Value));
         }
     }
 
     private void DeleteClient(object? param)
     {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
+        if ((param as GridRecordContextFlyoutInfo)?.Record is ClientDto record)
         {
-            _clientService.Remove(record.Id);
+            _clientService.Remove(record.Id!.Value);
             UpdateState();
         }
     }

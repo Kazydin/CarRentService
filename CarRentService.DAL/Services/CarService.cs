@@ -14,12 +14,13 @@ namespace CarRentService.DAL.Services;
 
 public class CarService : BaseCrudService<Car>, ICarService
 {
-    public override ObservableCollection<Car> Table => _store.Car;
+    public sealed override ObservableCollection<Car> Table { get; set; }
 
     public CarService(IDataStoreContext store,
         IValidator<Car> validator,
         IMapper mapper) : base(store, validator, mapper)
     {
+        Table = _store.Car;
     }
 
     public override Car? TryFindById(int id)

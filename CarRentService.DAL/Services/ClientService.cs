@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using AutoMapper;
+using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CarRentService.DAL.Validators;
 using GuardNet;
 
@@ -11,17 +13,50 @@ namespace CarRentService.DAL.Services;
 
 public class ClientService : BaseCrudService<Client>, IClientService
 {
-    public override ObservableCollection<Client> Table => _store.Client;
+    public override ObservableCollection<Client> Table { get; set; }
+
+    private readonly AppState _appState;
+
+    private static bool _subscribedToUserChanged;
 
     public ClientService(IDataStoreContext store,
         ClientValidator validator,
-        IMapper mapper) : base(store, validator, mapper)
+        IMapper mapper,
+        AppState appState) : base(store, validator, mapper)
     {
+        _appState = appState;
+
+        if (!_subscribedToUserChanged)
+        {
+            appState.OnUserChanged += SetTable;
+            _subscribedToUserChanged = true;
+        }
+
+    }
+
+    private void SetTable(object? sender, EventArgs? eventArgs)
+    {
+        if (_appState.CurrentUser != null)
+        {
+            if (_appState.CurrentUser.Role == ManagerRoleEnum.Admin)
+            {
+                Table = _store.Client;
+            }
+            else
+            {
+                Table = _store.Client.Where(p => _appState.CurrentUser.BranchIds.Contains(p.Id)).ToObservableCollection();
+            }
+        }
     }
 
     public override Client? TryFindById(int id)
     {
-        return _store.Client.FirstOrDefault(p => p.Id == id);
+        return Table.FirstOrDefault(p => p.Id == id);
+    }
+
+    public ObservableCollection<ClientDto> GetDtos()
+    {
+        return Table.Select(p => GetDto(p.Id)).ToObservableCollection();
     }
 
     public ClientDto GetDto(int clientId)
@@ -36,9 +71,6 @@ public class ClientService : BaseCrudService<Client>, IClientService
 
         IncludeBranch(dto);
         IncludeRentals(dto);
-        // IncludePayments(dto);
-        // IncludeCars(dto);
-        // IncludeInsurances(dto);
 
         return dto;
     }
@@ -53,36 +85,6 @@ public class ClientService : BaseCrudService<Client>, IClientService
         dto.Rentals =
             _mapper.Map<ObservableCollection<RentalDto>>(_store.Rental.Where(p => p.ClientId == dto.Id));
     }
-
-    // public void IncludePayments(ClientDto dto)
-    // {
-    //     dto.Payments =
-    //         _mapper.Map<ObservableCollection<PaymentDto>>(_store.Payment.Where(p => dto.Rentals.Select(r => r.Id).Contains(p.RentalId)));
-    // }
-    //
-    // public void IncludeCars(ClientDto dto)
-    // {
-    //     if (!dto.Rentals.Any())
-    //     {
-    //         IncludeRentals(dto);
-    //         _rentalService.IncludeCars(dto.Rentals);
-    //     }
-    //
-    //     dto.Cars =
-    //         _mapper.Map<ObservableCollection<CarDto>>(dto.Rentals.Select(p => p.Cars));
-    // }
-    //
-    // public void IncludeInsurances(ClientDto dto)
-    // {
-    //     if (!dto.Rentals.Any())
-    //     {
-    //         IncludeRentals(dto);
-    //         _rentalService.IncludeCars(dto.Rentals);
-    //     }
-    //
-    //     dto.Insurances =
-    //         _mapper.Map<ObservableCollection<InsuranceDto>>(dto.Rentals.Select(p => p.Insurances));
-    // }
 
     protected override void CleanEntity(Client entity)
     {

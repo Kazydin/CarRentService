@@ -108,7 +108,7 @@
                     Header="Филиал договора (основной)"
                     Grid.Row="3"
                     Grid.Column="1"
-                    Margin="5, 10, 5, 0"
+                    Margin="5, 11, 5, 0"
                     TextMemberPath="Name"
                     DisplayMemberPath="Name"
                     SelectedItem="{Binding Client.Branch, Mode=TwoWay}"

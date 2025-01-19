@@ -15,12 +15,13 @@ namespace CarRentService.DAL.Services;
 
 public class InsuranceService : BaseCrudService<Insurance>, IInsuranceService
 {
-    public override ObservableCollection<Insurance> Table => _store.Insurance;
+    public sealed override ObservableCollection<Insurance> Table { get; set; }
 
     public InsuranceService(IDataStoreContext store,
         IValidator<Insurance> validator,
         IMapper mapper) : base(store, validator, mapper)
     {
+        Table = _store.Insurance;
     }
 
     public override Insurance? TryFindById(int id)

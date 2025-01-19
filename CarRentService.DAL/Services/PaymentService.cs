@@ -13,12 +13,13 @@ namespace CarRentService.DAL.Services;
 
 public class PaymentService : BaseCrudService<Payment>, IPaymentService
 {
-    public override ObservableCollection<Payment> Table => _store.Payment;
+    public sealed override ObservableCollection<Payment> Table { get; set; }
 
     public PaymentService(IDataStoreContext store,
         IValidator<Payment> validator,
         IMapper mapper) : base(store, validator, mapper)
     {
+        Table = _store.Payment;
     }
 
     public override Payment? TryFindById(int id)

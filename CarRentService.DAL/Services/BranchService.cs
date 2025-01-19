@@ -13,12 +13,13 @@ namespace CarRentService.DAL.Services;
 
 public class BranchService : BaseCrudService<Branch>, IBranchService
 {
-    public override ObservableCollection<Branch> Table => _store.Branch;
+    public sealed override ObservableCollection<Branch> Table { get; set; }
 
     public BranchService(IDataStoreContext store,
         IValidator<Branch> validator,
         IMapper mapper) : base(store, validator, mapper)
     {
+        Table = _store.Branch;
     }
 
     public override Branch? TryFindById(int id)

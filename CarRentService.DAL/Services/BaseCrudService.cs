@@ -13,7 +13,7 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
 {
     protected readonly IDataStoreContext _store;
 
-    public abstract ObservableCollection<T> Table { get; }
+    public abstract ObservableCollection<T> Table { get; set; }
 
     protected readonly IValidator<T> _validator;
 
