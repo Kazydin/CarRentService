@@ -1,6 +1,9 @@
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
 using CarRentService.Common;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 

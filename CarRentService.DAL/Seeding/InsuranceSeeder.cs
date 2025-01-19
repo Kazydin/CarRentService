@@ -15,7 +15,7 @@ public class InsuranceSeeder(IInsuranceService service) : ISeeder
         {
             CarId = 1,
             RentalId = 1,
-            Type = InsuranceTypeEnum.Full,
+            Type = InsuranceTypeEnum.FullCoverage,
             Cost = 2000
         });
 
@@ -23,7 +23,7 @@ public class InsuranceSeeder(IInsuranceService service) : ISeeder
         {
             CarId = 2,
             RentalId = 2,
-            Type = InsuranceTypeEnum.Partial,
+            Type = InsuranceTypeEnum.SeasonalCoverage,
             Cost = 3000
         });
     }

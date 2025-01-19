@@ -74,6 +74,27 @@ public partial class RentalDto
 
     #endregion
 
+    /// <summary>
+    /// Стаж водителя в годах.
+    /// </summary>
+    public int RentalDays
+    {
+        get
+        {
+            if (StartDate == default || EndDate == default)
+            {
+                throw new InvalidOperationException("Дата начала или окончания не указаны");
+            }
+
+            if (EndDate < StartDate)
+            {
+                throw new InvalidOperationException("Дата окончания раньше даты начала");
+            }
+
+            return (EndDate - StartDate).Days;
+        }
+    }
+
     public override bool Equals(object? obj)
     {
         return obj is RentalDto other &&

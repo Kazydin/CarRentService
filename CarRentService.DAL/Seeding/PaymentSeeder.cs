@@ -14,7 +14,7 @@ public class PaymentSeeder(IPaymentService service) : ISeeder
         service.Add(new Payment
         {
             RentalId = 1,
-            Amount = 1000,
+            Amount = 90,
             Date = DateTime.Parse("23.12.2024 13:35"),
             Method = PaymentMethodEnum.Card
         });

@@ -15,4 +15,8 @@
     <ProjectReference Include="..\CarRentService.DAL\CarRentService.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Factory\" />
+  </ItemGroup>
+
 </Project>

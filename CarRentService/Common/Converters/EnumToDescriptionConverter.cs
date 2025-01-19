@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using CarRentService.Common.Extensions;
+using CarRentService.DAL.Enum;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 
@@ -7,6 +9,17 @@ namespace CarRentService.Common.Converters;
 
 public class EnumToDescriptionConverter : IValueConverter
 {
+    private static readonly Dictionary<string, Type> EnumNamespaceMap = new()
+    {
+        { "RentalTariffEnum", typeof(RentalTariffEnum) },
+        { "ManagerRoleEnum", typeof(ManagerRoleEnum) },
+        { "InsuranceTypeEnum", typeof(InsuranceTypeEnum) },
+        { "CarStatusEnum", typeof(CarStatusEnum) },
+        { "RentalStatusEnum", typeof(RentalStatusEnum) },
+        { "PaymentMethodEnum", typeof(PaymentMethodEnum) },
+    };
+
+
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is Enum enumValue)
@@ -19,14 +32,22 @@ public class EnumToDescriptionConverter : IValueConverter
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
     {
-        if (targetType.IsEnum && value is string stringValue)
+        if (value is string stringValue && parameter is string enumName)
         {
-            // Использование рефлексии для создания вызова обобщённого метода
-            var method = typeof(EnumExtensions).GetMethod("ToEnumFromDescription");
-            var genericMethod = method.MakeGenericMethod(targetType);
+            if (EnumNamespaceMap.TryGetValue(enumName, out var enumType))
+            {
+                if (enumType.IsEnum)
+                {
+                    var method = typeof(EnumExtensions).GetMethod(nameof(EnumExtensions.ToEnumFromDescription));
+                    var genericMethod = method.MakeGenericMethod(enumType);
 
-            // Вызов метода с передачей stringValue как параметра
-            return genericMethod.Invoke(null, [stringValue])!;
+                    return genericMethod.Invoke(null, new object[] { stringValue });
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Неизвестный тип перечисления для конвертирования в Enum");
+            }
         }
 
         return DependencyProperty.UnsetValue;

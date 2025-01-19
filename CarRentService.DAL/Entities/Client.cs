@@ -18,4 +18,7 @@ public partial class Client : Person
     /// </summary>
     [ObservableProperty]
     private int? _branchId;
+
+    [ObservableProperty]
+    private DateTime _driverLicenseIssuedDate;
 }

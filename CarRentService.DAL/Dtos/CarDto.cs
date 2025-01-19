@@ -72,6 +72,15 @@ public partial class CarDto
 
     #endregion
 
+    public int CarYears
+    {
+        get
+        {
+            var currentDate = DateTime.Now;
+            return currentDate.Year - Year!.Value;
+        }
+    }
+
     partial void OnRegistrationNumberChanged(string value)
     {
         UpdateName();

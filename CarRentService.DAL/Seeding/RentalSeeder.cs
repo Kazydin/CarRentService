@@ -20,7 +20,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             EndDate = new DateTime(2024, 10, 10),
             Status = RentalStatusEnum.Completed,
             TotalCost = 5000,
-            Tariff = RentalTariffEnum.Default,
+            Tariff = RentalTariffEnum.Basic,
             BranchId = 1
         });
 
@@ -72,7 +72,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             EndDate = new DateTime(2024, 9, 15),
             Status = RentalStatusEnum.Completed,
             TotalCost = 10000,
-            Tariff = RentalTariffEnum.Default,
+            Tariff = RentalTariffEnum.Basic,
             BranchId = 3
         });
     }

@@ -48,6 +48,10 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
         IncludeCars(dto);
         IncludeClient(dto);
         IncludeBranch(dto);
+        IncludePayments(dto);
+        IncludeInsurances(dto);
+
+        dto.TotalPaymentsSum = dto.Payments.Sum(p => p.Amount);
 
         return dto;
     }
@@ -73,6 +77,16 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
         {
             IncludeCars(dto);
         }
+    }
+
+    public void IncludePayments(RentalDto dto)
+    {
+        dto.Payments = _mapper.Map<ObservableCollection<PaymentDto>>(_store.Payment.Where(p => p.RentalId == dto.Id));
+    }
+
+    public void IncludeInsurances(RentalDto dto)
+    {
+        dto.Insurances = _mapper.Map<ObservableCollection<InsuranceDto>>(_store.Insurance.Where(p => p.RentalId == dto.Id));
     }
 
     protected override void CleanEntity(Rental entity)

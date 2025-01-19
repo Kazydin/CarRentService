@@ -12,10 +12,13 @@ using Syncfusion.UI.Xaml.DataGrid;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices.JavaScript;
+using CarRentService.BLL.Services.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common;
 using CarRentService.DAL.Constants;
+using System.ComponentModel;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 
@@ -67,11 +70,14 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     private readonly IMapper _mapper;
 
+    private readonly IRentalCostCalculationService _costCalculationService;
+
     public ViewRentalViewModel(INavigationService navigationService,
         INotificationService notificationService,
         IRentalService rentalService,
         IMapper mapper,
-        IBranchService branchService)
+        IBranchService branchService,
+        IRentalCostCalculationService costCalculationService)
     {
         MinDate = DateTime.Today;
 
@@ -80,6 +86,7 @@ public partial class ViewRentalViewModel : BaseViewModel
         _rentalService = rentalService;
         _mapper = mapper;
         _branchService = branchService;
+        _costCalculationService = costCalculationService;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -111,7 +118,8 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     private bool CanMoveToActiveStatus()
     {
-        return Rental.Status == RentalStatusEnum.Created && Math.Abs(Rental.TotalCost - Rental.TotalPaymentsSum) < MainConstants.DOUBLE_TOLERANCE;
+        return Rental.Status == RentalStatusEnum.Created &&
+               Math.Abs(Rental.TotalCost - Rental.TotalPaymentsSum) < MainConstants.DOUBLE_TOLERANCE;
     }
 
     private void ChangeRentalStatus(RentalStatusEnum status)
@@ -220,6 +228,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
         Rental = _rentalService.GetDto(entityId.Value);
         Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchService.Table);
+        UpdateCost();
     }
 
     public void SetGrids(SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,
@@ -231,5 +240,33 @@ public partial class ViewRentalViewModel : BaseViewModel
             { "Insurances", insurancesDataGrid },
             { "Payments", paymentsDataGrid }
         };
+    }
+
+    partial void OnRentalChanged(RentalDto? oldValue, RentalDto? newValue)
+    {
+        if (oldValue != null)
+        {
+            // Отписываемся от старой модели
+            oldValue.PropertyChanged -= OnRentalPropertyChanged;
+        }
+
+        if (newValue != null)
+        {
+            // Подписываемся на изменения новой модели
+            newValue.PropertyChanged += OnRentalPropertyChanged;
+        }
+    }
+
+    private void OnRentalPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(Rental.TotalCost))
+        {
+            UpdateCost();
+        }
+    }
+
+    private void UpdateCost()
+    {
+        Rental.TotalCost = _costCalculationService.CalculateTotalRentalCost(Rental);
     }
 }
