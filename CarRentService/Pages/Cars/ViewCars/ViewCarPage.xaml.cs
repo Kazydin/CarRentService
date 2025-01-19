@@ -1,6 +1,6 @@
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.Common;
 
 namespace CarRentService.Pages.Cars.ViewCars;
 

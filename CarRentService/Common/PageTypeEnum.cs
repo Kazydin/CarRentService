@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace CarRentService.Common;
+﻿namespace CarRentService.Common;
 
 public enum PageTypeEnum
 {

@@ -7,6 +7,6 @@ public class BranchValidator : AbstractValidator<Branch>
 {
     public BranchValidator()
     {
-        
+
     }
 }

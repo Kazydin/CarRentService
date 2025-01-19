@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -26,14 +25,14 @@ public partial class PaymentsTableViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<PaymentDto> _payments;
 
-    private readonly IPaymentService _paymentService;
+    private readonly IPaymentRepository _paymentRepository;
 
     private readonly INavigationService _navigationService;
 
-    public PaymentsTableViewModel(IPaymentService paymentService,
+    public PaymentsTableViewModel(IPaymentRepository paymentRepository,
         INavigationService navigationService)
     {
-        _paymentService = paymentService;
+        _paymentRepository = paymentRepository;
         _navigationService = navigationService;
 
         // Настройка команд
@@ -46,7 +45,7 @@ public partial class PaymentsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Payments = _paymentService.GetDtos();
+        Payments = _paymentRepository.GetDtos();
     }
 
     private void AddPayment()
@@ -59,7 +58,7 @@ public partial class PaymentsTableViewModel : BaseViewModel
         if ((param as GridRecordContextFlyoutInfo)?.Record is PaymentDto record)
         {
             _navigationService.Navigate(PageTypeEnum.EditPayment,
-                parameters: new CommonNavigationData(record.Id!.Value)) ;
+                parameters: new CommonNavigationData(record.Id!.Value));
         }
     }
 
@@ -76,7 +75,7 @@ public partial class PaymentsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is PaymentDto record)
         {
-            _paymentService.Remove(record.Id!.Value);
+            _paymentRepository.Remove(record.Id!.Value);
             UpdateState();
         }
     }

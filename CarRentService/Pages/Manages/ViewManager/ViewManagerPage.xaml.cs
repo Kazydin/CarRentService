@@ -1,6 +1,6 @@
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.Common;
 using CarRentService.DAL.Entities;
 using Microsoft.UI.Xaml;
 using Syncfusion.UI.Xaml.Editors;
@@ -25,7 +25,7 @@ public sealed partial class ViewManagerPage : NavigationPage
         {
             _viewModel.SetManager(data.EntityId, ManagerBranches.SelectedItems);
 
-            PasswordBox.Password =  _viewModel.Manager.Password;
+            PasswordBox.Password = _viewModel.Manager.Password;
 
             Header = $"Редактирование менеджера № {_viewModel.Manager.Id!.Value}";
         }

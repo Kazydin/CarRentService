@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System;
+﻿using System;
 using Microsoft.UI.Xaml.Data;
 
 namespace CarRentService.Common.Converters;

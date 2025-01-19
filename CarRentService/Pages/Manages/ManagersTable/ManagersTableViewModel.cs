@@ -1,14 +1,14 @@
-﻿using CarRentService.Common.Abstract;
-using CarRentService.Common.Models;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CarRentService.Common;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.Common.Abstract;
+using CarRentService.Common.Models;
+using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Syncfusion.UI.Xaml.DataGrid;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using CarRentService.DAL.Dtos;
 
 namespace CarRentService.Pages.Manages.ManagersTable;
 
@@ -25,14 +25,14 @@ public partial class ManagersTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<ManagerDto> _managers;
 
-    private readonly IManagerService _managerService;
+    private readonly IManagerRepository _managerRepository;
 
     private readonly INavigationService _navigationService;
 
-    public ManagersTableViewModel(IManagerService managerService,
+    public ManagersTableViewModel(IManagerRepository managerRepository,
         INavigationService navigationService)
     {
-        _managerService = managerService;
+        _managerRepository = managerRepository;
         _navigationService = navigationService;
 
         // Настройка команд
@@ -44,7 +44,7 @@ public partial class ManagersTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Managers = _managerService.GetDtos();
+        Managers = _managerRepository.GetDtos();
     }
 
     private void AddManager()
@@ -64,7 +64,7 @@ public partial class ManagersTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is Manager record)
         {
-            _managerService.Remove(record.Id);
+            _managerRepository.Remove(record.Id);
             UpdateState();
         }
     }

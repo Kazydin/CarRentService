@@ -1,19 +1,17 @@
-﻿using System;
-using System.Buffers;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.Common.Extensions;
+using CarRentService.Common.Models;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
-using System.ComponentModel.DataAnnotations;
-using CarRentService.Common.Extensions;
-using CarRentService.DAL.Enum;
-using CarRentService.Common;
-using CarRentService.Common.Models;
 
 namespace CarRentService.Pages.Payments.ViewPayment;
 
@@ -33,7 +31,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly IPaymentService _paymentService;
+    private readonly IPaymentRepository _paymentRepository;
 
     private readonly INotificationService _notificationService;
 
@@ -41,12 +39,12 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     public ViewPaymentViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IPaymentService paymentService,
+        IPaymentRepository paymentRepository,
         IMapper mapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _paymentService = paymentService;
+        _paymentRepository = paymentRepository;
         _mapper = mapper;
 
         SaveCommand = new RelayCommand(Save);
@@ -61,7 +59,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
     {
         try
         {
-            _paymentService.Update(_mapper.Map<Payment>(Payment));
+            _paymentRepository.Update(_mapper.Map<Payment>(Payment));
 
             _notificationService.ShowTip("Обновление платежа", "Сохранено успешно!");
 
@@ -77,7 +75,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
     {
         Guard.NotNull(Payment, "Нельзя удалить платеж, который еще не сохранен");
 
-        _paymentService.Remove(Payment.Id!.Value);
+        _paymentRepository.Remove(Payment.Id!.Value);
         _navigationService.GoBack();
     }
 
@@ -104,6 +102,6 @@ public partial class ViewPaymentViewModel : BaseViewModel
             return;
         }
 
-        Payment = _paymentService.GetDto(entityId.Value);
+        Payment = _paymentRepository.GetDto(entityId.Value);
     }
 }

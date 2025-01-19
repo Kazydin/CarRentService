@@ -1,10 +1,10 @@
-﻿using CarRentService.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using AutoMapper;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -25,17 +25,17 @@ public partial class BranchesTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<BranchDto> _branches;
 
-    private readonly IBranchService _branchService;
+    private readonly IBranchRepository _branchRepository;
 
     private readonly INavigationService _navigationService;
 
     private readonly IMapper _mapper;
 
-    public BranchesTableViewModel(IBranchService branchService,
+    public BranchesTableViewModel(IBranchRepository branchRepository,
         INavigationService navigationService,
         IMapper mapper)
     {
-        _branchService = branchService;
+        _branchRepository = branchRepository;
         _navigationService = navigationService;
         _mapper = mapper;
 
@@ -48,7 +48,7 @@ public partial class BranchesTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Branches = _branchService.GetDtos();
+        Branches = _branchRepository.GetDtos();
     }
 
     private void AddBranch()
@@ -68,7 +68,7 @@ public partial class BranchesTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is BranchDto record)
         {
-            _branchService.Remove(record.Id!.Value);
+            _branchRepository.Remove(record.Id!.Value);
             UpdateState();
         }
     }

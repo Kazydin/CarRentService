@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Page
+    x:Class="CarRentService.Pages.Rentals.ViewRental.Dialogs.AddCarDialogPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:editors="using:Syncfusion.UI.Xaml.Editors"
+    xmlns:dialogs="using:CarRentService.Pages.Rentals.ViewRental.Dialogs"
+    d:DataContext="{d:DesignInstance Type=dialogs:AddCarDialog}"
+    mc:Ignorable="d">
+
+    <StackPanel>
+        <TextBlock Margin="5">Клиент</TextBlock>
+        <editors:SfAutoComplete PlaceholderText="Выберте автомобиль"
+                                ItemsSource="{Binding Cars}"
+                                DisplayMemberPath="Name"
+                                HorizontalAlignment="Stretch"
+                                SelectedItem="{Binding Car, Mode=TwoWay}"
+                                MaxDropDownHeight="300" />
+
+    </StackPanel>
+</Page>

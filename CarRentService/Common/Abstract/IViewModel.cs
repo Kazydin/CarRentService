@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using CarRentService.Common.Attributes;
+﻿using CarRentService.Common.Attributes;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.Common.Abstract;

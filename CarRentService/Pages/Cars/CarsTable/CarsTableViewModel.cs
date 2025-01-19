@@ -1,15 +1,13 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.Common;
-using CarRentService.DAL.Abstract.Services;
-using CarRentService.DAL.Entities;
+using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Dtos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Syncfusion.UI.Xaml.DataGrid;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using CarRentService.DAL.Dtos;
 
 namespace CarRentService.Pages.Cars.CarsTable;
 
@@ -28,14 +26,14 @@ public partial class CarsTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<CarDto> _cars;
 
-    private readonly ICarService _carService;
+    private readonly ICarRepository _carRepository;
 
     private readonly INavigationService _navigationService;
 
-    public CarsTableViewModel(ICarService carService,
+    public CarsTableViewModel(ICarRepository carRepository,
         INavigationService navigationService)
     {
-        _carService = carService;
+        _carRepository = carRepository;
         _navigationService = navigationService;
 
         // Настройка команд
@@ -48,7 +46,7 @@ public partial class CarsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Cars = _carService.GetDtos();
+        Cars = _carRepository.GetDtos();
     }
 
     private void AddCar()
@@ -76,7 +74,7 @@ public partial class CarsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
-            _carService.Remove(record.Id!.Value);
+            _carRepository.Remove(record.Id!.Value);
             UpdateState();
         }
     }

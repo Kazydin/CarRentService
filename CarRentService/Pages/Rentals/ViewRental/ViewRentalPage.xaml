@@ -13,7 +13,8 @@
     xmlns:enum="using:CarRentService.DAL.Enum"
     xmlns:system="using:System"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance local:ViewRentalViewModel }">
+    d:DataContext="{d:DesignInstance local:ViewRentalViewModel }"
+    Loaded="ViewRentalPage_OnLoaded">
 
     <Pivot
         Margin="47, 20, 47, 20">

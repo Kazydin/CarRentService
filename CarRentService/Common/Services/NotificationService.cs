@@ -1,10 +1,9 @@
-﻿using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml;
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
 using GuardNet;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
 namespace CarRentService.Common.Services;
@@ -83,7 +82,7 @@ public class NotificationService : INotificationService
             // Попытка удаления, если возможно
             RemoveFromVisualTree(tip);
         };
-        
+
         // Добавляем в визуальное дерево
         AddToVisualTree(_targetElement, tip);
 

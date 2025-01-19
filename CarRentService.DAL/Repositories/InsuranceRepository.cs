@@ -1,23 +1,20 @@
-﻿using AutoMapper;
-
+﻿using System.Collections.ObjectModel;
+using AutoMapper;
+using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
-
 using FluentValidation;
-
-using System.Collections.ObjectModel;
-using CarRentService.Common.Extensions;
 using GuardNet;
 
-namespace CarRentService.DAL.Services;
+namespace CarRentService.DAL.Repositories;
 
-public class InsuranceService : BaseCrudService<Insurance>, IInsuranceService
+public class InsuranceRepository : BaseCrudRepository<Insurance>, IInsuranceRepository
 {
     public sealed override ObservableCollection<Insurance> Table { get; set; }
 
-    public InsuranceService(IDataStoreContext store,
+    public InsuranceRepository(IDataStoreContext store,
         IValidator<Insurance> validator,
         IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {
@@ -31,7 +28,7 @@ public class InsuranceService : BaseCrudService<Insurance>, IInsuranceService
 
     protected override void CleanEntity(Insurance entity)
     {
-        
+
     }
 
     public ObservableCollection<InsuranceDto> GetDtos()

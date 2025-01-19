@@ -1,21 +1,20 @@
-﻿using AutoMapper;
-
-using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
-using CarRentService.DAL.Entities;
-using System.Collections.ObjectModel;
-using CarRentService.DAL.Dtos;
-using FluentValidation;
+﻿using System.Collections.ObjectModel;
+using AutoMapper;
 using CarRentService.Common.Extensions;
+using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
+using FluentValidation;
 using GuardNet;
 
-namespace CarRentService.DAL.Services;
+namespace CarRentService.DAL.Repositories;
 
-public class PaymentService : BaseCrudService<Payment>, IPaymentService
+public class PaymentRepository : BaseCrudRepository<Payment>, IPaymentRepository
 {
     public sealed override ObservableCollection<Payment> Table { get; set; }
 
-    public PaymentService(IDataStoreContext store,
+    public PaymentRepository(IDataStoreContext store,
         IValidator<Payment> validator,
         IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {

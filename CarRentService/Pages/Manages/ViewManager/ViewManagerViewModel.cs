@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using AutoMapper;
 using CarRentService.Common.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.Common.Extensions;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using CarRentService.Common.Extensions;
-using CarRentService.DAL.Enum;
-using System.ComponentModel;
-using System;
 
 namespace CarRentService.Pages.Manages.ViewManager;
 
@@ -38,7 +37,7 @@ public partial class ViewManagerViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly IManagerService _managerService;
+    private readonly IManagerRepository _managerRepository;
 
     private readonly INotificationService _notificationService;
 
@@ -48,20 +47,20 @@ public partial class ViewManagerViewModel : BaseViewModel
 
     public ViewManagerViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IManagerService managerService,
+        IManagerRepository managerRepository,
         IMapper mapper,
-        IBranchService branchService)
+        IBranchRepository branchRepository)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _managerService = managerService;
+        _managerRepository = managerRepository;
         _mapper = mapper;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
         DeleteManagerCommand = new RelayCommand(DeleteManager, CanDeleteManager);
 
-        Branches = branchService.Table;
+        Branches = branchRepository.Table;
         Roles = EnumExtensions.GetValues<ManagerRoleEnum>().ToObservableCollection();
     }
 
@@ -71,7 +70,7 @@ public partial class ViewManagerViewModel : BaseViewModel
         {
             Manager.Branches = _mapper.Map<ObservableCollection<BranchDto>>(SelectedBranches);
 
-            _managerService.Update(_mapper.Map<Manager>(Manager));
+            _managerRepository.Update(_mapper.Map<Manager>(Manager));
 
             _notificationService.ShowTip("Обновление менеджера", "Сохранено успешно!");
 
@@ -87,7 +86,7 @@ public partial class ViewManagerViewModel : BaseViewModel
     {
         Guard.NotNull(Manager, "Нельзя удалить менеджера, который еще не сохранен");
 
-        _managerService.Remove(Manager.Id!.Value);
+        _managerRepository.Remove(Manager.Id!.Value);
         _navigationService.GoBack();
     }
 
@@ -109,7 +108,7 @@ public partial class ViewManagerViewModel : BaseViewModel
             return;
         }
 
-        Manager = _managerService.GetDto(entityId.Value);
+        Manager = _managerRepository.GetDto(entityId.Value);
         UpdateStateFromManager();
 
         if (selectedBranches == null)
@@ -126,7 +125,7 @@ public partial class ViewManagerViewModel : BaseViewModel
         }
     }
 
-   partial void OnManagerChanged(ManagerDto oldValue, ManagerDto newValue)
+    partial void OnManagerChanged(ManagerDto oldValue, ManagerDto newValue)
     {
         // Отписываемся от старого объекта, если он был
         if (oldValue != null)

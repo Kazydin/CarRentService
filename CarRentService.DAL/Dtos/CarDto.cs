@@ -100,4 +100,15 @@ public partial class CarDto
     {
         UpdateName();
     }
+
+    // public override bool Equals(object? obj)
+    // {
+    //     return obj is CarDto carDto &&
+    //            Id == carDto.Id;
+    // }
+    //
+    // public override int GetHashCode()
+    // {
+    //     return HashCode.Combine(Id);
+    // }
 }

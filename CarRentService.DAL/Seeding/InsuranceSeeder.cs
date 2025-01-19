@@ -1,17 +1,17 @@
 ﻿using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Seeding;
 
-public class InsuranceSeeder(IInsuranceService service) : ISeeder
+public class InsuranceSeeder(IInsuranceRepository repository) : ISeeder
 {
     public SeederType SeederType => SeederType.Insurance;
 
     public void Seed()
     {
-        service.Add(new Insurance
+        repository.Add(new Insurance
         {
             CarId = 1,
             RentalId = 1,
@@ -19,7 +19,7 @@ public class InsuranceSeeder(IInsuranceService service) : ISeeder
             Cost = 2000
         });
 
-        service.Add(new Insurance
+        repository.Add(new Insurance
         {
             CarId = 2,
             RentalId = 2,

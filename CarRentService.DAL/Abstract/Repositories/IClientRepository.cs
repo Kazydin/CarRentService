@@ -1,13 +1,13 @@
 ﻿using System.Collections.ObjectModel;
-using CarRentService.DAL.Entities;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CarRentService.DAL.Abstract.Services;
+namespace CarRentService.DAL.Abstract.Repositories;
 
 [InjectDI(ServiceLifetime.Singleton)]
-public interface IClientService : ICrudService<Client>
+public interface IClientRepository : ICrudRepository<Client>
 {
     ObservableCollection<ClientDto> GetDtos();
 

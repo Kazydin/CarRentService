@@ -1,5 +1,4 @@
-﻿using System;
-using CarRentService.Common.Attributes;
+﻿using CarRentService.Common.Attributes;
 
 namespace CarRentService.Common.Abstract;
 

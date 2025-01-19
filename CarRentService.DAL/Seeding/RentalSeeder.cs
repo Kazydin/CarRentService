@@ -1,17 +1,17 @@
 ﻿using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Seeding;
 
-public class RentalSeeder(IRentalService service) : ISeeder
+public class RentalSeeder(IRentalRepository repository) : ISeeder
 {
     public SeederType SeederType => SeederType.Rental;
 
     public void Seed()
     {
-        service.Add(new Rental
+        repository.Add(new Rental
         {
             Id = 1,
             CarIds = [1],
@@ -24,7 +24,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             BranchId = 1
         });
 
-        service.Add(new Rental
+        repository.Add(new Rental
         {
             Id = 2,
             CarIds = [2],
@@ -37,7 +37,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             BranchId = 1
         });
 
-        service.Add(new Rental
+        repository.Add(new Rental
         {
             Id = 3,
             CarIds = [3],
@@ -50,7 +50,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             BranchId = 1
         });
 
-        service.Add(new Rental
+        repository.Add(new Rental
         {
             Id = 4,
             CarIds = [4],
@@ -63,7 +63,7 @@ public class RentalSeeder(IRentalService service) : ISeeder
             BranchId = 2
         });
 
-        service.Add(new Rental
+        repository.Add(new Rental
         {
             Id = 5,
             CarIds = [5],

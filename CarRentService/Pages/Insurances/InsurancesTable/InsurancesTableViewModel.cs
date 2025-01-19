@@ -1,14 +1,14 @@
-﻿using CarRentService.Common.Abstract;
-using CarRentService.Common.Models;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CarRentService.Common;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.Common.Abstract;
+using CarRentService.Common.Models;
+using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Syncfusion.UI.Xaml.DataGrid;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using CarRentService.DAL.Dtos;
 
 namespace CarRentService.Pages.Insurances.InsurancesTable;
 
@@ -25,14 +25,14 @@ public partial class InsurancesTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<InsuranceDto> _insurances;
 
-    private readonly IInsuranceService _insuranceService;
+    private readonly IInsuranceRepository _insuranceRepository;
 
     private readonly INavigationService _navigationService;
 
-    public InsurancesTableViewModel(IInsuranceService insuranceService,
+    public InsurancesTableViewModel(IInsuranceRepository insuranceRepository,
         INavigationService navigationService)
     {
-        _insuranceService = insuranceService;
+        _insuranceRepository = insuranceRepository;
         _navigationService = navigationService;
 
         // Настройка команд
@@ -44,7 +44,7 @@ public partial class InsurancesTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Insurances = _insuranceService.GetDtos();
+        Insurances = _insuranceRepository.GetDtos();
     }
 
     private void AddInsurance()
@@ -64,7 +64,7 @@ public partial class InsurancesTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is Insurance record)
         {
-            _insuranceService.Remove(record.Id);
+            _insuranceRepository.Remove(record.Id);
             UpdateState();
         }
     }

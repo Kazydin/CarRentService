@@ -1,7 +1,6 @@
-﻿using Microsoft.UI.Xaml.Data;
+﻿using System;
 using Microsoft.UI.Xaml;
-
-using System;
+using Microsoft.UI.Xaml.Data;
 
 namespace CarRentService.Common.Converters;
 public class BoolToVisibilityConverter : IValueConverter

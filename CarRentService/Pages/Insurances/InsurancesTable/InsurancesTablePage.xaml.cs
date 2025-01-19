@@ -1,6 +1,6 @@
-using Microsoft.UI.Xaml;
-using CarRentService.Common.Abstract;
 using CarRentService.Common;
+using CarRentService.Common.Abstract;
+using Microsoft.UI.Xaml;
 
 namespace CarRentService.Pages.Insurances.InsurancesTable;
 

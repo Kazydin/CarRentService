@@ -10,6 +10,8 @@ public class RentalMappingProfile : Profile
     {
         CreateMap<Rental, Rental>();
 
+        CreateMap<RentalDto, RentalDto>();
+
         CreateMap<Rental, RentalDto>();
 
         CreateMap<RentalDto, Rental>();

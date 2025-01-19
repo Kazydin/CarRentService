@@ -1,6 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CarRentService.DAL.Enum;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Dtos;
 

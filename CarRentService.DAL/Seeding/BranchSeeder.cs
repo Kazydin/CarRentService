@@ -1,16 +1,16 @@
 ﻿using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Entities;
 
 namespace CarRentService.DAL.Seeding;
 
-public class BranchSeeder(IBranchService service) : ISeeder
+public class BranchSeeder(IBranchRepository repository) : ISeeder
 {
     public SeederType SeederType => SeederType.Branch;
 
     public void Seed()
     {
-        service.Add(new Branch
+        repository.Add(new Branch
         {
             Id = 1,
             Name = "Центральный филиал",
@@ -18,7 +18,7 @@ public class BranchSeeder(IBranchService service) : ISeeder
             ContactDetails = "+7 (495) 123-45-67",
         });
 
-        service.Add(new Branch
+        repository.Add(new Branch
         {
             Id = 2,
             Name = "Северный филиал",
@@ -26,7 +26,7 @@ public class BranchSeeder(IBranchService service) : ISeeder
             ContactDetails = "+7 (812) 987-65-43",
         });
 
-        service.Add(new Branch
+        repository.Add(new Branch
         {
             Id = 3,
             Name = "Южный филиал",
@@ -34,7 +34,7 @@ public class BranchSeeder(IBranchService service) : ISeeder
             ContactDetails = "+7 (861) 555-33-22",
         });
 
-        service.Add(new Branch
+        repository.Add(new Branch
         {
             Id = 4,
             Name = "Западный филиал",
@@ -42,7 +42,7 @@ public class BranchSeeder(IBranchService service) : ISeeder
             ContactDetails = "+7 (4012) 777-88-99",
         });
 
-        service.Add(new Branch
+        repository.Add(new Branch
         {
             Id = 5,
             Name = "Восточный филиал",

@@ -1,19 +1,18 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.Common.Models;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
 using Syncfusion.UI.Xaml.DataGrid;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using CarRentService.Common.Extensions;
-using CarRentService.DAL.Enum;
-using CarRentService.Common;
-using CarRentService.Common.Models;
 
 namespace CarRentService.Pages.Cars.ViewCars;
 
@@ -40,7 +39,7 @@ public partial class ViewCarViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly ICarService _carService;
+    private readonly ICarRepository _carRepository;
 
     private readonly INotificationService _notificationService;
 
@@ -48,13 +47,13 @@ public partial class ViewCarViewModel : BaseViewModel
 
     public ViewCarViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        ICarService carService,
+        ICarRepository carRepository,
         IMapper mapper,
-        IBranchService branchService)
+        IBranchRepository branchRepository)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _carService = carService;
+        _carRepository = carRepository;
         _mapper = mapper;
 
         SaveCommand = new RelayCommand(Save);
@@ -69,7 +68,7 @@ public partial class ViewCarViewModel : BaseViewModel
         AddRentalCommand = new RelayCommand<object>(AddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
 
-        Branches = _mapper.Map<ObservableCollection<BranchDto>>(branchService.Table);
+        Branches = _mapper.Map<ObservableCollection<BranchDto>>(branchRepository.Table);
     }
     private void AddRental(object? obj)
     {
@@ -116,7 +115,7 @@ public partial class ViewCarViewModel : BaseViewModel
     {
         try
         {
-            _carService.Update(_mapper.Map<Car>(Car));
+            _carRepository.Update(_mapper.Map<Car>(Car));
 
             _notificationService.ShowTip("Обновление автомобиля", "Сохранено успешно!");
 
@@ -132,7 +131,7 @@ public partial class ViewCarViewModel : BaseViewModel
     {
         Guard.NotNull(Car, "Нельзя удалить автомобиль, который еще не сохранен");
 
-        _carService.Remove(Car.Id!.Value);
+        _carRepository.Remove(Car.Id!.Value);
         _navigationService.GoBack();
     }
 
@@ -154,7 +153,7 @@ public partial class ViewCarViewModel : BaseViewModel
             return;
         }
 
-        Car = _carService.GetDto(entityId.Value);
+        Car = _carRepository.GetDto(entityId.Value);
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid)

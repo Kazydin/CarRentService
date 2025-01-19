@@ -1,15 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using AutoMapper;
 using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Extensions;
 using FluentValidation;
 using GuardNet;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
-namespace CarRentService.DAL.Services;
+namespace CarRentService.DAL.Repositories;
 
-public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEntity
+public abstract class BaseCrudRepository<T> : BaseSubject, ICrudRepository<T> where T : class, IEntity
 {
     protected readonly IDataStoreContext _store;
 
@@ -21,7 +21,7 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
 
     protected readonly AppState _appState;
 
-    protected BaseCrudService(IDataStoreContext store,
+    protected BaseCrudRepository(IDataStoreContext store,
         IValidator<T> validator,
         IMapper mapper,
         AppState appState)
@@ -52,11 +52,13 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
         Guard.NotNull(existingEntity, nameof(existingEntity), "Удаляемый объект не найден");
 
         _store.Remove(existingEntity!);
+        Notify();
     }
 
     public void Remove(T entity)
     {
         Remove(entity.Id);
+        Notify();
     }
 
     public void Update(T entity)
@@ -69,6 +71,7 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
         Guard.NotNull(existingEntity, nameof(existingEntity), "Обновляемый объект не найден");
 
         _mapper.Map(entity, existingEntity);
+        Notify();
     }
 
     public T AddOrUpdate(T entity)
@@ -87,6 +90,7 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
             _store.Add(entity);
         }
 
+        Notify();
         return existingEntity ?? entity;
     }
 

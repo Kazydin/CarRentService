@@ -1,8 +1,7 @@
-﻿using Microsoft.UI.Xaml;
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CarRentService.Common.Attributes;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace CarRentService.Common.Abstract;

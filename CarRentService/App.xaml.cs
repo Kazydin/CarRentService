@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-using System;
+﻿using System;
+using System.Reflection;
+using CarRentService.Common.Abstract;
 using CarRentService.DAL.Seeding;
 using CarRentService.Extensions;
-using System.Reflection;
 using FluentValidation;
-using CarRentService.Common.Abstract;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 
 namespace CarRentService;
 

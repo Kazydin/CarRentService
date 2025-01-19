@@ -1,13 +1,13 @@
-﻿using CarRentService.Common;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Dtos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Syncfusion.UI.Xaml.DataGrid;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using CarRentService.DAL.Dtos;
 
 namespace CarRentService.Pages.Rentals.RentalsTable;
 
@@ -23,17 +23,17 @@ public partial class RentalsTableViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<RentalDto> _rentals;
 
-    private readonly IRentalService _rentalService;
+    private readonly IRentalRepository _rentalRepository;
 
     private readonly INavigationService _navigationService;
 
     private readonly INotificationService _notificationService;
 
-    public RentalsTableViewModel(IRentalService rentalService,
+    public RentalsTableViewModel(IRentalRepository rentalRepository,
         INavigationService navigationService,
         INotificationService notificationService)
     {
-        _rentalService = rentalService;
+        _rentalRepository = rentalRepository;
         _navigationService = navigationService;
         _notificationService = notificationService;
 
@@ -46,7 +46,7 @@ public partial class RentalsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Rentals = _rentalService.GetDtos();
+        Rentals = _rentalRepository.GetDtos();
     }
 
     private void AddRental()
@@ -72,7 +72,7 @@ public partial class RentalsTableViewModel : BaseViewModel
 
             if (result)
             {
-                _rentalService.Remove(record.Id!.Value);
+                _rentalRepository.Remove(record.Id!.Value);
                 UpdateState();
             }
         }

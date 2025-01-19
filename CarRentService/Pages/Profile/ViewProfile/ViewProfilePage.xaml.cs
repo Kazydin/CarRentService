@@ -1,7 +1,6 @@
 using System.Linq;
-using CarRentService.Common.Abstract;
 using CarRentService.Common;
-using CarRentService.Common.Extensions;
+using CarRentService.Common.Abstract;
 using CarRentService.DAL.Enum;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

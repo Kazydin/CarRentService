@@ -1,7 +1,7 @@
 ﻿using System;
-using Windows.UI;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
+using Windows.UI;
 
 namespace CarRentService.Common.Converters;
 
@@ -13,7 +13,7 @@ public class BooleanToBackgroundConverter : IValueConverter
         {
             return new SolidColorBrush(Color.FromArgb(100, 125, 125, 125));
         }
-        return new SolidColorBrush(Color.FromArgb(0, 0 , 0, 0));
+        return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

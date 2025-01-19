@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace CarRentService.DAL.Abstract.Services;
+namespace CarRentService.DAL.Abstract.Repositories;
 
-public interface ICrudService<T> where T : IEntity
+public interface ICrudRepository<T> : ISubject where T : IEntity
 {
     ObservableCollection<T> Table { get; }
 

@@ -4,7 +4,7 @@ using AutoMapper;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -40,7 +40,7 @@ public partial class ViewBranchViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly IBranchService _branchService;
+    private readonly IBranchRepository _branchRepository;
 
     private readonly INotificationService _notificationService;
 
@@ -48,11 +48,11 @@ public partial class ViewBranchViewModel : BaseViewModel
 
     public ViewBranchViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IBranchService branchService,
+        IBranchRepository branchRepository,
         IMapper mapper)
     {
         _navigationService = navigationService;
-        _branchService = branchService;
+        _branchRepository = branchRepository;
         _notificationService = notificationService;
         _mapper = mapper;
 
@@ -115,7 +115,7 @@ public partial class ViewBranchViewModel : BaseViewModel
     {
         try
         {
-            _branchService.Update(_mapper.Map<Branch>(Branch));
+            _branchRepository.Update(_mapper.Map<Branch>(Branch));
 
             _notificationService.ShowTip("Обновление филиала", "Сохранено успешно!");
 
@@ -131,7 +131,7 @@ public partial class ViewBranchViewModel : BaseViewModel
     {
         Guard.NotNull(Branch, "Нельзя удалить филиал, который еще не сохранен");
 
-        _branchService.Remove(Branch.Id!.Value);
+        _branchRepository.Remove(Branch.Id!.Value);
         _navigationService.GoBack();
     }
 
@@ -153,7 +153,7 @@ public partial class ViewBranchViewModel : BaseViewModel
             return;
         }
 
-        Branch = _branchService.GetDto(entityId.Value);
+        Branch = _branchRepository.GetDto(entityId.Value);
     }
 
     public void SetGrids(SfDataGrid carsDataGrid,

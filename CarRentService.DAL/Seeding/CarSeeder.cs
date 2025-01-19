@@ -1,17 +1,17 @@
 ﻿using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Seeding;
 
-public class CarSeeder(ICarService service) : ISeeder
+public class CarSeeder(ICarRepository repository) : ISeeder
 {
     public SeederType SeederType => SeederType.Car;
 
     public void Seed()
     {
-        service.Add(new Car
+        repository.Add(new Car
         {
             Id = 1,
             Make = "Toyota",
@@ -24,7 +24,7 @@ public class CarSeeder(ICarService service) : ISeeder
             Mileage = 135789
         });
 
-        service.Add(new Car
+        repository.Add(new Car
         {
             Id = 2,
             Make = "Hyundai",
@@ -37,7 +37,7 @@ public class CarSeeder(ICarService service) : ISeeder
             Mileage = 98765
         });
 
-        service.Add(new Car
+        repository.Add(new Car
         {
             Id = 3,
             Make = "Ford",
@@ -50,7 +50,7 @@ public class CarSeeder(ICarService service) : ISeeder
             Mileage = 234560
         });
 
-        service.Add(new Car
+        repository.Add(new Car
         {
             Id = 4,
             Make = "Kia",
@@ -63,7 +63,7 @@ public class CarSeeder(ICarService service) : ISeeder
             Mileage = 35689
         });
 
-        service.Add(new Car
+        repository.Add(new Car
         {
             Id = 5,
             Make = "Nissan",

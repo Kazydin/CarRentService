@@ -1,5 +1,4 @@
-﻿using CarRentService.BLL;
-using CarRentService.Common.Abstract;
+﻿using CarRentService.Common.Abstract;
 using CarRentService.DAL;
 using CommunityToolkit.Mvvm.ComponentModel;
 

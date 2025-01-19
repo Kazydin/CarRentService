@@ -1,5 +1,4 @@
-﻿using CarRentService.DAL.Entities;
-using CarRentService.DAL.Enum;
+﻿using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Dtos;

@@ -1,28 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using CarRentService.BLL.Services.Abstract;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
+using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Constants;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
+using CarRentService.Pages.Rentals.ViewRental.Dialogs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
+using Microsoft.UI.Xaml;
 using Syncfusion.UI.Xaml.DataGrid;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using CarRentService.BLL.Services.Abstract;
-using CarRentService.Common.Extensions;
-using CarRentService.Common;
-using CarRentService.DAL.Constants;
-using System.ComponentModel;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 
-public partial class ViewRentalViewModel : BaseViewModel
+public partial class ViewRentalViewModel : BaseViewModel, INotifiable
 {
     public RelayCommand DeleteRentalCommand { get; }
 
@@ -41,6 +43,8 @@ public partial class ViewRentalViewModel : BaseViewModel
     public RelayCommand<object> AddPaymentCommand { get; }
 
     public RelayCommand<object> DeletePaymentCommand { get; }
+
+    public RelayCommand<object> DeleteCarCommand { get; }
 
     public RelayCommand<object> AddInsuranceCommand { get; }
 
@@ -62,9 +66,11 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
+    private readonly IRentalRepository _rentalRepository;
+
     private readonly IRentalService _rentalService;
 
-    private readonly IBranchService _branchService;
+    private readonly IBranchRepository _branchRepository;
 
     private readonly INotificationService _notificationService;
 
@@ -72,21 +78,29 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     private readonly IRentalCostCalculationService _costCalculationService;
 
+    private readonly AddCarDialog _addCarContent;
+
+    private XamlRoot _xamlRoot;
+
     public ViewRentalViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IRentalService rentalService,
+        IRentalRepository rentalRepository,
         IMapper mapper,
-        IBranchService branchService,
-        IRentalCostCalculationService costCalculationService)
+        IBranchRepository branchRepository,
+        IRentalCostCalculationService costCalculationService,
+        AddCarDialog addCarContent,
+        IRentalService rentalService)
     {
         MinDate = DateTime.Today;
 
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _rentalService = rentalService;
+        _rentalRepository = rentalRepository;
         _mapper = mapper;
-        _branchService = branchService;
+        _branchRepository = branchRepository;
         _costCalculationService = costCalculationService;
+        _addCarContent = addCarContent;
+        _rentalService = rentalService;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -96,6 +110,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
         AddCarCommand = new RelayCommand<object>(AddCar);
         EditCarCommand = new RelayCommand<object>(EditCar);
+        DeleteCarCommand = new RelayCommand<object>(DeleteCar);
 
         EditClientCommand = new RelayCommand<object>(EditClient);
 
@@ -103,12 +118,29 @@ public partial class ViewRentalViewModel : BaseViewModel
         DeletePaymentCommand = new RelayCommand<object>(EditPayment);
 
         AddInsuranceCommand = new RelayCommand<object>(AddInsurance);
-        DeleteInsuranceCommand = new RelayCommand<object>(EditInsurance);
+        DeleteInsuranceCommand = new RelayCommand<object>(DeleteInsurance);
 
         MoveToActiveStatusCommand = new RelayCommand(MoveToActiveStatus, CanMoveToActiveStatus);
         MoveToCompletedStatusCommand = new RelayCommand(MoveToCompletedStatus, CanMoveToCompletedStatus);
 
         _tariffs = EnumExtensions.GetValues<RentalTariffEnum>().ToObservableCollection();
+
+        _rentalRepository.Subscribe(this);
+    }
+
+    private async void DeleteInsurance(object? param)
+    {
+        if ((param as GridRecordContextFlyoutInfo)?.Record is InsuranceDto record)
+        {
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление страховки",
+                    "Вы действительно хотите удалить страховку?");
+
+            if (result)
+            {
+                _rentalService.RemoveInsurance(Rental, record);
+            }
+        }
     }
 
     private bool CanMoveToCompletedStatus()
@@ -171,17 +203,31 @@ public partial class ViewRentalViewModel : BaseViewModel
         throw new System.NotImplementedException();
     }
 
-    private void AddCar(object? obj)
+    private async void DeleteCar(object? param)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
+        {
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление автомобиля",
+                    "Вы действительно хотите удалить автомобиль?");
+
+            if (result)
+            {
+                _rentalService.RemoveCar(Rental, record);
+            }
+        }
+    }
+
+    private async void AddCar(object? obj)
+    {
+        await _addCarContent.ShowAsync(Rental, _xamlRoot);
     }
 
     private async void Save()
     {
         try
         {
-            _rentalService.Update(_mapper.Map<Rental>(Rental));
+            _rentalRepository.Update(_mapper.Map<Rental>(Rental));
 
             _notificationService.ShowTip("Обновление аренды", "Сохранено успешно!");
 
@@ -203,7 +249,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
         if (result)
         {
-            _rentalService.Remove(Rental.Id!.Value);
+            _rentalRepository.Remove(Rental.Id!.Value);
             _navigationService.GoBack();
         }
     }
@@ -226,8 +272,9 @@ public partial class ViewRentalViewModel : BaseViewModel
             return;
         }
 
-        Rental = _rentalService.GetDto(entityId.Value);
-        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchService.Table);
+        Rental = null!;
+        Rental = _rentalRepository.GetDto(entityId.Value);
+        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchRepository.Table);
         UpdateCost();
     }
 
@@ -268,5 +315,15 @@ public partial class ViewRentalViewModel : BaseViewModel
     private void UpdateCost()
     {
         Rental.TotalCost = _costCalculationService.CalculateTotalRentalCost(Rental);
+    }
+
+    public void SetXamlRoot(XamlRoot xamlRoot)
+    {
+        _xamlRoot = xamlRoot;
+    }
+
+    public void Update(object sender, EventArgs e)
+    {
+        SetRental(Rental.Id);
     }
 }

@@ -6,10 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CarRentService.DAL;
 
 [InjectDI(ServiceLifetime.Singleton)]
-public class AppState : ISubject
+public class AppState : BaseSubject
 {
-    private readonly List<INotifiable> _observers = new();
-
     private Manager? _currentUser;
 
     public Manager? CurrentUser
@@ -22,27 +20,6 @@ public class AppState : ISubject
                 _currentUser = value;
                 Notify();
             }
-        }
-    }
-
-    public void Subscribe(INotifiable observer)
-    {
-        if (!_observers.Contains(observer))
-        {
-            _observers.Add(observer);
-        }
-    }
-
-    public void Unsubscribe(INotifiable observer)
-    {
-        _observers.Remove(observer);
-    }
-
-    public void Notify()
-    {
-        foreach (var observer in _observers)
-        {
-            observer.Update(this, EventArgs.Empty);
         }
     }
 }

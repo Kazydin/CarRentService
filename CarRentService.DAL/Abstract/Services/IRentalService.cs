@@ -1,20 +1,12 @@
-﻿using System.Collections.ObjectModel;
-using CarRentService.Common.Attributes;
+﻿using CarRentService.Common.Attributes;
 using CarRentService.DAL.Dtos;
-using CarRentService.DAL.Entities;
 
 namespace CarRentService.DAL.Abstract.Services;
 
 [InjectDI]
-public interface IRentalService : ICrudService<Rental>
+public interface IRentalService
 {
-    ObservableCollection<RentalDto> GetDtos();
+    void RemoveCar(RentalDto rental, CarDto car);
 
-    RentalDto GetDto(int entityId);
-
-    void IncludeClient(RentalDto dto);
-
-    void IncludeCars(RentalDto dto);
-
-    void IncludeCars(IEnumerable<RentalDto> dtos);
+    void RemoveInsurance(RentalDto rental, InsuranceDto insurance);
 }

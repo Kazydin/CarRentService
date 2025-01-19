@@ -1,17 +1,17 @@
 ﻿using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Seeding;
 
-public class PaymentSeeder(IPaymentService service) : ISeeder
+public class PaymentSeeder(IPaymentRepository repository) : ISeeder
 {
     public SeederType SeederType => SeederType.Payment;
 
     public void Seed()
     {
-        service.Add(new Payment
+        repository.Add(new Payment
         {
             RentalId = 1,
             Amount = 90,
@@ -19,7 +19,7 @@ public class PaymentSeeder(IPaymentService service) : ISeeder
             Method = PaymentMethodEnum.Card
         });
 
-        service.Add(new Payment
+        repository.Add(new Payment
         {
             RentalId = 2,
             Amount = 3000,

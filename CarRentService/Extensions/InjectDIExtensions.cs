@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
 using System.Linq;
 using System.Reflection;
-using System;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Store;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRentService.Extensions;
 

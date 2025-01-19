@@ -3,10 +3,8 @@ using System.Collections.ObjectModel;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
-using CarRentService.DAL.Entities;
-using CarRentService.DAL.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Syncfusion.UI.Xaml.DataGrid;
@@ -26,14 +24,14 @@ public partial class ClientsTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<ClientDto> _clients;
 
-    private readonly IClientService _clientService;
+    private readonly IClientRepository _clientRepository;
 
     private readonly INavigationService _navigationService;
 
-    public ClientsTableViewModel(IClientService clientService,
+    public ClientsTableViewModel(IClientRepository clientRepository,
         INavigationService navigationService)
     {
-        _clientService = clientService;
+        _clientRepository = clientRepository;
         _navigationService = navigationService;
 
         // Настройка команд
@@ -45,7 +43,7 @@ public partial class ClientsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Clients = _clientService.GetDtos();
+        Clients = _clientRepository.GetDtos();
     }
 
     private void AddClient()
@@ -65,7 +63,7 @@ public partial class ClientsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is ClientDto record)
         {
-            _clientService.Remove(record.Id!.Value);
+            _clientRepository.Remove(record.Id!.Value);
             UpdateState();
         }
     }

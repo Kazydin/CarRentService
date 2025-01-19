@@ -1,16 +1,16 @@
 ﻿using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Entities;
 
 namespace CarRentService.DAL.Seeding;
 
-public class ClientSeeder(IClientService service) : ISeeder
+public class ClientSeeder(IClientRepository repository) : ISeeder
 {
     public SeederType SeederType => SeederType.Client;
 
     public void Seed()
     {
-        service.Add(new Client
+        repository.Add(new Client
         {
             BranchId = 1,
             Fio = "Иванов Иван Иванович",
@@ -20,7 +20,7 @@ public class ClientSeeder(IClientService service) : ISeeder
             DriverLicenseIssuedDate = DateTime.Parse("10.03.2020")
         });
 
-        service.Add(new Client
+        repository.Add(new Client
         {
             BranchId = 2,
             Fio = "Петров Петр Петрович",
@@ -30,7 +30,7 @@ public class ClientSeeder(IClientService service) : ISeeder
             DriverLicenseIssuedDate = DateTime.Parse("13.01.1997")
         });
 
-        service.Add(new Client
+        repository.Add(new Client
         {
             BranchId = 3,
             Fio = "Сидоров Сидр Сидорович",

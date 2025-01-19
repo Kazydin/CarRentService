@@ -1,6 +1,6 @@
-﻿using Syncfusion.UI.Xaml.DataGrid;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Common.Abstract;
 

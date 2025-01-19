@@ -7,7 +7,7 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -43,13 +43,13 @@ public partial class ViewClientViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly IClientService _clientService;
+    private readonly IClientRepository _clientRepository;
 
-    private readonly IRentalService _rentalService;
+    private readonly IRentalRepository _rentalRepository;
 
-    private readonly ICarService _carService;
+    private readonly ICarRepository _carRepository;
 
-    private readonly IBranchService _branchService;
+    private readonly IBranchRepository _branchRepository;
 
     private readonly INotificationService _notificationService;
 
@@ -57,19 +57,19 @@ public partial class ViewClientViewModel : BaseViewModel
 
     public ViewClientViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IClientService clientService,
+        IClientRepository clientRepository,
         IMapper mapper,
-        IBranchService branchService,
-        IRentalService rentalService,
-        ICarService carService)
+        IBranchRepository branchRepository,
+        IRentalRepository rentalRepository,
+        ICarRepository carRepository)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _clientService = clientService;
+        _clientRepository = clientRepository;
         _mapper = mapper;
-        _branchService = branchService;
-        _rentalService = rentalService;
-        _carService = carService;
+        _branchRepository = branchRepository;
+        _rentalRepository = rentalRepository;
+        _carRepository = carRepository;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -80,7 +80,7 @@ public partial class ViewClientViewModel : BaseViewModel
         AddRentalCommand = new RelayCommand<object>(AddRental, CanAddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
 
-        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchService.Table);
+        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchRepository.Table);
     }
 
     private bool CanAddRental(object? obj)
@@ -106,7 +106,7 @@ public partial class ViewClientViewModel : BaseViewModel
     {
         try
         {
-            var entity = _clientService.AddOrUpdate(_mapper.Map<Client>(Client));
+            var entity = _clientRepository.AddOrUpdate(_mapper.Map<Client>(Client));
 
             SetClient(entity.Id);
 
@@ -122,7 +122,7 @@ public partial class ViewClientViewModel : BaseViewModel
     {
         Guard.NotNull(Client, "Нельзя удалить клиента, который еще не сохранен");
 
-        _clientService.Remove(Client.Id!.Value);
+        _clientRepository.Remove(Client.Id!.Value);
         _navigationService.GoBack();
     }
 
@@ -144,9 +144,9 @@ public partial class ViewClientViewModel : BaseViewModel
             return;
         }
 
-        Client = _clientService.GetDto(entityId.Value);
-        _rentalService.IncludeCars(Client.Rentals);
-        _carService.IncludeBranches(Client.Rentals.SelectMany(p => p.Cars));
+        Client = _clientRepository.GetDto(entityId.Value);
+        _rentalRepository.IncludeCars(Client.Rentals);
+        _carRepository.IncludeBranches(Client.Rentals.SelectMany(p => p.Cars));
         SetDtos();
     }
 

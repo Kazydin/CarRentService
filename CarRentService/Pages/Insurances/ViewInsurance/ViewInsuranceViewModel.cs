@@ -1,17 +1,17 @@
-﻿using AutoMapper;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.Common.Extensions;
+using CarRentService.Common.Models;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using CarRentService.Common.Extensions;
-using CarRentService.DAL.Enum;
-using CarRentService.Common.Models;
-using CarRentService.Common;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Insurances.ViewInsurance;
@@ -34,7 +34,7 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly IInsuranceService _insuranceService;
+    private readonly IInsuranceRepository _insuranceRepository;
 
     private readonly INotificationService _notificationService;
 
@@ -42,12 +42,12 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
     public ViewInsuranceViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IInsuranceService insuranceService,
+        IInsuranceRepository insuranceRepository,
         IMapper mapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _insuranceService = insuranceService;
+        _insuranceRepository = insuranceRepository;
         _mapper = mapper;
 
         SaveCommand = new RelayCommand(Save);
@@ -73,7 +73,7 @@ public partial class ViewInsuranceViewModel : BaseViewModel
     {
         try
         {
-            _insuranceService.Update(_mapper.Map<Insurance>(Insurance));
+            _insuranceRepository.Update(_mapper.Map<Insurance>(Insurance));
 
             _notificationService.ShowTip("Обновление страхования", "Сохранено успешно!");
 
@@ -89,7 +89,7 @@ public partial class ViewInsuranceViewModel : BaseViewModel
     {
         Guard.NotNull(Insurance, "Нельзя удалить страхование, которое еще не сохранено");
 
-        _insuranceService.Remove(Insurance.Id!.Value);
+        _insuranceRepository.Remove(Insurance.Id!.Value);
         _navigationService.GoBack();
     }
 
@@ -111,6 +111,6 @@ public partial class ViewInsuranceViewModel : BaseViewModel
             return;
         }
 
-        Insurance = _insuranceService.GetDto(entityId.Value);
+        Insurance = _insuranceRepository.GetDto(entityId.Value);
     }
 }

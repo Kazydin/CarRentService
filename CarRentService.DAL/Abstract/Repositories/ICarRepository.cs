@@ -2,12 +2,11 @@
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
-using CarRentService.DAL.Enum;
 
-namespace CarRentService.DAL.Abstract.Services;
+namespace CarRentService.DAL.Abstract.Repositories;
 
 [InjectDI]
-public interface ICarService : ICrudService<Car>
+public interface ICarRepository : ICrudRepository<Car>
 {
     ObservableCollection<CarDto> GetDtos();
 

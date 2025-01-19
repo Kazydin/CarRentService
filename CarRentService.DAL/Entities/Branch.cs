@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using CarRentService.DAL.Abstract;
+﻿using CarRentService.DAL.Abstract;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;

@@ -1,9 +1,7 @@
+using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.Common;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 
@@ -33,5 +31,10 @@ public sealed partial class ViewRentalPage : NavigationPage
             _viewModel.SetRental();
             Header = "Создание аренды";
         }
+    }
+
+    private void ViewRentalPage_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        _viewModel.SetXamlRoot(XamlRoot);
     }
 }

@@ -2,20 +2,20 @@
 using AutoMapper;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 using CarRentService.DAL.Validators;
 using GuardNet;
 
-namespace CarRentService.DAL.Services;
+namespace CarRentService.DAL.Repositories;
 
-public class ClientService : BaseCrudService<Client>, IClientService, INotifiable
+public class ClientRepository : BaseCrudRepository<Client>, IClientRepository, INotifiable
 {
     public override ObservableCollection<Client> Table { get; set; }
 
-    public ClientService(IDataStoreContext store,
+    public ClientRepository(IDataStoreContext store,
         ClientValidator validator,
         IMapper mapper,
         AppState appState) : base(store, validator, mapper, appState)

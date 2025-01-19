@@ -1,23 +1,20 @@
-﻿using AutoMapper;
-
-using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
-using CarRentService.DAL.Entities;
-
-using FluentValidation;
-
-using System.Collections.ObjectModel;
-using CarRentService.DAL.Dtos;
+﻿using System.Collections.ObjectModel;
+using AutoMapper;
 using CarRentService.Common.Extensions;
+using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
+using FluentValidation;
 using GuardNet;
 
-namespace CarRentService.DAL.Services;
+namespace CarRentService.DAL.Repositories;
 
-public class ManagerService : BaseCrudService<Manager>, IManagerService
+public class ManagerRepository : BaseCrudRepository<Manager>, IManagerRepository
 {
     public sealed override ObservableCollection<Manager> Table { get; set; }
 
-    public ManagerService(IDataStoreContext store,
+    public ManagerRepository(IDataStoreContext store,
         IValidator<Manager> validator,
         IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {
@@ -31,7 +28,7 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
 
     protected override void CleanEntity(Manager entity)
     {
-       
+
     }
 
     public ObservableCollection<ManagerDto> GetDtos()

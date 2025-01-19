@@ -1,95 +1,57 @@
-﻿using AutoMapper;
+﻿using System.Collections.Immutable;
+using AutoMapper;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Abstract.Services;
-using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Entities;
-using FluentValidation;
-using System.Collections.ObjectModel;
 using CarRentService.DAL.Dtos;
-using CarRentService.Common.Extensions;
-using CarRentService.DAL.Extensions;
-using GuardNet;
+using CarRentService.DAL.Entities;
 
 namespace CarRentService.DAL.Services;
 
-public class RentalService : BaseCrudService<Rental>, IRentalService
+public class RentalService : IRentalService
 {
-    public sealed override ObservableCollection<Rental> Table { get; set; }
+    private readonly IRentalRepository _rentalRepository;
 
-    public RentalService(IDataStoreContext store,
-        IValidator<Rental> validator,
-        IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
+    private readonly ICarRepository _carRepository;
+
+    private readonly IInsuranceRepository _insuranceRepository;
+
+    private readonly IMapper _mapper;
+
+    public RentalService(IRentalRepository rentalRepository,
+        ICarRepository carRepository,
+        IInsuranceRepository insuranceRepository,
+        IMapper mapper)
     {
-        Table = _store.Rental;  
+        _rentalRepository = rentalRepository;
+        _carRepository = carRepository;
+        _insuranceRepository = insuranceRepository;
+        _mapper = mapper;
     }
 
-    public override Rental? TryFindById(int id)
+    public void RemoveCar(RentalDto rental, CarDto car)
     {
-        return _store.Rental.FirstOrDefault(p => p.Id == id);
-    }
+        var insuranceIds = _insuranceRepository.Table
+            .Where(p => p.CarId == car.Id)
+            .Select(p => p.Id)
+            .ToImmutableArray();
 
-    public ObservableCollection<RentalDto> GetDtos()
-    {
-        return Table
-            .Select(p => GetDto(p.Id))
-            .ToObservableCollection();
-    }
-
-    public RentalDto GetDto(int entityId)
-    {
-        var entity = _store.Rental.FirstOrDefault(p => p.Id == entityId);
-
-        Guard.NotNull(entity, nameof(entity), $"Аренда с ID {entityId} не найдена");
-
-        // Клонирование, чтобы не менять базовый объект
-        entity = _mapper.Map<Rental>(entity);
-
-        var dto = _mapper.Map<RentalDto>(entity);
-
-        IncludeCars(dto);
-        IncludeClient(dto);
-        IncludeBranch(dto);
-        IncludePayments(dto);
-        IncludeInsurances(dto);
-
-        dto.TotalPaymentsSum = dto.Payments.Sum(p => p.Amount);
-
-        return dto;
-    }
-
-    private void IncludeBranch(RentalDto dto)
-    {
-        dto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == dto.BranchId));
-    }
-
-    public void IncludeClient(RentalDto dto)
-    {
-        dto.Client = _mapper.Map<ClientDto>(_store.Client.FirstOrDefault(p => p.Id == dto.ClientId));
-    }
-
-    public void IncludeCars(RentalDto dto)
-    {
-        dto.Cars = _mapper.Map<ObservableCollection<CarDto>>(_store.Car.Where(p => dto.CarIds.Contains(p.Id)));
-    }
-
-    public void IncludeCars(IEnumerable<RentalDto> dtos)
-    {
-        foreach (var dto in dtos)
+        foreach (var insurance in insuranceIds)
         {
-            IncludeCars(dto);
+            _insuranceRepository.Remove(insurance);
         }
+
+        rental.Cars.Remove(car);
+        rental.CarIds.Remove(car.Id!.Value);
+
+        _rentalRepository.Update(_mapper.Map<Rental>(rental));
     }
 
-    public void IncludePayments(RentalDto dto)
+    public void RemoveInsurance(RentalDto rental, InsuranceDto insurance)
     {
-        dto.Payments = _mapper.Map<ObservableCollection<PaymentDto>>(_store.Payment.Where(p => p.RentalId == dto.Id));
-    }
+        _insuranceRepository.Remove(insurance.Id!.Value);
 
-    public void IncludeInsurances(RentalDto dto)
-    {
-        dto.Insurances = _mapper.Map<ObservableCollection<InsuranceDto>>(_store.Insurance.Where(p => p.RentalId == dto.Id));
-    }
+        rental.Insurances.Remove(insurance);
 
-    protected override void CleanEntity(Rental entity)
-    {
+        _rentalRepository.Update(_mapper.Map<Rental>(rental));
     }
 }

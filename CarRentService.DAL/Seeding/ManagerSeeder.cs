@@ -1,17 +1,17 @@
 ﻿using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Services;
+using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Seeding;
 
-public class ManagerSeeder(IManagerService service) : ISeeder
+public class ManagerSeeder(IManagerRepository repository) : ISeeder
 {
     public SeederType SeederType => SeederType.Manager;
 
     public void Seed()
     {
-        service.Add(new Manager
+        repository.Add(new Manager
         {
             Role = ManagerRoleEnum.Admin,
             Fio = "Петров Петр Сергеевич",
@@ -21,7 +21,7 @@ public class ManagerSeeder(IManagerService service) : ISeeder
             Password = "Admin123!",
         });
 
-        service.Add(new Manager
+        repository.Add(new Manager
         {
             Role = ManagerRoleEnum.BranchManager,
             Fio = "Сергеев Семён Олегович",
@@ -32,7 +32,7 @@ public class ManagerSeeder(IManagerService service) : ISeeder
             BranchIds = [1, 2]
         });
 
-        service.Add(new Manager
+        repository.Add(new Manager
         {
             Role = ManagerRoleEnum.BranchManager,
             Fio = "Олегов Антон Петрович",

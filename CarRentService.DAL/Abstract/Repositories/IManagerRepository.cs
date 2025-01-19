@@ -3,10 +3,10 @@ using CarRentService.Common.Attributes;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 
-namespace CarRentService.DAL.Abstract.Services;
+namespace CarRentService.DAL.Abstract.Repositories;
 
 [InjectDI]
-public interface IManagerService : ICrudService<Manager>
+public interface IManagerRepository : ICrudRepository<Manager>
 {
     ObservableCollection<ManagerDto> GetDtos();
 

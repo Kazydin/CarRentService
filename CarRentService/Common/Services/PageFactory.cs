@@ -1,9 +1,7 @@
-﻿using CarRentService.Common;
-using CarRentService.Common.Abstract;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using CarRentService.Common.Abstract;
 
 namespace CarRentService.Common.Services;
 
