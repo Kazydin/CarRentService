@@ -11,41 +11,28 @@ using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
-public class ClientService : BaseCrudService<Client>, IClientService
+public class ClientService : BaseCrudService<Client>, IClientService, INotifiable
 {
     public override ObservableCollection<Client> Table { get; set; }
-
-    private readonly AppState _appState;
-
-    private static bool _subscribedToUserChanged;
 
     public ClientService(IDataStoreContext store,
         ClientValidator validator,
         IMapper mapper,
-        AppState appState) : base(store, validator, mapper)
+        AppState appState) : base(store, validator, mapper, appState)
     {
-        _appState = appState;
-
-        if (!_subscribedToUserChanged)
-        {
-            appState.OnUserChanged += SetTable;
-            _subscribedToUserChanged = true;
-        }
-
+        _appState.Subscribe(this);
     }
 
-    private void SetTable(object? sender, EventArgs? eventArgs)
+    public void Update(object sender, EventArgs e)
     {
-        if (_appState.CurrentUser != null)
+        if (_appState.CurrentUser!.Role == ManagerRoleEnum.Admin)
         {
-            if (_appState.CurrentUser.Role == ManagerRoleEnum.Admin)
-            {
-                Table = _store.Client;
-            }
-            else
-            {
-                Table = _store.Client.Where(p => _appState.CurrentUser.BranchIds.Contains(p.Id)).ToObservableCollection();
-            }
+            Table = _store.Client;
+        }
+        else
+        {
+            Table = _store.Client.Where(p => _appState.CurrentUser.BranchIds.Contains(p.Id))
+                .ToObservableCollection();
         }
     }
 

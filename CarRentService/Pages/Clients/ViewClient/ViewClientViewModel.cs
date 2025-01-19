@@ -77,10 +77,15 @@ public partial class ViewClientViewModel : BaseViewModel
 
         ClearFiltersAndSortCommand = new RelayCommand<object>(ClearFiltersAndSort);
 
-        AddRentalCommand = new RelayCommand<object>(AddRental);
+        AddRentalCommand = new RelayCommand<object>(AddRental, CanAddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
 
         Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchService.Table);
+    }
+
+    private bool CanAddRental(object? obj)
+    {
+        return Client.Id.HasValue;
     }
 
     private void EditRental(object? param)
@@ -101,11 +106,11 @@ public partial class ViewClientViewModel : BaseViewModel
     {
         try
         {
-            _clientService.Update(_mapper.Map<Client>(Client));
+            var entity = _clientService.AddOrUpdate(_mapper.Map<Client>(Client));
+
+            SetClient(entity.Id);
 
             _notificationService.ShowTip("Обновление клиента", "Сохранено успешно!");
-
-            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {

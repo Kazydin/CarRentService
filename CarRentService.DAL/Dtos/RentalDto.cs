@@ -52,6 +52,9 @@ public partial class RentalDto
     [ObservableProperty]
     private int? _clientId;
 
+    [ObservableProperty]
+    private int? _branchId;
+
     #region LinkedEntities
 
     [ObservableProperty]

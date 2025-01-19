@@ -12,6 +12,7 @@ using Syncfusion.UI.Xaml.DataGrid;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices.JavaScript;
 using CarRentService.Common.Extensions;
 using CarRentService.Common;
 using CarRentService.DAL.Constants;
@@ -50,9 +51,11 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     [ObservableProperty] private RentalDto _rental;
 
-    [ObservableProperty] private ObservableCollection<Branch> _branches;
+    [ObservableProperty] private ObservableCollection<BranchDto> _branches;
 
     [ObservableProperty] private ObservableCollection<RentalTariffEnum> _tariffs;
+
+    [ObservableProperty] private DateTime _minDate;
 
     private readonly INavigationService _navigationService;
 
@@ -70,6 +73,8 @@ public partial class ViewRentalViewModel : BaseViewModel
         IMapper mapper,
         IBranchService branchService)
     {
+        MinDate = DateTime.Today;
+
         _navigationService = navigationService;
         _notificationService = notificationService;
         _rentalService = rentalService;
@@ -96,7 +101,7 @@ public partial class ViewRentalViewModel : BaseViewModel
         MoveToActiveStatusCommand = new RelayCommand(MoveToActiveStatus, CanMoveToActiveStatus);
         MoveToCompletedStatusCommand = new RelayCommand(MoveToCompletedStatus, CanMoveToCompletedStatus);
 
-        Branches = _branchService.Table;
+        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchService.Table);
 
         _tariffs = EnumExtensions.GetValues<RentalTariffEnum>().ToObservableCollection();
     }

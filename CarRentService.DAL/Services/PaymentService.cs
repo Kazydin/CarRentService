@@ -17,7 +17,7 @@ public class PaymentService : BaseCrudService<Payment>, IPaymentService
 
     public PaymentService(IDataStoreContext store,
         IValidator<Payment> validator,
-        IMapper mapper) : base(store, validator, mapper)
+        IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {
         Table = _store.Payment;
     }

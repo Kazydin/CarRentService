@@ -19,7 +19,7 @@ public class InsuranceService : BaseCrudService<Insurance>, IInsuranceService
 
     public InsuranceService(IDataStoreContext store,
         IValidator<Insurance> validator,
-        IMapper mapper) : base(store, validator, mapper)
+        IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {
         Table = _store.Insurance;
     }

@@ -19,14 +19,20 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
 
     protected readonly IMapper _mapper;
 
+    protected readonly AppState _appState;
+
     protected BaseCrudService(IDataStoreContext store,
         IValidator<T> validator,
-        IMapper mapper)
+        IMapper mapper,
+        AppState appState)
     {
         _validator = validator;
         _store = store;
         _mapper = mapper;
+
+        _appState = appState;
     }
+
     public abstract T? TryFindById(int id);
 
     protected abstract void CleanEntity(T entity);
@@ -63,6 +69,25 @@ public abstract class BaseCrudService<T> : ICrudService<T> where T : class, IEnt
         Guard.NotNull(existingEntity, nameof(existingEntity), "Обновляемый объект не найден");
 
         _mapper.Map(entity, existingEntity);
+    }
+
+    public T AddOrUpdate(T entity)
+    {
+        CleanEntity(entity);
+        Validate(entity);
+
+        var existingEntity = TryFindById(entity.Id);
+
+        if (existingEntity != null)
+        {
+            _mapper.Map(entity, existingEntity);
+        }
+        else
+        {
+            _store.Add(entity);
+        }
+
+        return existingEntity ?? entity;
     }
 
     protected void Validate(T entity)

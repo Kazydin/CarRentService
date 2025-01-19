@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Constants;
 using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -23,6 +22,8 @@ public partial class Rental : IEntity
     /// Идентификатор клиента, который арендует автомобиль.
     /// </summary>
     [ObservableProperty] private int _clientId;
+
+    [ObservableProperty] private int _branchId;
 
     /// <summary>
     /// Дата начала аренды.

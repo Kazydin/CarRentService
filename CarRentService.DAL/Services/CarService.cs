@@ -18,7 +18,7 @@ public class CarService : BaseCrudService<Car>, ICarService
 
     public CarService(IDataStoreContext store,
         IValidator<Car> validator,
-        IMapper mapper) : base(store, validator, mapper)
+        IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {
         Table = _store.Car;
     }

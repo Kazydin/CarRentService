@@ -36,6 +36,8 @@ public enum PageTypeEnum
 
     EditManager,
 
+    ChangeTheme,
+
     EditProfile,
 
     Logout,

@@ -17,14 +17,11 @@ public class ManagerService : BaseCrudService<Manager>, IManagerService
 {
     public sealed override ObservableCollection<Manager> Table { get; set; }
 
-    private readonly AppState _appState;
-
     public ManagerService(IDataStoreContext store,
         IValidator<Manager> validator,
-        IMapper mapper, AppState appState) : base(store, validator, mapper)
+        IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {
         Table = _store.Manager;
-        _appState = appState;
     }
 
     public override Manager? TryFindById(int id)

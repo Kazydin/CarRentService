@@ -4,7 +4,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CarRentService"
-    xmlns:converters="using:CarRentService.Common.Converters">
+    xmlns:converters="using:CarRentService.Common.Converters"
+    RequestedTheme="Dark">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,6 +13,8 @@
                     xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
+            <converters:DateTimeToDateTimeOffsetConverter
+                x:Key="DateTimeToDateTimeOffsetConverter" />
             <converters:EnumToStringConverter
                 x:Key="EnumToStringConverter" />
             <converters:EnumToDescriptionConverter

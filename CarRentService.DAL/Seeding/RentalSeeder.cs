@@ -20,7 +20,8 @@ public class RentalSeeder(IRentalService service) : ISeeder
             EndDate = new DateTime(2024, 10, 10),
             Status = RentalStatusEnum.Completed,
             TotalCost = 5000,
-            Tariff = RentalTariffEnum.Default
+            Tariff = RentalTariffEnum.Default,
+            BranchId = 1
         });
 
         service.Add(new Rental
@@ -32,7 +33,8 @@ public class RentalSeeder(IRentalService service) : ISeeder
             EndDate = new DateTime(2024, 11, 15),
             Status = RentalStatusEnum.Active,
             TotalCost = 7000,
-            Tariff = RentalTariffEnum.Seasonal
+            Tariff = RentalTariffEnum.Seasonal,
+            BranchId = 1
         });
 
         service.Add(new Rental
@@ -44,7 +46,8 @@ public class RentalSeeder(IRentalService service) : ISeeder
             EndDate = new DateTime(2024, 12, 5),
             Status = RentalStatusEnum.Completed,
             TotalCost = 3000,
-            Tariff = RentalTariffEnum.Vip
+            Tariff = RentalTariffEnum.Vip,
+            BranchId = 1
         });
 
         service.Add(new Rental
@@ -56,7 +59,8 @@ public class RentalSeeder(IRentalService service) : ISeeder
             EndDate = new DateTime(2024, 12, 20),
             Status = RentalStatusEnum.Active,
             TotalCost = 8000,
-            Tariff = RentalTariffEnum.Hybrid
+            Tariff = RentalTariffEnum.Hybrid,
+            BranchId = 2
         });
 
         service.Add(new Rental
@@ -68,7 +72,8 @@ public class RentalSeeder(IRentalService service) : ISeeder
             EndDate = new DateTime(2024, 9, 15),
             Status = RentalStatusEnum.Completed,
             TotalCost = 10000,
-            Tariff = RentalTariffEnum.Default
+            Tariff = RentalTariffEnum.Default,
+            BranchId = 3
         });
     }
 }

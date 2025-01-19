@@ -17,9 +17,9 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
 
     public RentalService(IDataStoreContext store,
         IValidator<Rental> validator,
-        IMapper mapper) : base(store, validator, mapper)
+        IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {
-        Table = _store.Rental;
+        Table = _store.Rental;  
     }
 
     public override Rental? TryFindById(int id)
@@ -47,12 +47,12 @@ public class RentalService : BaseCrudService<Rental>, IRentalService
 
         IncludeCars(dto);
         IncludeClient(dto);
-        IncludeBranch(dto.Client!);
+        IncludeBranch(dto);
 
         return dto;
     }
 
-    private void IncludeBranch(ClientDto dto)
+    private void IncludeBranch(RentalDto dto)
     {
         dto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == dto.BranchId));
     }

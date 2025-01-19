@@ -14,7 +14,7 @@ public partial class ClientDto
     private string _fio;
 
     [ObservableProperty]
-    private int? _age;
+    private int _age;
 
     [ObservableProperty]
     private string _phone;

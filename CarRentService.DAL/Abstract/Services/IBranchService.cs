@@ -2,10 +2,11 @@
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRentService.DAL.Abstract.Services;
 
-[InjectDI]
+[InjectDI(ServiceLifetime.Singleton)]
 public interface IBranchService : ICrudService<Branch>
 {
     BranchDto GetDto(int branchId);

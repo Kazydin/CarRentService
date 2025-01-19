@@ -11,15 +11,28 @@ using GuardNet;
 
 namespace CarRentService.DAL.Services;
 
-public class BranchService : BaseCrudService<Branch>, IBranchService
+public class BranchService : BaseCrudService<Branch>, IBranchService, INotifiable
 {
     public sealed override ObservableCollection<Branch> Table { get; set; }
 
     public BranchService(IDataStoreContext store,
         IValidator<Branch> validator,
-        IMapper mapper) : base(store, validator, mapper)
+        IMapper mapper, AppState appState) : base(store, validator, mapper, appState)
     {
-        Table = _store.Branch;
+        _appState.Subscribe(this);
+    }
+
+    public void Update(object sender, EventArgs e)
+    {
+        if (_appState.CurrentUser!.Role == ManagerRoleEnum.Admin)
+        {
+            Table = _store.Branch;
+        }
+        else
+        {
+            Table = _store.Branch.Where(p => _appState.CurrentUser.BranchIds.Contains(p.Id))
+                .ToObservableCollection();
+        }
     }
 
     public override Branch? TryFindById(int id)

@@ -48,9 +48,24 @@
                     MappingName="Id" />
                 <dataGrid:GridTextColumn
                     HeaderText="Статус"
-                    MappingName="Status" />
+                    DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
+                <dataGrid:GridTextColumn
+                    HeaderText="ФИО клиента"
+                    MappingName="Client.Fio" />
                 <dataGrid:GridNumericColumn
-                    HeaderText="Цена"
+                    HeaderText="ID филиала"
+                    MappingName="Branch.Id" />
+                <dataGrid:GridTextColumn
+                    HeaderText="Название филиала"
+                    MappingName="Branch.Name" />
+                <dataGrid:GridDateColumn
+                    HeaderText="Дата начала"
+                    MappingName="StartDate" />
+                <dataGrid:GridDateColumn
+                    HeaderText="Дата конца"
+                    MappingName="EndDate" />
+                <dataGrid:GridNumericColumn
+                    HeaderText="Стоимость"
                     MappingName="TotalCost" />
             </dataGrid:SfDataGrid.Columns>
             <dataGrid:SfDataGrid.RecordContextFlyout>

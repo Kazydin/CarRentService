@@ -4,9 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
-
 using GuardNet;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 
@@ -54,7 +52,7 @@ public class NavigationService : INavigationService
 
             _pageWithActions = new Dictionary<PageTypeEnum, Action>
             {
-                { PageTypeEnum.Logout, _windowManager.Logout }
+                { PageTypeEnum.Logout, _windowManager.Logout },
             };
         }
     }
