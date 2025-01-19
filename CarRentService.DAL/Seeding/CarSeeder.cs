@@ -20,6 +20,8 @@ public class CarSeeder(ICarService service) : ISeeder
             RegistrationNumber = "A123BC77",
             Status = CarStatusEnum.Available,
             BranchId = 1,
+            HorsePower = 150,
+            Mileage = 135789
         });
 
         service.Add(new Car
@@ -31,6 +33,8 @@ public class CarSeeder(ICarService service) : ISeeder
             RegistrationNumber = "B456DE99",
             Status = CarStatusEnum.InRepair,
             BranchId = 1,
+            HorsePower = 120,
+            Mileage = 98765
         });
 
         service.Add(new Car
@@ -42,6 +46,8 @@ public class CarSeeder(ICarService service) : ISeeder
             RegistrationNumber = "C789FG55",
             Status = CarStatusEnum.Available,
             BranchId = 2,
+            HorsePower = 190,
+            Mileage = 234560
         });
 
         service.Add(new Car
@@ -53,6 +59,8 @@ public class CarSeeder(ICarService service) : ISeeder
             RegistrationNumber = "D321HI33",
             Status = CarStatusEnum.Available,
             BranchId = 2,
+            HorsePower = 130,
+            Mileage = 35689
         });
 
         service.Add(new Car
@@ -64,6 +72,8 @@ public class CarSeeder(ICarService service) : ISeeder
             RegistrationNumber = "E654JK22",
             Status = CarStatusEnum.Rented,
             BranchId = 3,
+            HorsePower = 220,
+            Mileage = 231701
         });
     }
 }

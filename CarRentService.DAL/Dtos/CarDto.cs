@@ -38,7 +38,17 @@ public partial class CarDto
     private int? _year;
 
     [ObservableProperty]
+    private int _horsePower;
+
+    [ObservableProperty]
+    private int _mileage;
+
+    #region DtoFields
+
+    [ObservableProperty]
     private string _name;
+
+    #endregion
 
     #region LinkedEntities
 

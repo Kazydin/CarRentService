@@ -18,4 +18,6 @@ public interface ICarService : ICrudService<Car>
     void IncludeActiveRental(CarDto dto);
 
     void IncludeBranch(CarDto dto);
+
+    void IncludeBranches(IEnumerable<CarDto> dtos);
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using CarRentService.DAL.Enum;
+﻿using CarRentService.DAL.Enum;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -27,4 +26,10 @@ public partial class Car : Vehicle
     /// </summary>
     [ObservableProperty]
     private int _branchId;
+
+    [ObservableProperty]
+    private int _horsePower;
+
+    [ObservableProperty]
+    private int _mileage;
 }

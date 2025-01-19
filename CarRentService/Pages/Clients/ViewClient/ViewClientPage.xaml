@@ -36,14 +36,12 @@
                         Width="*" />
                     <ColumnDefinition
                         Width="*" />
-                    <ColumnDefinition
-                        Width="*" />
                 </Grid.ColumnDefinitions>
                 <CommandBar
                     DefaultLabelPosition="Right"
                     Grid.Row="0"
                     Grid.Column="0"
-                    Grid.ColumnSpan="4">
+                    Grid.ColumnSpan="3">
                     <AppBarButton
                         Icon="Delete"
                         Command="{Binding DeleteClientCommand}"
@@ -95,9 +93,9 @@
                         Text="{Binding Client.Phone, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
-                    Margin="5, 10, 0, 10"
-                    Grid.Row="2"
-                    Grid.Column="3">
+                    Margin="0, 10, 5, 10"
+                    Grid.Row="3"
+                    Grid.Column="0">
                     <TextBlock
                         Margin="0, 0, 0, 10">
                         Номер водительского удостоверения
@@ -109,16 +107,17 @@
                     ItemsSource="{Binding Branches, Mode=OneWay}"
                     Header="Филиал договора (основной)"
                     Grid.Row="3"
-                    Grid.Column="0"
-                    Margin="0, 10, 0, 0"
+                    Grid.Column="1"
+                    Margin="5, 10, 5, 0"
                     TextMemberPath="Name"
                     DisplayMemberPath="Name"
                     SelectedItem="{Binding Client.Branch, Mode=TwoWay}"
-                    Width="200" />
+                    Width="Auto"
+                    HorizontalAlignment="Stretch"/>
                 <StackPanel
                     Grid.Row="4"
                     Grid.Column="0"
-                    Grid.ColumnSpan="4"
+                    Grid.ColumnSpan="3"
                     Margin="0, 15, 0, 0"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
@@ -169,7 +168,6 @@
                             RelationalColumn="Cars">
                             <dataGrid:GridViewDefinition.DataGrid>
                                 <dataGrid:SfDataGrid
-                                    x:Name="FirstDetailsViewGrid"
                                     AllowEditing="False"
                                     AllowFiltering="True"
                                     ShowGroupDropArea="True"
@@ -179,14 +177,17 @@
                                     HeaderLinesVisibility="Both"
                                     IsGroupDropAreaExpanded="True"
                                     ColumnWidthMode="Star"
-                                    AutoGenerateColumns="True">
+                                    AutoGenerateColumns="False">
                                     <dataGrid:SfDataGrid.Columns>
-                                        <dataGrid:GridTextColumn
+                                        <dataGrid:GridNumericColumn
                                             HeaderText="ID автомобиля"
                                             MappingName="Id" />
                                         <dataGrid:GridTextColumn
+                                            HeaderText="Регистрационный номер"
+                                            MappingName="RegistrationNumber" />
+                                        <dataGrid:GridTextColumn
                                             HeaderText="Статус"
-                                            MappingName="Status" />
+                                            DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
                                         <dataGrid:GridTextColumn
                                             HeaderText="Марка"
                                             MappingName="Make" />
@@ -196,6 +197,12 @@
                                         <dataGrid:GridNumericColumn
                                             MappingName="Year"
                                             HeaderText="Год" />
+                                        <dataGrid:GridNumericColumn
+                                            HeaderText="Л.С."
+                                            MappingName="HorsePower" />
+                                        <dataGrid:GridNumericColumn
+                                            HeaderText="Пробег"
+                                            MappingName="Mileage" />
                                     </dataGrid:SfDataGrid.Columns>
                                 </dataGrid:SfDataGrid>
                             </dataGrid:GridViewDefinition.DataGrid>
@@ -207,10 +214,19 @@
                             MappingName="Id" />
                         <dataGrid:GridTextColumn
                             HeaderText="Статус"
-                            MappingName="Status" />
+                            DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата начала"
+                            MappingName="StartDate" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата конца"
+                            MappingName="EndDate" />
+                        <dataGrid:GridTextColumn
+                            HeaderText="Тариф"
+                            DisplayBinding="{Binding Path=Tariff, Converter={StaticResource EnumToDescriptionConverter}}" />
                         <dataGrid:GridNumericColumn
-                            HeaderText="Цена"
-                            MappingName="Cost" />
+                            HeaderText="Стоимость"
+                            MappingName="TotalCost" />
                     </dataGrid:SfDataGrid.Columns>
                     <dataGrid:SfDataGrid.RecordContextFlyout>
                         <MenuFlyout>
@@ -230,13 +246,6 @@
         <PivotItem
             Header="Автомобили">
             <StackPanel>
-                <InfoBar
-                    IsOpen="True"
-                    Severity="Informational"
-                    Title="Информация"
-                    IsClosable="False"
-                    Margin="0, 10, 0, 0"
-                    Message="На данной странице предоставлены только автомобили, находящиеся в аренде у клиента" />
                 <CommandBar
                     DefaultLabelPosition="Right">
                     <AppBarButton
@@ -259,7 +268,7 @@
                     HeaderLinesVisibility="Both"
                     IsGroupDropAreaExpanded="True"
                     ColumnWidthMode="Star"
-                    ItemsSource="{Binding Client.CurrentCars}">
+                    ItemsSource="{Binding Cars}">
 
                     <dataGrid:SfDataGrid.GroupColumnDescriptions>
                         <dataGrid:GroupColumnDescription ColumnName="RentalId" />
@@ -270,8 +279,17 @@
                             HeaderText="ID автомобиля"
                             MappingName="Id" />
                         <dataGrid:GridTextColumn
+                            HeaderText="Регистрационный номер"
+                            MappingName="RegistrationNumber" />
+                        <dataGrid:GridNumericColumn
                             HeaderText="ID аренды"
                             MappingName="RentalId" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата начала аренды"
+                            MappingName="StartDate" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата конца аренды"
+                            MappingName="EndDate" />
                         <dataGrid:GridTextColumn
                             HeaderText="Марка"
                             MappingName="Make" />
@@ -281,6 +299,9 @@
                         <dataGrid:GridNumericColumn
                             MappingName="Year"
                             HeaderText="Год" />
+                        <dataGrid:GridNumericColumn
+                            HeaderText="Л.С."
+                            MappingName="HorsePower" />
                     </dataGrid:SfDataGrid.Columns>
 
                     <dataGrid:SfDataGrid.RecordContextFlyout>
@@ -320,7 +341,7 @@
                     HeaderLinesVisibility="Both"
                     IsGroupDropAreaExpanded="True"
                     ColumnWidthMode="Star"
-                    ItemsSource="{Binding Client.Insurances}">
+                    ItemsSource="{Binding Insurances}">
 
                     <dataGrid:SfDataGrid.GroupColumnDescriptions>
                         <dataGrid:GroupColumnDescription ColumnName="RentalId" />
@@ -334,6 +355,21 @@
                             HeaderText="ID аренды"
                             MappingName="RentalId" />
                         <dataGrid:GridDateColumn
+                            HeaderText="Дата начала аренды"
+                            MappingName="StartDate" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата конца аренды"
+                            MappingName="EndDate" />
+                        <dataGrid:GridNumericColumn
+                            HeaderText="ID автомобиля"
+                            MappingName="Id" />
+                        <dataGrid:GridTextColumn
+                            HeaderText="Страхуемый автомобиль"
+                            MappingName="Car.Name" />
+                        <dataGrid:GridTextColumn
+                            HeaderText="Тип"
+                            DisplayBinding="{Binding Path=Type, Converter={StaticResource EnumToDescriptionConverter}}" />
+                        <dataGrid:GridNumericColumn
                             HeaderText="Стоимость"
                             MappingName="Cost" />
                     </dataGrid:SfDataGrid.Columns>
@@ -374,7 +410,7 @@
                     IsGroupDropAreaExpanded="True"
                     MinHeight="400"
                     ColumnWidthMode="Star"
-                    ItemsSource="{Binding Client.Payments}">
+                    ItemsSource="{Binding Payments}">
 
                     <dataGrid:SfDataGrid.GroupColumnDescriptions>
                         <dataGrid:GroupColumnDescription ColumnName="RentalId" />
@@ -387,6 +423,12 @@
                         <dataGrid:GridNumericColumn
                             HeaderText="ID аренды"
                             MappingName="RentalId" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата начала аренды"
+                            MappingName="StartDate" />
+                        <dataGrid:GridDateColumn
+                            HeaderText="Дата конца аренды"
+                            MappingName="EndDate" />
                         <dataGrid:GridDateColumn
                             HeaderText="Дата"
                             MappingName="Date" />

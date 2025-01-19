@@ -46,19 +46,19 @@ public partial class RentalDto
     [ObservableProperty]
     private RentalTariffEnum _tariff;
 
-    #region LinkedEntities
-
     [ObservableProperty]
     private ObservableCollection<int> _carIds = new();
+
+    [ObservableProperty]
+    private int? _clientId;
+
+    #region LinkedEntities
 
     [ObservableProperty]
     private ObservableCollection<CarDto> _cars = new();
 
     [ObservableProperty]
     private BranchDto? _branch;
-
-    [ObservableProperty]
-    private int? _clientId;
 
     [ObservableProperty]
     private ClientDto? _client;

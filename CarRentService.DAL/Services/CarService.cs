@@ -76,4 +76,12 @@ public class CarService : BaseCrudService<Car>, ICarService
     {
         dto.Branch = _mapper.Map<BranchDto>(_store.Branch.FirstOrDefault(p => p.Id == dto.BranchId));
     }
+
+    public void IncludeBranches(IEnumerable<CarDto> dtos)
+    {
+        foreach (var dto in dtos)
+        {
+            IncludeBranch(dto);
+        }
+    }
 }

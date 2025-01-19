@@ -11,9 +11,7 @@ public class ClientMappingProfile : Profile
     {
         CreateMap<Client, Client>();
 
-        // TODO: попробовать удалить
-        CreateMap<Client, ClientDto>()
-            .ForMember(dest => dest.CurrentCars, opt => opt.Ignore());
+        CreateMap<Client, ClientDto>();
 
         CreateMap<ClientDto, Client>();
     }

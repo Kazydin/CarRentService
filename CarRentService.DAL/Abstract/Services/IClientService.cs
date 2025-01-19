@@ -13,5 +13,5 @@ public interface IClientService : ICrudService<Client>
 
     void IncludeRentals(ClientDto dto);
 
-    void IncludeCurrentCars(ClientDto dto);
+    // void IncludeCars(ClientDto dto);
 }

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using AutoMapper;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Dtos;
@@ -31,11 +33,21 @@ public partial class ViewClientViewModel : BaseViewModel
 
     [ObservableProperty] private ClientDto _client;
 
-    [ObservableProperty] private ObservableCollection<Branch> _branches;
+    [ObservableProperty] private ObservableCollection<ClientCarDto> _cars;
+
+    [ObservableProperty] private ObservableCollection<ClientInsuranceDto> _insurances;
+
+    [ObservableProperty] private ObservableCollection<ClientPaymentDto> _payments;
+
+    [ObservableProperty] private ObservableCollection<BranchDto> _branches;
 
     private readonly INavigationService _navigationService;
 
     private readonly IClientService _clientService;
+
+    private readonly IRentalService _rentalService;
+
+    private readonly ICarService _carService;
 
     private readonly IBranchService _branchService;
 
@@ -47,13 +59,17 @@ public partial class ViewClientViewModel : BaseViewModel
         INotificationService notificationService,
         IClientService clientService,
         IMapper mapper,
-        IBranchService branchService)
+        IBranchService branchService,
+        IRentalService rentalService,
+        ICarService carService)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
         _clientService = clientService;
         _mapper = mapper;
         _branchService = branchService;
+        _rentalService = rentalService;
+        _carService = carService;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -64,14 +80,15 @@ public partial class ViewClientViewModel : BaseViewModel
         AddRentalCommand = new RelayCommand<object>(AddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
 
-        Branches = _branchService.Table;
+        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchService.Table);
     }
 
     private void EditRental(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id!.Value));
+            _navigationService.Navigate(PageTypeEnum.EditRental,
+                parameters: new CommonNavigationData(record.Id!.Value));
         }
     }
 
@@ -123,6 +140,23 @@ public partial class ViewClientViewModel : BaseViewModel
         }
 
         Client = _clientService.GetDto(entityId.Value);
+        _rentalService.IncludeCars(Client.Rentals);
+        _carService.IncludeBranches(Client.Rentals.SelectMany(p => p.Cars));
+        SetDtos();
+    }
+
+    private void SetDtos()
+    {
+        Cars = new();
+        Insurances = new();
+        Payments = new();
+
+        foreach (var rental in Client.Rentals)
+        {
+            Cars = Cars.Union(rental.Cars.Select(p => new ClientCarDto(rental, p)).ToObservableCollection()).ToObservableCollection();
+            Insurances = Insurances.Union(rental.Insurances.Select(p => new ClientInsuranceDto(rental, p)).ToObservableCollection()).ToObservableCollection();
+            Payments = Payments.Union(rental.Payments.Select(p => new ClientPaymentDto(rental, p)).ToObservableCollection()).ToObservableCollection();
+        }
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid, SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,
