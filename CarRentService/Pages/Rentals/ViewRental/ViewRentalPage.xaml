@@ -162,6 +162,7 @@
                     Margin="5, 10, 0, 0"
                     Grid.Row="4"
                     Grid.Column="1"
+                    x:Name="RentalBranch"
                     HorizontalAlignment="Stretch"
                     TextMemberPath="Name"
                     DisplayMemberPath="Name"

@@ -14,5 +14,7 @@ public class InsuranceConfiguration : IEntityTypeConfiguration<Insurance>
 
         builder.HasOne(p => p.Rental)
             .WithMany(p => p.Insurances);
+
+        builder.HasOne(p => p.Car);
     }
 }

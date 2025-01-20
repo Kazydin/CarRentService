@@ -12,7 +12,7 @@ public class Insurance : IEntity
 
     public Rental Rental { get; set; }
 
-    public int CarId { get; set; }
+    public Car Car { get; set; }
 
     /// <summary>
     /// Тип страховки (например, полное или частичное покрытие).

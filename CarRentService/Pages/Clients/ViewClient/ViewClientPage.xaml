@@ -12,406 +12,407 @@
     xmlns:editors="using:Syncfusion.UI.Xaml.Editors"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ViewClientViewModel }">
 
-    <Pivot
-        Margin="47, 20, 47, 20">
-        <PivotItem
-            Header="Основная информация">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="*" />
-                    <ColumnDefinition
-                        Width="*" />
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <CommandBar
-                    DefaultLabelPosition="Right"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3">
-                    <AppBarButton
-                        Icon="Delete"
-                        Command="{Binding DeleteClientCommand}"
-                        Label="Удалить клиента" />
-                </CommandBar>
-                <StackPanel
-                    Margin="0, 10, 5, 10"
-                    Grid.Row="1"
-                    Grid.Column="0">
-                    <TextBlock
-                        Margin="0, 0, 0, 10">
-                        ID клиента
-                    </TextBlock>
-                    <TextBox
-                        Text="{Binding Client.Id, Mode=TwoWay}"
-                        IsEnabled="False" />
+    <Grid Margin="47, 20, 47, 47">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Pivot>
+            <PivotItem
+                Header="Основная информация">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <CommandBar
+                        DefaultLabelPosition="Right"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3">
+                        <AppBarButton
+                            Icon="Delete"
+                            Command="{Binding DeleteClientCommand}"
+                            Label="Удалить клиента" />
+                    </CommandBar>
+                    <StackPanel
+                        Margin="0, 10, 5, 10"
+                        Grid.Row="1"
+                        Grid.Column="0">
+                        <TextBlock
+                            Margin="0, 0, 0, 10">
+                            ID клиента
+                        </TextBlock>
+                        <TextBox
+                            Text="{Binding Client.Id, Mode=TwoWay}"
+                            IsEnabled="False" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="0, 10, 5, 5"
+                        Grid.Row="2"
+                        Grid.Column="0">
+                        <TextBlock
+                            Margin="0, 0, 0, 10">
+                            Фамилия Имя Отчество
+                        </TextBlock>
+                        <TextBox
+                            Text="{Binding Client.Fio, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="5, 10, 5, 10"
+                        Grid.Row="2"
+                        Grid.Column="1">
+                        <TextBlock
+                            Margin="0, 0, 0, 10">
+                            Возраст
+                        </TextBlock>
+                        <TextBox
+                            Text="{Binding Client.Age, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="5, 10, 5, 10"
+                        Grid.Row="2"
+                        Grid.Column="2">
+                        <TextBlock
+                            Margin="0, 0, 0, 10">
+                            Телефон
+                        </TextBlock>
+                        <TextBox
+                            Text="{Binding Client.Phone, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="0, 10, 5, 10"
+                        Grid.Row="3"
+                        Grid.Column="0">
+                        <TextBlock
+                            Margin="0, 0, 0, 10">
+                            Номер водительского удостоверения
+                        </TextBlock>
+                        <TextBox
+                            Text="{Binding Client.DriverLicenseNumber, Mode=TwoWay}" />
+                    </StackPanel>
+                    <editors:SfComboBox
+                        ItemsSource="{Binding Branches, Mode=OneWay}"
+                        Header="Филиал договора (основной)"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="5, 11, 5, 0"
+                        TextMemberPath="Name"
+                        DisplayMemberPath="Name"
+                        x:Name="ClientBranch"
+                        SelectedValuePath="Name"
+                        SelectedItem="{Binding Client.Branch, Mode=TwoWay}"
+                        Width="Auto"
+                        HorizontalAlignment="Stretch" />
+
+                </Grid>
+            </PivotItem>
+            <PivotItem
+                Header="Аренды">
+                <StackPanel>
+                    <CommandBar
+                        DefaultLabelPosition="Right">
+                        <AppBarButton
+                            Icon="Add"
+                            Command="{Binding AddRentalCommand}"
+                            Label="Добавить" />
+                        <AppBarButton
+                            Icon="Clear"
+                            Command="{Binding ClearFiltersAndSortCommand}"
+                            CommandParameter="Rentals"
+                            Label="Сбросить группировку, фильтры и сортировку" />
+                    </CommandBar>
+
+                    <dataGrid:SfDataGrid
+                        x:Name="RentalsDataGrid"
+                        AutoGenerateColumns="False"
+                        AllowEditing="False"
+                        AllowFiltering="True"
+                        ShowGroupDropArea="True"
+                        LiveDataUpdateMode="AllowDataShaping"
+                        AllowDraggingColumns="True"
+                        GridLinesVisibility="Both"
+                        HeaderLinesVisibility="Both"
+                        MinHeight="400"
+                        IsGroupDropAreaExpanded="True"
+                        ColumnWidthMode="Star"
+                        ItemsSource="{Binding Client.Rentals}">
+                        <dataGrid:SfDataGrid.DetailsViewDefinition>
+                            <dataGrid:GridViewDefinition
+                                RelationalColumn="Cars">
+                                <dataGrid:GridViewDefinition.DataGrid>
+                                    <dataGrid:SfDataGrid
+                                        AllowEditing="False"
+                                        AllowFiltering="True"
+                                        ShowGroupDropArea="True"
+                                        LiveDataUpdateMode="AllowDataShaping"
+                                        AllowDraggingColumns="True"
+                                        GridLinesVisibility="Both"
+                                        HeaderLinesVisibility="Both"
+                                        IsGroupDropAreaExpanded="True"
+                                        ColumnWidthMode="Star"
+                                        AutoGenerateColumns="False">
+                                        <dataGrid:SfDataGrid.Columns>
+                                            <dataGrid:GridNumericColumn
+                                                HeaderText="ID автомобиля"
+                                                MappingName="Id" />
+                                            <dataGrid:GridTextColumn
+                                                HeaderText="Регистрационный номер"
+                                                MappingName="RegistrationNumber" />
+                                            <dataGrid:GridTextColumn
+                                                HeaderText="Статус"
+                                                DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
+                                            <dataGrid:GridTextColumn
+                                                HeaderText="Марка"
+                                                MappingName="Make" />
+                                            <dataGrid:GridTextColumn
+                                                HeaderText="Модель"
+                                                MappingName="Model" />
+                                            <dataGrid:GridNumericColumn
+                                                MappingName="Year"
+                                                HeaderText="Год" />
+                                            <dataGrid:GridNumericColumn
+                                                HeaderText="Л.С."
+                                                MappingName="HorsePower" />
+                                            <dataGrid:GridNumericColumn
+                                                HeaderText="Пробег"
+                                                MappingName="Mileage" />
+                                        </dataGrid:SfDataGrid.Columns>
+                                    </dataGrid:SfDataGrid>
+                                </dataGrid:GridViewDefinition.DataGrid>
+                            </dataGrid:GridViewDefinition>
+                        </dataGrid:SfDataGrid.DetailsViewDefinition>
+                        <dataGrid:SfDataGrid.Columns>
+                            <dataGrid:GridNumericColumn
+                                HeaderText="ID аренды"
+                                MappingName="Id" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Статус"
+                                DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата начала"
+                                MappingName="StartDate" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата конца"
+                                MappingName="EndDate" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Тариф"
+                                DisplayBinding="{Binding Path=Tariff, Converter={StaticResource EnumToDescriptionConverter}}" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="Стоимость"
+                                MappingName="TotalCost" />
+                        </dataGrid:SfDataGrid.Columns>
+                        <dataGrid:SfDataGrid.RecordContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem
+                                    Text="Изменить"
+                                    Command="{Binding Path=DataGrid.DataContext.EditRentalCommand}"
+                                    CommandParameter="{Binding}" />
+                                <MenuFlyoutItem
+                                    Text="Удалить"
+                                    Command="{Binding Path=DataGrid.DataContext.DeleteRentalCommand}"
+                                    CommandParameter="{Binding}" />
+                            </MenuFlyout>
+                        </dataGrid:SfDataGrid.RecordContextFlyout>
+                    </dataGrid:SfDataGrid>
                 </StackPanel>
-                <StackPanel
-                    Margin="0, 10, 5, 5"
-                    Grid.Row="2"
-                    Grid.Column="0">
-                    <TextBlock
-                        Margin="0, 0, 0, 10">
-                        Фамилия Имя Отчество
-                    </TextBlock>
-                    <TextBox
-                        Text="{Binding Client.Fio, Mode=TwoWay}" />
+            </PivotItem>
+            <PivotItem
+                Header="Автомобили">
+                <StackPanel>
+                    <CommandBar
+                        DefaultLabelPosition="Right">
+                        <AppBarButton
+                            Icon="Clear"
+                            Command="{Binding ClearFiltersAndSortCommand}"
+                            CommandParameter="Cars"
+                            Label="Сбросить группировку, фильтры и сортировку" />
+                    </CommandBar>
+
+                    <dataGrid:SfDataGrid
+                        x:Name="CarsDataGrid"
+                        AutoGenerateColumns="False"
+                        AllowEditing="False"
+                        AllowFiltering="True"
+                        ShowGroupDropArea="True"
+                        LiveDataUpdateMode="AllowDataShaping"
+                        MinHeight="400"
+                        AllowDraggingColumns="True"
+                        GridLinesVisibility="Both"
+                        HeaderLinesVisibility="Both"
+                        IsGroupDropAreaExpanded="True"
+                        ColumnWidthMode="Star"
+                        ItemsSource="{Binding Cars}">
+
+                        <dataGrid:SfDataGrid.Columns>
+                            <dataGrid:GridNumericColumn
+                                HeaderText="ID автомобиля"
+                                MappingName="Id" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Регистрационный номер"
+                                MappingName="RegistrationNumber" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="ID аренды"
+                                MappingName="CurrentRental.Id" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата начала аренды"
+                                MappingName="CurrentRental.StartDate" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата конца аренды"
+                                MappingName="CurrentRental.EndDate" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Марка"
+                                MappingName="Make" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Модель"
+                                MappingName="Model" />
+                            <dataGrid:GridNumericColumn
+                                MappingName="Year"
+                                HeaderText="Год" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="Л.С."
+                                MappingName="HorsePower" />
+                        </dataGrid:SfDataGrid.Columns>
+
+                    </dataGrid:SfDataGrid>
                 </StackPanel>
-                <StackPanel
-                    Margin="5, 10, 5, 10"
-                    Grid.Row="2"
-                    Grid.Column="1">
-                    <TextBlock
-                        Margin="0, 0, 0, 10">
-                        Возраст
-                    </TextBlock>
-                    <TextBox
-                        Text="{Binding Client.Age, Mode=TwoWay}" />
+            </PivotItem>
+            <PivotItem
+                Header="Страховки">
+                <StackPanel>
+                    <CommandBar
+                        DefaultLabelPosition="Right">
+                        <AppBarButton
+                            Icon="Clear"
+                            Command="{Binding ClearFiltersAndSortCommand}"
+                            CommandParameter="Insurances"
+                            Label="Сбросить группировку, фильтры и сортировку" />
+                    </CommandBar>
+
+                    <dataGrid:SfDataGrid
+                        x:Name="InsurancesDataGrid"
+                        AllowEditing="False"
+                        AllowFiltering="True"
+                        ShowGroupDropArea="True"
+                        MinHeight="400"
+                        LiveDataUpdateMode="AllowDataShaping"
+                        AllowDraggingColumns="True"
+                        GridLinesVisibility="Both"
+                        HeaderLinesVisibility="Both"
+                        IsGroupDropAreaExpanded="True"
+                        ColumnWidthMode="Star"
+                        ItemsSource="{Binding Insurances}">
+
+                        <dataGrid:SfDataGrid.Columns>
+                            <dataGrid:GridNumericColumn
+                                HeaderText="ID страховки"
+                                MappingName="Id" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="ID аренды"
+                                MappingName="RentalId" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата начала аренды"
+                                MappingName="StartDate" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата конца аренды"
+                                MappingName="EndDate" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="ID автомобиля"
+                                MappingName="Id" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Страхуемый автомобиль"
+                                MappingName="Car.Name" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Тип"
+                                DisplayBinding="{Binding Path=Type, Converter={StaticResource EnumToDescriptionConverter}}" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="Стоимость"
+                                MappingName="Cost" />
+                        </dataGrid:SfDataGrid.Columns>
+                    </dataGrid:SfDataGrid>
                 </StackPanel>
-                <StackPanel
-                    Margin="5, 10, 5, 10"
-                    Grid.Row="2"
-                    Grid.Column="2">
-                    <TextBlock
-                        Margin="0, 0, 0, 10">
-                        Телефон
-                    </TextBlock>
-                    <TextBox
-                        Text="{Binding Client.Phone, Mode=TwoWay}" />
+            </PivotItem>
+            <PivotItem
+                Header="Платежи">
+                <StackPanel>
+                    <CommandBar
+                        DefaultLabelPosition="Right">
+                        <AppBarButton
+                            Icon="Clear"
+                            Command="{Binding ClearFiltersAndSortCommand}"
+                            CommandParameter="Insurances"
+                            Label="Сбросить группировку, фильтры и сортировку" />
+                    </CommandBar>
+
+                    <dataGrid:SfDataGrid
+                        x:Name="PaymentsDataGrid"
+                        AutoGenerateColumns="False"
+                        AllowEditing="False"
+                        AllowFiltering="True"
+                        ShowGroupDropArea="True"
+                        LiveDataUpdateMode="AllowDataShaping"
+                        AllowDraggingColumns="True"
+                        GridLinesVisibility="Both"
+                        HeaderLinesVisibility="Both"
+                        IsGroupDropAreaExpanded="True"
+                        MinHeight="400"
+                        ColumnWidthMode="Star"
+                        ItemsSource="{Binding Payments}">
+
+                        <dataGrid:SfDataGrid.Columns>
+                            <dataGrid:GridNumericColumn
+                                HeaderText="ID платежа"
+                                MappingName="Id" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="ID аренды"
+                                MappingName="RentalId" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата начала аренды"
+                                MappingName="StartDate" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата конца аренды"
+                                MappingName="EndDate" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата"
+                                MappingName="Date" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Метод"
+                                DisplayBinding="{Binding Path=Method, Converter={StaticResource EnumToDescriptionConverter}}" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="Сумма, руб."
+                                MappingName="Amount" />
+                        </dataGrid:SfDataGrid.Columns>
+                    </dataGrid:SfDataGrid>
                 </StackPanel>
-                <StackPanel
-                    Margin="0, 10, 5, 10"
-                    Grid.Row="3"
-                    Grid.Column="0">
-                    <TextBlock
-                        Margin="0, 0, 0, 10">
-                        Номер водительского удостоверения
-                    </TextBlock>
-                    <TextBox
-                        Text="{Binding Client.DriverLicenseNumber, Mode=TwoWay}" />
-                </StackPanel>
-                <editors:SfComboBox
-                    ItemsSource="{Binding Branches, Mode=OneWay}"
-                    Header="Филиал договора (основной)"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    Margin="5, 11, 5, 0"
-                    TextMemberPath="Name"
-                    DisplayMemberPath="Name"
-                    x:Name="ClientBranch"
-                    SelectedValuePath="Name"
-                    SelectedItem="{Binding Client.Branch, Mode=TwoWay}"
-                    Width="Auto"
-                    HorizontalAlignment="Stretch"/>
-                <StackPanel
-                    Grid.Row="4"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
-                    Margin="0, 15, 0, 0"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
-                    <Button
-                        Margin="0, 0, 10, 0"
-                        Command="{Binding SaveCommand}">
-                        Сохранить
-                    </Button>
-                    <Button
-                        Command="{Binding CancelEditCommand}">
-                        Отмена
-                    </Button>
-                </StackPanel>
-            </Grid>
-        </PivotItem>
-        <PivotItem
-            Header="Аренды">
-            <StackPanel>
-                <CommandBar
-                    DefaultLabelPosition="Right">
-                    <AppBarButton
-                        Icon="Add"
-                        Command="{Binding AddRentalCommand}"
-                        Label="Добавить" />
-                    <AppBarButton
-                        Icon="Clear"
-                        Command="{Binding ClearFiltersAndSortCommand}"
-                        CommandParameter="Rentals"
-                        Label="Сбросить группировку, фильтры и сортировку" />
-                </CommandBar>
-
-                <dataGrid:SfDataGrid
-                    x:Name="RentalsDataGrid"
-                    AutoGenerateColumns="False"
-                    AllowEditing="False"
-                    AllowFiltering="True"
-                    ShowGroupDropArea="True"
-                    LiveDataUpdateMode="AllowDataShaping"
-                    AllowDraggingColumns="True"
-                    GridLinesVisibility="Both"
-                    HeaderLinesVisibility="Both"
-                    MinHeight="400"
-                    IsGroupDropAreaExpanded="True"
-                    ColumnWidthMode="Star"
-                    ItemsSource="{Binding Client.Rentals}">
-                    <dataGrid:SfDataGrid.DetailsViewDefinition>
-                        <dataGrid:GridViewDefinition
-                            RelationalColumn="Cars">
-                            <dataGrid:GridViewDefinition.DataGrid>
-                                <dataGrid:SfDataGrid
-                                    AllowEditing="False"
-                                    AllowFiltering="True"
-                                    ShowGroupDropArea="True"
-                                    LiveDataUpdateMode="AllowDataShaping"
-                                    AllowDraggingColumns="True"
-                                    GridLinesVisibility="Both"
-                                    HeaderLinesVisibility="Both"
-                                    IsGroupDropAreaExpanded="True"
-                                    ColumnWidthMode="Star"
-                                    AutoGenerateColumns="False">
-                                    <dataGrid:SfDataGrid.Columns>
-                                        <dataGrid:GridNumericColumn
-                                            HeaderText="ID автомобиля"
-                                            MappingName="Id" />
-                                        <dataGrid:GridTextColumn
-                                            HeaderText="Регистрационный номер"
-                                            MappingName="RegistrationNumber" />
-                                        <dataGrid:GridTextColumn
-                                            HeaderText="Статус"
-                                            DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
-                                        <dataGrid:GridTextColumn
-                                            HeaderText="Марка"
-                                            MappingName="Make" />
-                                        <dataGrid:GridTextColumn
-                                            HeaderText="Модель"
-                                            MappingName="Model" />
-                                        <dataGrid:GridNumericColumn
-                                            MappingName="Year"
-                                            HeaderText="Год" />
-                                        <dataGrid:GridNumericColumn
-                                            HeaderText="Л.С."
-                                            MappingName="HorsePower" />
-                                        <dataGrid:GridNumericColumn
-                                            HeaderText="Пробег"
-                                            MappingName="Mileage" />
-                                    </dataGrid:SfDataGrid.Columns>
-                                </dataGrid:SfDataGrid>
-                            </dataGrid:GridViewDefinition.DataGrid>
-                        </dataGrid:GridViewDefinition>
-                    </dataGrid:SfDataGrid.DetailsViewDefinition>
-                    <dataGrid:SfDataGrid.Columns>
-                        <dataGrid:GridNumericColumn
-                            HeaderText="ID аренды"
-                            MappingName="Id" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Статус"
-                            DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата начала"
-                            MappingName="StartDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата конца"
-                            MappingName="EndDate" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Тариф"
-                            DisplayBinding="{Binding Path=Tariff, Converter={StaticResource EnumToDescriptionConverter}}" />
-                        <dataGrid:GridNumericColumn
-                            HeaderText="Стоимость"
-                            MappingName="TotalCost" />
-                    </dataGrid:SfDataGrid.Columns>
-                    <dataGrid:SfDataGrid.RecordContextFlyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem
-                                Text="Изменить"
-                                Command="{Binding Path=DataGrid.DataContext.EditRentalCommand}"
-                                CommandParameter="{Binding}" />
-                            <MenuFlyoutItem
-                                Text="Удалить"
-                                Command="{Binding Path=DataGrid.DataContext.DeleteRentalCommand}"
-                                CommandParameter="{Binding}" />
-                        </MenuFlyout>
-                    </dataGrid:SfDataGrid.RecordContextFlyout>
-                </dataGrid:SfDataGrid>
-            </StackPanel>
-        </PivotItem>
-        <PivotItem
-            Header="Автомобили">
-            <StackPanel>
-                <CommandBar
-                    DefaultLabelPosition="Right">
-                    <AppBarButton
-                        Icon="Clear"
-                        Command="{Binding ClearFiltersAndSortCommand}"
-                        CommandParameter="Cars"
-                        Label="Сбросить группировку, фильтры и сортировку" />
-                </CommandBar>
-
-                <dataGrid:SfDataGrid
-                    x:Name="CarsDataGrid"
-                    AutoGenerateColumns="False"
-                    AllowEditing="False"
-                    AllowFiltering="True"
-                    ShowGroupDropArea="True"
-                    LiveDataUpdateMode="AllowDataShaping"
-                    MinHeight="400"
-                    AllowDraggingColumns="True"
-                    GridLinesVisibility="Both"
-                    HeaderLinesVisibility="Both"
-                    IsGroupDropAreaExpanded="True"
-                    ColumnWidthMode="Star"
-                    ItemsSource="{Binding Client.Cars}">
-
-                    <dataGrid:SfDataGrid.Columns>
-                        <dataGrid:GridNumericColumn
-                            HeaderText="ID автомобиля"
-                            MappingName="Id" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Регистрационный номер"
-                            MappingName="RegistrationNumber" />
-                        <dataGrid:GridNumericColumn
-                            HeaderText="ID аренды"
-                            MappingName="RentalId" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата начала аренды"
-                            MappingName="StartDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата конца аренды"
-                            MappingName="EndDate" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Марка"
-                            MappingName="Make" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Модель"
-                            MappingName="Model" />
-                        <dataGrid:GridNumericColumn
-                            MappingName="Year"
-                            HeaderText="Год" />
-                        <dataGrid:GridNumericColumn
-                            HeaderText="Л.С."
-                            MappingName="HorsePower" />
-                    </dataGrid:SfDataGrid.Columns>
-
-                </dataGrid:SfDataGrid>
-            </StackPanel>
-        </PivotItem>
-        <PivotItem
-            Header="Страховки">
-            <StackPanel>
-                <CommandBar
-                    DefaultLabelPosition="Right">
-                    <AppBarButton
-                        Icon="Clear"
-                        Command="{Binding ClearFiltersAndSortCommand}"
-                        CommandParameter="Insurances"
-                        Label="Сбросить группировку, фильтры и сортировку" />
-                </CommandBar>
-
-                <dataGrid:SfDataGrid
-                    x:Name="InsurancesDataGrid"
-                    AllowEditing="False"
-                    AllowFiltering="True"
-                    ShowGroupDropArea="True"
-                    MinHeight="400"
-                    LiveDataUpdateMode="AllowDataShaping"
-                    AllowDraggingColumns="True"
-                    GridLinesVisibility="Both"
-                    HeaderLinesVisibility="Both"
-                    IsGroupDropAreaExpanded="True"
-                    ColumnWidthMode="Star"
-                    ItemsSource="{Binding Client.Insurances}">
-
-                    <dataGrid:SfDataGrid.Columns>
-                        <dataGrid:GridNumericColumn
-                            HeaderText="ID страховки"
-                            MappingName="Id" />
-                        <dataGrid:GridNumericColumn
-                            HeaderText="ID аренды"
-                            MappingName="RentalId" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата начала аренды"
-                            MappingName="StartDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата конца аренды"
-                            MappingName="EndDate" />
-                        <dataGrid:GridNumericColumn
-                            HeaderText="ID автомобиля"
-                            MappingName="Id" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Страхуемый автомобиль"
-                            MappingName="Car.Name" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Тип"
-                            DisplayBinding="{Binding Path=Type, Converter={StaticResource EnumToDescriptionConverter}}" />
-                        <dataGrid:GridNumericColumn
-                            HeaderText="Стоимость"
-                            MappingName="Cost" />
-                    </dataGrid:SfDataGrid.Columns>
-                </dataGrid:SfDataGrid>
-            </StackPanel>
-        </PivotItem>
-        <PivotItem
-            Header="Платежи">
-            <StackPanel>
-                <CommandBar
-                    DefaultLabelPosition="Right">
-                    <AppBarButton
-                        Icon="Clear"
-                        Command="{Binding ClearFiltersAndSortCommand}"
-                        CommandParameter="Insurances"
-                        Label="Сбросить группировку, фильтры и сортировку" />
-                </CommandBar>
-
-                <dataGrid:SfDataGrid
-                    x:Name="PaymentsDataGrid"
-                    AutoGenerateColumns="False"
-                    AllowEditing="False"
-                    AllowFiltering="True"
-                    ShowGroupDropArea="True"
-                    LiveDataUpdateMode="AllowDataShaping"
-                    AllowDraggingColumns="True"
-                    GridLinesVisibility="Both"
-                    HeaderLinesVisibility="Both"
-                    IsGroupDropAreaExpanded="True"
-                    MinHeight="400"
-                    ColumnWidthMode="Star"
-                    ItemsSource="{Binding Client.Payments}">
-
-                    <dataGrid:SfDataGrid.Columns>
-                        <dataGrid:GridNumericColumn
-                            HeaderText="ID платежа"
-                            MappingName="Id" />
-                        <dataGrid:GridNumericColumn
-                            HeaderText="ID аренды"
-                            MappingName="RentalId" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата начала аренды"
-                            MappingName="StartDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата конца аренды"
-                            MappingName="EndDate" />
-                        <dataGrid:GridDateColumn
-                            HeaderText="Дата"
-                            MappingName="Date" />
-                        <dataGrid:GridTextColumn
-                            HeaderText="Метод"
-                            DisplayBinding="{Binding Path=Method, Converter={StaticResource EnumToDescriptionConverter}}" />
-                        <dataGrid:GridNumericColumn
-                            HeaderText="Сумма, руб."
-                            MappingName="Amount" />
-                    </dataGrid:SfDataGrid.Columns>
-                </dataGrid:SfDataGrid>
-            </StackPanel>
-        </PivotItem>
-    </Pivot>
+            </PivotItem>
+        </Pivot>
+        <StackPanel
+            HorizontalAlignment="Right"
+            Grid.Row="1"
+            Orientation="Horizontal">
+            <Button
+                Margin="0, 0, 10, 0"
+                Command="{Binding SaveCommand}">
+                Сохранить
+            </Button>
+            <Button
+                Command="{Binding CancelEditCommand}">
+                Отмена
+            </Button>
+        </StackPanel>
+    </Grid>
 </abstract:NavigationPage>

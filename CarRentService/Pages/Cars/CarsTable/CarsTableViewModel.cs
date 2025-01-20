@@ -23,8 +23,6 @@ public partial class CarsTableViewModel : BaseViewModel
 
     public RelayCommand<object> EditCarCommand { get; }
 
-    public RelayCommand<object> EditCurrentRentalCommand { get; }
-
     public RelayCommand<object> DeleteCarCommand { get; }
 
     public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
@@ -49,7 +47,6 @@ public partial class CarsTableViewModel : BaseViewModel
         // Настройка команд
         AddCarCommand = new RelayCommand(AddCar);
         EditCarCommand = new RelayCommand<object>(EditCar);
-        EditCurrentRentalCommand = new RelayCommand<object>(EditCurrentRental);
         DeleteCarCommand = new RelayCommand<object>(DeleteCar);
         ClearFiltersAndSortCommand = new RelayCommand<object?>(ClearFiltersAndSort);
     }
@@ -71,14 +68,6 @@ public partial class CarsTableViewModel : BaseViewModel
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
             _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.Id!.Value));
-        }
-    }
-
-    private void EditCurrentRental(object? param)
-    {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
-        {
-            _navigationService.Navigate(PageTypeEnum.EditCar, parameters: new CommonNavigationData(record.ActiveRental!.Id!.Value));
         }
     }
 

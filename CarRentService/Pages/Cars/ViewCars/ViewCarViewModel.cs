@@ -144,6 +144,8 @@ public partial class ViewCarViewModel : BaseViewModel
             await UpdateState(car.Id);
 
             _notificationService.ShowTip("Обновление автомобиля", "Сохранено успешно!");
+
+            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {

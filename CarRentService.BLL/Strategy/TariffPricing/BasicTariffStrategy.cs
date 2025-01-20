@@ -11,6 +11,11 @@ public class BasicTariffStrategy : ITariffPricingStrategy
     {
         double cost = 0;
 
+        if (rental.Client == null)
+        {
+            return cost;
+        }
+
         foreach (var rentalCar in rental.Cars)
         {
             cost += BasicRate * GetPowerRate(rentalCar.HorsePower) * GetYearsRate(rental.Client!.DrivingExperienceYears) * GetRentDaysRate(rental.RentalDays);

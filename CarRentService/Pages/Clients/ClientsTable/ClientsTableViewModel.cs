@@ -54,6 +54,7 @@ public partial class ClientsTableViewModel : BaseViewModel
     public void UpdateState()
     {
         Clients = _store.Clients
+            .Include(p => p.Branch)
             .Select(p => _clientMapper.Map(p))
             .ToObservableCollection();
     }

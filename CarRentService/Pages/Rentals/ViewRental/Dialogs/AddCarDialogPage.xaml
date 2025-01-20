@@ -16,7 +16,9 @@
         <editors:SfAutoComplete PlaceholderText="Выберте автомобиль"
                                 ItemsSource="{Binding Cars}"
                                 DisplayMemberPath="Name"
+                                TextSearchMode="Contains"
                                 HorizontalAlignment="Stretch"
+                                TextHighlightMode="Matched"
                                 SelectedItem="{Binding Car, Mode=TwoWay}"
                                 MaxDropDownHeight="300" />
 

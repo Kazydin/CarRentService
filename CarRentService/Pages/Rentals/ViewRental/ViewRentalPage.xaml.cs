@@ -31,6 +31,8 @@ public sealed partial class ViewRentalPage : NavigationPage
         {
             await _viewModel.UpdateState();
             Header = "Создание аренды";
+
+            RentalBranch.SelectedIndex = -1;
         }
     }
 

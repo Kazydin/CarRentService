@@ -49,10 +49,7 @@
                     MappingName="Id" />
                 <dataGrid:GridTextColumn
                     HeaderText="Статус"
-                    MappingName="Status" />
-                <dataGrid:GridTextColumn
-                    HeaderText="ID текущей аренды"
-                    MappingName="RentalId" />
+                    DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
                 <dataGrid:GridTextColumn
                     HeaderText="Марка"
                     MappingName="Make" />
@@ -69,10 +66,6 @@
                     <MenuFlyoutItem
                         Text="Изменить автомобиль"
                         Command="{Binding Path=DataGrid.DataContext.EditCarCommand}"
-                        CommandParameter="{Binding}" />
-                    <MenuFlyoutItem
-                        Text="Изменить текущую аренду"
-                        Command="{Binding Path=DataGrid.DataContext.EditRentalCommand}"
                         CommandParameter="{Binding}" />
                     <MenuFlyoutItem
                         Text="Удалить"

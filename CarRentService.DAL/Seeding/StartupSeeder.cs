@@ -8,9 +8,9 @@ public class StartupSeeder(IEnumerable<ISeeder> seeders)
 {
     public void Run()
     {
-        // foreach (var seeder in seeders.OrderBy(p => p.SeederType))
-        // {
-        //     seeder.Seed();
-        // }
+        foreach (var seeder in seeders.OrderBy(p => p.SeederType))
+        {
+            seeder.Seed();
+        }
     }
 }

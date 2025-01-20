@@ -67,6 +67,9 @@ public partial class CarDto
     [ObservableProperty]
     private BranchDto? _branch;
 
+    [ObservableProperty]
+    private RentalDto _currentRental;
+
     #endregion
 
     public int CarYears

@@ -37,6 +37,12 @@ public partial class ViewClientViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<BranchDto> _branches;
 
+    [ObservableProperty] private ObservableCollection<CarDto> _cars;
+
+    [ObservableProperty] private ObservableCollection<InsuranceDto> _insurances;
+
+    [ObservableProperty] private ObservableCollection<PaymentDto> _payments;
+
     private readonly INavigationService _navigationService;
 
     private readonly INotificationService _notificationService;
@@ -100,7 +106,10 @@ public partial class ViewClientViewModel : BaseViewModel
 
             _clientMapper.Map(Client, client);
 
-            client.Branch = await _store.Branches.SingleAsync(p => p.Id == Client.Branch!.Id);
+            if (Client.Branch != null)
+            {
+                client.Branch = await _store.Branches.SingleAsync(p => p.Id == Client.Branch!.Id);
+            }
 
             _clientMapper.Validate(client);
 
@@ -111,9 +120,11 @@ public partial class ViewClientViewModel : BaseViewModel
 
             await _store.SaveChangesAsync();
 
+            _notificationService.ShowTip("Обновление клиента", "Сохранено успешно!");
+
             await UpdateState(client.Id);
 
-            _notificationService.ShowTip("Обновление клиента", "Сохранено успешно!");
+            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {
@@ -166,12 +177,16 @@ public partial class ViewClientViewModel : BaseViewModel
         var client = await _store.Clients
             .Include(p => p.Branch)
             .Include(p => p.Rentals)
-            .Include(p => p.Branch)
+            .ThenInclude(p => p.Cars)
+            .ThenInclude(p => p.Rentals)
             .FirstOrDefaultAsync(p => p.Id == entityId);
 
         Guard.NotNull(client, "Клиент не найден");
 
         Client = _clientMapper.Map(client!);
+        Cars = Client.Rentals.SelectMany(p => p.Cars).ToObservableCollection();
+        Insurances = Client.Rentals.SelectMany(p => p.Insurances).ToObservableCollection();
+        Payments = Client.Rentals.SelectMany(p => p.Payments).ToObservableCollection();
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid, SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,

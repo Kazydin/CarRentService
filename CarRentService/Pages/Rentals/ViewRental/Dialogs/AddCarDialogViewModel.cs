@@ -1,16 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using AutoMapper;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GuardNet;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarRentService.Pages.Rentals.ViewRental.Dialogs;
 
@@ -39,21 +35,9 @@ public partial class AddCarDialogViewModel : IViewModel
         AddCarCommand = new RelayCommand(AddCar, CanAddCar);
     }
 
-    private async void AddCar()
+    private void AddCar()
     {
-        var rental = await _store.Rentals
-            .Include(p => p.Cars)
-            .FirstOrDefaultAsync(p => p.Id == Rental.Id);
-
-        Guard.NotNull(rental, "Не найдена аренда");
-
-        var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == Car.Id);
-
-        Guard.NotNull(car, "Не найден автомобиль");
-
-        rental!.Cars.Add(car!);
-
-        await _store.SaveChangesAsync();
+        Rental.Cars.Add(Car);
 
         CanExit = true;
     }

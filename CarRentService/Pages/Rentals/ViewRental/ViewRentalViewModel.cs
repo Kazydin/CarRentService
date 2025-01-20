@@ -250,14 +250,8 @@ public partial class ViewRentalViewModel : BaseViewModel
     {
         try
         {
-            var rental = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == Rental.Id);
+            var rental = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == Rental.Id) ?? new Rental();
 
-            if (rental == null)
-            {
-                rental = new Rental();
-
-                _store.Rentals.Add(rental);
-            }
             _rentalMapper.Map(Rental, rental);
 
             rental.Cars = await _store.Cars
@@ -272,6 +266,11 @@ public partial class ViewRentalViewModel : BaseViewModel
                 .SingleAsync(p => p.Id == Rental.Client!.Id);
 
             _rentalMapper.Validate(rental);
+
+            if (rental.Id == 0)
+            {
+                _store.Rentals.Add(rental);
+            }
 
             await _store.SaveChangesAsync();
 
