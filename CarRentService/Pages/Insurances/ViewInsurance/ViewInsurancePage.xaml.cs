@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
@@ -16,16 +17,16 @@ public sealed partial class ViewInsurancePage : NavigationPage
         _viewModel = viewModel;
     }
 
-    public override void OnNavigatedTo(INavigationData? parameters)
+    public override async Task OnNavigatedTo(INavigationData? parameters)
     {
         if (parameters is CommonNavigationData data)
         {
-            _viewModel.SetInsurance(data.EntityId);
+            await _viewModel.UpdateState(data.EntityId);
             Header = $"Редактирование страховки № {_viewModel.Insurance.Id}";
         }
         else
         {
-            _viewModel.SetInsurance();
+            await _viewModel.UpdateState();
             Header = "Создание страховки";
         }
     }

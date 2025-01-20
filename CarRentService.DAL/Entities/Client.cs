@@ -1,24 +1,19 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace CarRentService.DAL.Entities;
+﻿namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Клиент
 /// </summary>
-public partial class Client : Person
+public class Client : Person
 {
     /// <summary>
     /// Номер водительского удостоверения
     /// </summary>
-    [ObservableProperty]
-    private string _driverLicenseNumber;
+    public string DriverLicenseNumber { get; set; }
 
-    /// <summary>
-    /// ИД филиала, если есть привязка
-    /// </summary>
-    [ObservableProperty]
-    private int? _branchId;
+    public Branch Branch { get; set; }
 
-    [ObservableProperty]
-    private DateTime _driverLicenseIssuedDate;
+    public List<Rental> Rentals { get; set; }
+
+
+    public DateTime DriverLicenseIssuedDate;
 }

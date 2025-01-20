@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+using System.Linq;
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentValidation;
 using GuardNet;
+using Microsoft.EntityFrameworkCore;
+using Syncfusion.UI.Xaml.Data;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Branches.ViewBranch;
@@ -34,27 +39,33 @@ public partial class ViewBranchViewModel : BaseViewModel
 
     public RelayCommand<object> EditManagerCommand { get; }
 
+    public RelayCommand<object> DeleteManagerCommand { get; }
+
     public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
     [ObservableProperty] private BranchDto _branch;
 
     private readonly INavigationService _navigationService;
 
-    private readonly IBranchRepository _branchRepository;
-
     private readonly INotificationService _notificationService;
 
-    private readonly IMapper _mapper;
+    private readonly IUniversalMapper<BranchDto, Branch> _branchMapper;
+
+    private readonly AppDbContext _store;
+
+    private readonly AppState _appState;
 
     public ViewBranchViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IBranchRepository branchRepository,
-        IMapper mapper)
+        IUniversalMapper<BranchDto, Branch> branchMapper,
+        AppDbContext store,
+        AppState appState)
     {
         _navigationService = navigationService;
-        _branchRepository = branchRepository;
         _notificationService = notificationService;
-        _mapper = mapper;
+        _branchMapper = branchMapper;
+        _store = store;
+        _appState = appState;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -68,8 +79,9 @@ public partial class ViewBranchViewModel : BaseViewModel
         AddClientCommand = new RelayCommand(AddClient);
         EditClientCommand = new RelayCommand<object>(EditClient);
 
-        AddManagerCommand = new RelayCommand(AddManager);
+        AddManagerCommand = new RelayCommand(AddManager, CanAddManager);
         EditManagerCommand = new RelayCommand<object>(EditManager);
+        DeleteManagerCommand = new RelayCommand<object>(DeleteManager);
     }
 
     private void AddCar()
@@ -103,11 +115,25 @@ public partial class ViewBranchViewModel : BaseViewModel
         _navigationService.Navigate(PageTypeEnum.EditManager);
     }
 
+    private bool CanAddManager()
+    {
+        return _appState.CurrentUser!.Role == ManagerRoleEnum.Admin;
+    }
+
     private void EditManager(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is ManagerDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditManager, parameters: new CommonNavigationData(record.Id!.Value));
+            _navigationService.Navigate(PageTypeEnum.EditManager,
+                parameters: new CommonNavigationData(record.Id!.Value));
+        }
+    }
+
+    private async void DeleteManager(object? param)
+    {
+        if ((param as GridRecordContextFlyoutInfo)?.Record is ManagerDto record)
+        {
+            Branch.Managers.Remove(record);
         }
     }
 
@@ -115,7 +141,19 @@ public partial class ViewBranchViewModel : BaseViewModel
     {
         try
         {
-            _branchRepository.Update(_mapper.Map<Branch>(Branch));
+            var branch = await _store.Branches
+                .Include(p => p.Cars)
+                .Include(p => p.Clients)
+                .Include(p => p.Managers)
+                .SingleAsync(p => p.Id == Branch.Id);
+
+            _branchMapper.Map(Branch, branch);
+
+            branch.Cars = _store.Cars.Where(p => Branch.Cars.Select(r => r.Id).Contains(p.Id)).ToList();
+            branch.Clients = _store.Clients.Where(p => Branch.Clients.Select(r => r.Id).Contains(p.Id)).ToList();
+            branch.Managers = _store.Managers.Where(p => Branch.Managers.Select(r => r.Id).Contains(p.Id)).ToList();
+
+            await _store.SaveChangesAsync();
 
             _notificationService.ShowTip("Обновление филиала", "Сохранено успешно!");
 
@@ -127,12 +165,22 @@ public partial class ViewBranchViewModel : BaseViewModel
         }
     }
 
-    private void DeleteBranch()
+    private async void DeleteBranch()
     {
-        Guard.NotNull(Branch, "Нельзя удалить филиал, который еще не сохранен");
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Удаление филиала",
+                "Вы действительно хотите удалить филиал?");
 
-        _branchRepository.Remove(Branch.Id!.Value);
-        _navigationService.GoBack();
+        if (result)
+        {
+            var branch = await _store.Branches.FirstOrDefaultAsync(p => p.Id == Branch.Id);
+
+            Guard.NotNull(branch, "Не найден филиал");
+
+            _store.Branches.Remove(branch!);
+
+            _navigationService.GoBack();
+        }
     }
 
     public bool CanDeleteBranch()
@@ -145,7 +193,7 @@ public partial class ViewBranchViewModel : BaseViewModel
         _navigationService.GoBack();
     }
 
-    public void SetBranch(int? entityId = null)
+    public async Task UpdateState(int? entityId = null)
     {
         if (entityId == null)
         {
@@ -153,7 +201,15 @@ public partial class ViewBranchViewModel : BaseViewModel
             return;
         }
 
-        Branch = _branchRepository.GetDto(entityId.Value);
+        var branch = await _store.Branches
+            .Include(p => p.Cars)
+            .Include(p => p.Managers)
+            .Include(p => p.Clients)
+            .FirstOrDefaultAsync(p => p.Id == entityId);
+
+        Guard.NotNull(branch, "Филиал не найден");
+
+        Branch = _branchMapper.Map(branch!);
     }
 
     public void SetGrids(SfDataGrid carsDataGrid,

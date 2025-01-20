@@ -1,18 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
+using Windows.Media.Protection.PlayReady;
+using FluentValidation;
 
 namespace CarRentService.Pages.Cars.ViewCars;
 
@@ -31,6 +37,7 @@ public partial class ViewCarViewModel : BaseViewModel
     public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
     public RelayCommand SendToRepairCommand { get; }
+
     public RelayCommand ReturnFromRepairCommand { get; }
 
     [ObservableProperty] private CarDto _car;
@@ -39,22 +46,24 @@ public partial class ViewCarViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly ICarRepository _carRepository;
-
     private readonly INotificationService _notificationService;
 
-    private readonly IMapper _mapper;
+    private readonly IUniversalMapper<CarDto, Car> _carMapper;
+
+    private readonly IUniversalMapper<BranchDto, Branch> _branchMapper;
+
+    private readonly AppDbContext _store;
 
     public ViewCarViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        ICarRepository carRepository,
-        IMapper mapper,
-        IBranchRepository branchRepository)
+        IUniversalMapper<CarDto, Car> carMapper,
+        AppDbContext store,IUniversalMapper<BranchDto, Branch> branchMapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _carRepository = carRepository;
-        _mapper = mapper;
+        _carMapper = carMapper;
+        _store = store;
+        _branchMapper = branchMapper;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -67,8 +76,6 @@ public partial class ViewCarViewModel : BaseViewModel
 
         AddRentalCommand = new RelayCommand<object>(AddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
-
-        Branches = _mapper.Map<ObservableCollection<BranchDto>>(branchRepository.Table);
     }
     private void AddRental(object? obj)
     {
@@ -115,11 +122,17 @@ public partial class ViewCarViewModel : BaseViewModel
     {
         try
         {
-            _carRepository.Update(_mapper.Map<Car>(Car));
+            var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == Car.Id);
+
+            Guard.NotNull(car, "Не найден автомобиль");
+
+            _carMapper.Map(Car, car!);
+
+            await _store.SaveChangesAsync();
+
+            await UpdateState(car!.Id);
 
             _notificationService.ShowTip("Обновление автомобиля", "Сохранено успешно!");
-
-            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {
@@ -127,12 +140,24 @@ public partial class ViewCarViewModel : BaseViewModel
         }
     }
 
-    private void DeleteCar()
+    private async void DeleteCar()
     {
-        Guard.NotNull(Car, "Нельзя удалить автомобиль, который еще не сохранен");
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Удаление автомобиля",
+                "Вы действительно хотите удалить автомобиль?");
 
-        _carRepository.Remove(Car.Id!.Value);
-        _navigationService.GoBack();
+        if (result)
+        {
+            var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == Car.Id);
+
+            Guard.NotNull(car, "Не найден авьтомобиль");
+
+            _store.Cars.Remove(car!);
+
+            await _store.SaveChangesAsync();
+
+            _navigationService.GoBack();
+        }
     }
 
     public bool CanDeleteCar()
@@ -145,15 +170,25 @@ public partial class ViewCarViewModel : BaseViewModel
         _navigationService.GoBack();
     }
 
-    public void SetCar(int? entityId = null)
+    public async Task UpdateState(int? entityId = null)
     {
+        Branches = _store.Branches
+            .Select(p => _branchMapper.Map(p))
+            .ToObservableCollection();
+
         if (entityId == null)
         {
             Car = new CarDto();
             return;
         }
 
-        Car = _carRepository.GetDto(entityId.Value);
+        var car = await _store.Cars
+            .Include(p => p.Rentals)
+            .FirstOrDefaultAsync(p => p.Id == entityId);
+
+        Guard.NotNull(car, "Автомобиль не найден");
+
+        Car = _carMapper.Map(car!);
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid)

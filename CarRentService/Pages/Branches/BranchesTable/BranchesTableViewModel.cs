@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AutoMapper;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.Common.Services;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Branches.BranchesTable;
@@ -22,22 +29,26 @@ public partial class BranchesTableViewModel : BaseViewModel
 
     public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
 
+    private readonly INotificationService _notificationService;
+
     [ObservableProperty]
     private ObservableCollection<BranchDto> _branches;
 
-    private readonly IBranchRepository _branchRepository;
-
     private readonly INavigationService _navigationService;
 
-    private readonly IMapper _mapper;
+    private readonly IUniversalMapper<BranchDto, Branch> _branchMapper;
 
-    public BranchesTableViewModel(IBranchRepository branchRepository,
-        INavigationService navigationService,
-        IMapper mapper)
+    private readonly AppDbContext _store;
+
+    public BranchesTableViewModel(INavigationService navigationService,
+        IUniversalMapper<BranchDto, Branch> branchMapper,
+        AppDbContext store,
+        INotificationService notificationService)
     {
-        _branchRepository = branchRepository;
         _navigationService = navigationService;
-        _mapper = mapper;
+        _branchMapper = branchMapper;
+        _store = store;
+        _notificationService = notificationService;
 
         // Настройка команд
         AddBranchCommand = new RelayCommand(AddBranch);
@@ -48,7 +59,9 @@ public partial class BranchesTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Branches = _branchRepository.GetDtos();
+        Branches = _store.Branches
+            .Select(p => _branchMapper.Map(p))
+            .ToObservableCollection();
     }
 
     private void AddBranch()
@@ -64,12 +77,24 @@ public partial class BranchesTableViewModel : BaseViewModel
         }
     }
 
-    private void DeleteBranch(object? param)
+    private async void DeleteBranch(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is BranchDto record)
         {
-            _branchRepository.Remove(record.Id!.Value);
-            UpdateState();
+            var result = await _notificationService.ShowConfirmDialogAsync("Удаление филиала",
+                "Вы действительно хотите удалить филиал?");
+
+            if (result)
+            {
+                var branch = await _store.Branches.FirstOrDefaultAsync(p => p.Id == record.Id);
+
+                Guard.NotNull(branch, "Не найден филиал");
+
+                _store.Branches.Remove(branch!);
+                await _store.SaveChangesAsync();
+
+                UpdateState();
+            }
         }
     }
 

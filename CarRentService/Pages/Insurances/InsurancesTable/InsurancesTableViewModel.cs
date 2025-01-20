@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Insurances.InsurancesTable;
@@ -25,15 +30,19 @@ public partial class InsurancesTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<InsuranceDto> _insurances;
 
-    private readonly IInsuranceRepository _insuranceRepository;
-
     private readonly INavigationService _navigationService;
 
-    public InsurancesTableViewModel(IInsuranceRepository insuranceRepository,
-        INavigationService navigationService)
+    private readonly IUniversalMapper<InsuranceDto, Insurance> _insuranceMapper;
+
+    private readonly AppDbContext _store;
+
+    public InsurancesTableViewModel(INavigationService navigationService,
+        IUniversalMapper<InsuranceDto, Insurance> insuranceMapper,
+        AppDbContext store)
     {
-        _insuranceRepository = insuranceRepository;
         _navigationService = navigationService;
+        _insuranceMapper = insuranceMapper;
+        _store = store;
 
         // Настройка команд
         AddInsuranceCommand = new RelayCommand(AddInsurance);
@@ -44,7 +53,9 @@ public partial class InsurancesTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Insurances = _insuranceRepository.GetDtos();
+        Insurances = _store.Insurances
+            .Select(p => _insuranceMapper.Map(p))
+            .ToObservableCollection();
     }
 
     private void AddInsurance()
@@ -60,11 +71,18 @@ public partial class InsurancesTableViewModel : BaseViewModel
         }
     }
 
-    private void DeleteInsurance(object? param)
+    private async void DeleteInsurance(object? param)
     {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is Insurance record)
+        if ((param as GridRecordContextFlyoutInfo)?.Record is InsuranceDto record)
         {
-            _insuranceRepository.Remove(record.Id);
+            var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == record.Id);
+
+            Guard.NotNull(insurance, "Не найдена страховка");
+
+            _store.Insurances.Remove(insurance!);
+
+            await _store.SaveChangesAsync();
+
             UpdateState();
         }
     }

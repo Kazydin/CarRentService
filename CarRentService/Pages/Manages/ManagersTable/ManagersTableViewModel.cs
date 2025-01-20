@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Manages.ManagersTable;
@@ -25,15 +30,19 @@ public partial class ManagersTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<ManagerDto> _managers;
 
-    private readonly IManagerRepository _managerRepository;
-
     private readonly INavigationService _navigationService;
 
-    public ManagersTableViewModel(IManagerRepository managerRepository,
-        INavigationService navigationService)
+    private readonly AppDbContext _store;
+
+    private readonly IUniversalMapper<ManagerDto, Manager> _managerMapper;
+
+    public ManagersTableViewModel(INavigationService navigationService,
+        AppDbContext store,
+        IUniversalMapper<ManagerDto, Manager> managerMapper)
     {
-        _managerRepository = managerRepository;
         _navigationService = navigationService;
+        _store = store;
+        _managerMapper = managerMapper;
 
         // Настройка команд
         AddManagerCommand = new RelayCommand(AddManager);
@@ -44,7 +53,9 @@ public partial class ManagersTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Managers = _managerRepository.GetDtos();
+        Managers = _store.Managers
+            .Select(p => _managerMapper.Map(p))
+            .ToObservableCollection();
     }
 
     private void AddManager()
@@ -60,11 +71,18 @@ public partial class ManagersTableViewModel : BaseViewModel
         }
     }
 
-    private void DeleteManager(object? param)
+    private async void DeleteManager(object? param)
     {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is Manager record)
+        if ((param as GridRecordContextFlyoutInfo)?.Record is ManagerDto record)
         {
-            _managerRepository.Remove(record.Id);
+            var manager = await _store.Managers.FirstOrDefaultAsync(p => p.Id == record.Id);
+
+            Guard.NotNull(manager, "Не найден менеджер");
+
+            _store.Managers.Remove(manager!);
+
+            await _store.SaveChangesAsync();
+
             UpdateState();
         }
     }

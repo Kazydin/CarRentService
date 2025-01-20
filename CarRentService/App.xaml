@@ -15,14 +15,16 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:DateTimeToDateTimeOffsetConverter
                 x:Key="DateTimeToDateTimeOffsetConverter" />
+            <converters:BooleanToVisibilityConverter
+                x:Key="BooleanToVisibilityConverter" />
             <converters:EnumToStringConverter
                 x:Key="EnumToStringConverter" />
             <converters:EnumToDescriptionConverter
                 x:Key="EnumToDescriptionConverter" />
             <converters:EnumCollectionToDescriptionsConverter
                 x:Key="EnumCollectionToDescriptionsConverter" />
-            <converters:BooleanToBackgroundConverter
-                x:Key="BooleanToBackgroundConverter" />
+            <converters:BoolToBackgroundConverter
+                x:Key="BoolToBackgroundConverter" />
             <converters:MatchValuesBackgroundConverter
                 x:Key="MatchValuesBackgroundConverter" />
         </ResourceDictionary>

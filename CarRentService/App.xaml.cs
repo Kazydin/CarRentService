@@ -24,6 +24,9 @@ public partial class App : Application
         var services = new ServiceCollection();
         ConfigureServices(services);
 
+        services.AddDbContext();
+        services.AdUniversalMappers();
+
         ServiceProvider = services.BuildServiceProvider();
 
         SeedData();
@@ -45,7 +48,6 @@ public partial class App : Application
         Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "ru-RU";
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NMaF5cXmtCfEx+WmFZfVtgcl9HaVZRRWY/P1ZhSXxWdkRjUH5Wc31XTmhaWEQ=");
 
-        services.AddDataStoreContext();
         services.AddValidatorsFromAssembly(Assembly.Load("CarRentService.DAL"));
 
         services.AddAutoMapper(Assembly.Load("CarRentService.Common"),

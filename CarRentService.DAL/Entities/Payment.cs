@@ -1,40 +1,29 @@
 ﻿using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Enum;
 
-using CommunityToolkit.Mvvm.ComponentModel;
-
 namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Платеж
 /// </summary>
-[ObservableObject]
-public partial class Payment : IEntity
+public class Payment : IEntity
 {
-    [ObservableProperty]
-    private int _id;
+    public int Id { get; set; }
 
     /// <summary>
     /// Сумма платежа.
     /// </summary>
-    [ObservableProperty]
-    private double _amount;
+    public double Amount { get; set; }
 
     /// <summary>
     /// Дата платежа.
     /// </summary>
-    [ObservableProperty]
-    private DateTime _date;
+    public DateTime Date { get; set; }
 
     /// <summary>
     /// Метод оплаты (например, наличные, карта).
     /// </summary>
-    [ObservableProperty]
-    private PaymentMethodEnum _method;
+    public PaymentMethodEnum Method { get; set; }
 
-    /// <summary>
-    /// Аренда, связанная с этим платежом.
-    /// </summary>
-    [ObservableProperty]
-    private int _rentalId;
+    public Rental Rental { get; set; }
 }

@@ -46,9 +46,6 @@ public partial class ManagerDto
     [ObservableProperty]
     private string _password;
 
-    [ObservableProperty]
-    private ObservableCollection<int> _branchIds = new();
-
     #region LinkedEntities
 
     [ObservableProperty]

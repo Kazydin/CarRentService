@@ -12,7 +12,7 @@ public class NotificationService : INotificationService
 {
     private FrameworkElement _targetElement = null!;
 
-    private static readonly TimeSpan _tipShowingTime = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan _tipShowingTime = TimeSpan.FromSeconds(2);
 
     public async Task ShowErrorDialogAsync(string title, string errorMessage)
     {

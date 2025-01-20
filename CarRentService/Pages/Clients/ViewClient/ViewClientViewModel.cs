@@ -1,18 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentValidation;
 using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Clients.ViewClient;
@@ -33,47 +36,30 @@ public partial class ViewClientViewModel : BaseViewModel
 
     [ObservableProperty] private ClientDto _client;
 
-    [ObservableProperty] private ObservableCollection<ClientCarDto> _cars;
-
-    [ObservableProperty] private ObservableCollection<ClientInsuranceDto> _insurances;
-
-    [ObservableProperty] private ObservableCollection<ClientPaymentDto> _payments;
-
     [ObservableProperty] private ObservableCollection<BranchDto> _branches;
 
     private readonly INavigationService _navigationService;
 
-    private readonly IClientRepository _clientRepository;
-
-    private readonly IRentalRepository _rentalRepository;
-
-    private readonly ICarRepository _carRepository;
-
-    private readonly IBranchRepository _branchRepository;
-
     private readonly INotificationService _notificationService;
 
-    private readonly IMapper _mapper;
+    private readonly IUniversalMapper<ClientDto, Client> _clientMapper;
 
-    private readonly IInsuranceRepository _insuranceRepository;
+    private readonly IUniversalMapper<BranchDto, Branch> _branchMapper;
+
+    private readonly AppDbContext _store;
 
     public ViewClientViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IClientRepository clientRepository,
         IMapper mapper,
-        IBranchRepository branchRepository,
-        IRentalRepository rentalRepository,
-        ICarRepository carRepository,
-        IInsuranceRepository insuranceRepository)
+        IUniversalMapper<ClientDto, Client> clientMapper,
+        AppDbContext store,
+        IUniversalMapper<BranchDto, Branch> branchMapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _clientRepository = clientRepository;
-        _mapper = mapper;
-        _branchRepository = branchRepository;
-        _rentalRepository = rentalRepository;
-        _carRepository = carRepository;
-        _insuranceRepository = insuranceRepository;
+        _clientMapper = clientMapper;
+        _store = store;
+        _branchMapper = branchMapper;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -108,9 +94,17 @@ public partial class ViewClientViewModel : BaseViewModel
     {
         try
         {
-            var entity = _clientRepository.AddOrUpdate(_mapper.Map<Client>(Client));
+            var client = await _store.Clients.FirstOrDefaultAsync(p => p.Id == Client.Id);
 
-            SetClient(entity.Id);
+            client ??= new Client();
+
+            Guard.NotNull(client, "Не найден клиент");
+
+            _clientMapper.Map(Client, client!);
+
+            await _store.SaveChangesAsync();
+
+            await UpdateState(client!.Id);
 
             _notificationService.ShowTip("Обновление клиента", "Сохранено успешно!");
         }
@@ -120,12 +114,24 @@ public partial class ViewClientViewModel : BaseViewModel
         }
     }
 
-    private void DeleteClient()
+    private async void DeleteClient()
     {
-        Guard.NotNull(Client, "Нельзя удалить клиента, который еще не сохранен");
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Удаление клиента",
+                "Вы действительно хотите удалить клиента?");
 
-        _clientRepository.Remove(Client.Id!.Value);
-        _navigationService.GoBack();
+        if (result)
+        {
+            var client = await _store.Clients.FirstOrDefaultAsync(p => p.Id == Client.Id);
+
+            Guard.NotNull(client, "Не найден клиент");
+
+            _store.Clients.Remove(client!);
+
+            await _store.SaveChangesAsync();
+
+            _navigationService.GoBack();
+        }
     }
 
     public bool CanDeleteClient()
@@ -138,9 +144,11 @@ public partial class ViewClientViewModel : BaseViewModel
         _navigationService.GoBack();
     }
 
-    public void SetClient(int? entityId = null)
+    public async Task UpdateState(int? entityId = null)
     {
-        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchRepository.Table);
+        Branches = _store.Branches
+            .Select(p => _branchMapper.Map(p))
+            .ToObservableCollection();
 
         if (entityId == null)
         {
@@ -148,27 +156,15 @@ public partial class ViewClientViewModel : BaseViewModel
             return;
         }
 
-        Client = _clientRepository.GetDto(entityId.Value);
-        _rentalRepository.IncludeCars(Client.Rentals);
-        _rentalRepository.IncludeInsurances(Client.Rentals);
-        _insuranceRepository.IncludeCars(Client.Rentals.SelectMany(p => p.Insurances));
-        _rentalRepository.IncludePayments(Client.Rentals);
-        _carRepository.IncludeBranches(Client.Rentals.SelectMany(p => p.Cars));
-        SetDtos();
-    }
+        var client = await _store.Clients
+            .Include(p => p.Branch)
+            .Include(p => p.Rentals)
+            .Include(p => p.Branch)
+            .FirstOrDefaultAsync(p => p.Id == entityId);
 
-    private void SetDtos()
-    {
-        Cars = new();
-        Insurances = new();
-        Payments = new();
+        Guard.NotNull(client, "Клиент не найден");
 
-        foreach (var rental in Client.Rentals)
-        {
-            Cars = Cars.Union(rental.Cars.Select(p => new ClientCarDto(rental, p)).ToObservableCollection()).ToObservableCollection();
-            Insurances = Insurances.Union(rental.Insurances.Select(p => new ClientInsuranceDto(rental, p)).ToObservableCollection()).ToObservableCollection();
-            Payments = Payments.Union(rental.Payments.Select(p => new ClientPaymentDto(rental, p)).ToObservableCollection()).ToObservableCollection();
-        }
+        Client = _clientMapper.Map(client!);
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid, SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,

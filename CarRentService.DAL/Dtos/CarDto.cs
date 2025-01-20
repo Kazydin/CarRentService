@@ -65,9 +65,6 @@ public partial class CarDto
     private RentalDto? _activeRental;
 
     [ObservableProperty]
-    private int? _branchId;
-
-    [ObservableProperty]
     private BranchDto? _branch;
 
     #endregion
@@ -100,15 +97,4 @@ public partial class CarDto
     {
         UpdateName();
     }
-
-    // public override bool Equals(object? obj)
-    // {
-    //     return obj is CarDto carDto &&
-    //            Id == carDto.Id;
-    // }
-    //
-    // public override int GetHashCode()
-    // {
-    //     return HashCode.Combine(Id);
-    // }
 }

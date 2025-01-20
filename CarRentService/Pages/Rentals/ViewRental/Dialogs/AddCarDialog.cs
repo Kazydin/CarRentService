@@ -48,7 +48,7 @@ public partial class AddCarDialog
 
     public async Task ShowAsync(RentalDto rental, XamlRoot xamlRoot)
     {
-        _viewModel.OnShow(rental);
+        _viewModel.OnShow(rental.Id!.Value);
 
         _dialog.XamlRoot = xamlRoot;
         await _dialog.ShowAsync();

@@ -5,7 +5,7 @@ using Windows.UI;
 
 namespace CarRentService.Common.Converters;
 
-public class BooleanToBackgroundConverter : IValueConverter
+public class BoolToBackgroundConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {

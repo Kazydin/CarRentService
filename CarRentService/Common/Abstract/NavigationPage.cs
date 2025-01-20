@@ -1,4 +1,5 @@
-﻿using CarRentService.Common.Attributes;
+﻿using System.Threading.Tasks;
+using CarRentService.Common.Attributes;
 
 namespace CarRentService.Common.Abstract;
 
@@ -9,8 +10,9 @@ public abstract class NavigationPage : BasePage
 
     public string? Header { get; set; } = null;
 
-    public virtual void OnNavigatedTo(INavigationData? parameters)
+    public virtual Task OnNavigatedTo(INavigationData? parameters)
     {
+        return Task.CompletedTask;
     }
 
     protected NavigationPage(PageTypeEnum type, string header)

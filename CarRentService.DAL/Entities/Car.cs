@@ -1,35 +1,27 @@
 ﻿using CarRentService.DAL.Enum;
 
-using CommunityToolkit.Mvvm.ComponentModel;
-
 namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Автомобиль
 /// </summary>
-public partial class Car : Vehicle
+public class Car : Vehicle
 {
     /// <summary>
     /// регистрационный номер автомобиля
     /// </summary>
-    [ObservableProperty]
-    private string _registrationNumber;
+    public string RegistrationNumber { get; set; }
 
     /// <summary>
     /// статус автомобиля (например, доступен, в ремонте)
     /// </summary>
-    [ObservableProperty]
-    private CarStatusEnum _status;
+    public CarStatusEnum Status { get; set; }
 
-    /// <summary>
-    /// идентификатор филиала
-    /// </summary>
-    [ObservableProperty]
-    private int _branchId;
+    public Branch Branch { get; set; }
 
-    [ObservableProperty]
-    private int _horsePower;
+    public int HorsePower { get; set; }
 
-    [ObservableProperty]
-    private int _mileage;
+    public int Mileage { get; set; }
+
+    public List<Rental> Rentals { get; set; }
 }

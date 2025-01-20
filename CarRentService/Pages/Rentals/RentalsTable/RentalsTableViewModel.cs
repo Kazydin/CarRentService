@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Rentals.RentalsTable;
@@ -23,19 +29,23 @@ public partial class RentalsTableViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<RentalDto> _rentals;
 
-    private readonly IRentalRepository _rentalRepository;
-
     private readonly INavigationService _navigationService;
 
     private readonly INotificationService _notificationService;
 
-    public RentalsTableViewModel(IRentalRepository rentalRepository,
-        INavigationService navigationService,
-        INotificationService notificationService)
+    private readonly AppDbContext _store;
+
+    private readonly IUniversalMapper<RentalDto, Rental> _rentalMapper;
+
+    public RentalsTableViewModel(INavigationService navigationService,
+        INotificationService notificationService,
+        AppDbContext store,
+        IUniversalMapper<RentalDto, Rental> rentalMapper)
     {
-        _rentalRepository = rentalRepository;
         _navigationService = navigationService;
         _notificationService = notificationService;
+        _store = store;
+        _rentalMapper = rentalMapper;
 
         // Настройка команд
         AddRentalCommand = new RelayCommand(AddRental);
@@ -46,7 +56,9 @@ public partial class RentalsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Rentals = _rentalRepository.GetDtos();
+        Rentals = _store.Rentals
+            .Select(p => _rentalMapper.Map(p))
+            .ToObservableCollection();
     }
 
     private void AddRental()
@@ -67,12 +79,18 @@ public partial class RentalsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            var result = await _notificationService.ShowConfirmDialogAsync($"Удаление аренды №{record.Id!.Value}",
+            var result = await _notificationService.ShowConfirmDialogAsync("Удаление аренды",
                 "Вы действительно хотите удалить аренду?");
 
             if (result)
             {
-                _rentalRepository.Remove(record.Id!.Value);
+                var rental = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == record.Id);
+
+                Guard.NotNull(rental, "Не найдена аренда");
+
+                _store.Rentals.Remove(rental!);
+                await _store.SaveChangesAsync();
+
                 UpdateState();
             }
         }

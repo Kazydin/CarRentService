@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using AutoMapper;
+using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentValidation;
 using GuardNet;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentService.Pages.Manages.ViewManager;
 
@@ -26,41 +27,43 @@ public partial class ViewManagerViewModel : BaseViewModel
 
     [ObservableProperty] private ManagerDto _manager;
 
-    [ObservableProperty] private ObservableCollection<Branch> _branches;
+    [ObservableProperty] private ObservableCollection<BranchDto> _branches;
 
     [ObservableProperty] private ObservableCollection<ManagerRoleEnum> _roles;
 
-    [ObservableProperty] private ObservableCollection<Branch> _selectedBranches = new();
+    [ObservableProperty] private ObservableCollection<BranchDto> _selectedBranches = new();
 
     [ObservableProperty]
     private bool _isBranchesEnabled;
 
     private readonly INavigationService _navigationService;
 
-    private readonly IManagerRepository _managerRepository;
-
     private readonly INotificationService _notificationService;
-
-    private readonly IMapper _mapper;
 
     private IList<object>? _selectedBranchesComboBox;
 
+    private readonly IUniversalMapper<ManagerDto, Manager> _managerMapper;
+
+    private readonly IUniversalMapper<BranchDto, Branch> _branchMapper;
+
+    private readonly AppDbContext _store;
+
     public ViewManagerViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IManagerRepository managerRepository,
-        IMapper mapper,
-        IBranchRepository branchRepository)
+        AppDbContext store,
+        IUniversalMapper<ManagerDto, Manager> managerMapper,
+        IUniversalMapper<BranchDto, Branch> branchMapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _managerRepository = managerRepository;
-        _mapper = mapper;
+        _store = store;
+        _managerMapper = managerMapper;
+        _branchMapper = branchMapper;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
         DeleteManagerCommand = new RelayCommand(DeleteManager, CanDeleteManager);
 
-        Branches = branchRepository.Table;
         Roles = EnumExtensions.GetValues<ManagerRoleEnum>().ToObservableCollection();
     }
 
@@ -68,9 +71,19 @@ public partial class ViewManagerViewModel : BaseViewModel
     {
         try
         {
-            Manager.Branches = _mapper.Map<ObservableCollection<BranchDto>>(SelectedBranches);
+            var manager = await _store.Managers
+                .Include(p => p.Branches)
+                .SingleAsync(p => p.Id == Manager.Id);
 
-            _managerRepository.Update(_mapper.Map<Manager>(Manager));
+            Manager.Branches = SelectedBranches;
+
+            _managerMapper.Map(Manager, manager!);
+
+            manager.Branches = _store.Branches
+                .Where(p => SelectedBranches.Select(r => r.Id).Contains(p.Id))
+                .ToList();
+
+            await _store.SaveChangesAsync();
 
             _notificationService.ShowTip("Обновление менеджера", "Сохранено успешно!");
 
@@ -82,12 +95,26 @@ public partial class ViewManagerViewModel : BaseViewModel
         }
     }
 
-    private void DeleteManager()
+    private async void DeleteManager()
     {
-        Guard.NotNull(Manager, "Нельзя удалить менеджера, который еще не сохранен");
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Удаление менеджера",
+                "Вы действительно хотите удалить менеджера?");
 
-        _managerRepository.Remove(Manager.Id!.Value);
-        _navigationService.GoBack();
+        if (result)
+        {
+            var manager = await _store.Managers
+                .Include(p => p.Branches)
+                .FirstOrDefaultAsync(p => p.Id == Manager.Id);
+
+            Guard.NotNull(manager, "Не найден менеджер");
+
+            _store.Managers.Remove(manager!);
+
+            await _store.SaveChangesAsync();
+
+            _navigationService.GoBack();
+        }
     }
 
     public bool CanDeleteManager()
@@ -100,15 +127,24 @@ public partial class ViewManagerViewModel : BaseViewModel
         _navigationService.GoBack();
     }
 
-    public void SetManager(int? entityId = null, IList<object>? selectedBranches = null)
+    public async Task UpdateState(int? entityId = null, IList<object>? selectedBranches = null)
     {
+        Branches = _store.Branches
+            .Select(p => _branchMapper.Map(p))
+            .ToObservableCollection();
+
         if (entityId == null)
         {
             Manager = new ManagerDto();
             return;
         }
 
-        Manager = _managerRepository.GetDto(entityId.Value);
+        var manager = await _store.Managers
+            .Include(p => p.Branches)
+            .FirstOrDefaultAsync(p => p.Id == entityId);
+
+        Manager = _managerMapper.Map(manager!);
+
         UpdateStateFromManager();
 
         if (selectedBranches == null)

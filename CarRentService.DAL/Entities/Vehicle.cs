@@ -1,32 +1,26 @@
 ﻿using CarRentService.DAL.Abstract;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Транспортное средство
 /// </summary>
-[ObservableObject]
-public abstract partial class Vehicle : IEntity
+public abstract class Vehicle : IEntity
 {
-    [ObservableProperty]
-    private int _id;
+    public int Id { get; set; }
 
     /// <summary>
     /// Марка транспортного средства.
     /// </summary>
-    [ObservableProperty]
-    private string _make;
+    public string Make { get; set; }
 
     /// <summary>
     /// Модель транспортного средства.
     /// </summary>
-    [ObservableProperty]
-    private string _model;
+    public string Model { get; set; }
 
     /// <summary>
     /// Год выпуска транспортного средства.
     /// </summary>
-    [ObservableProperty]
-    private int _year;
+    public int Year { get; set; }
 }

@@ -22,15 +22,21 @@ public partial class ClientDto
     private string _driverLicenseNumber;
 
     [ObservableProperty]
-    private int? _branchId;
-
-    [ObservableProperty]
     private DateTime? _driverLicenseIssuedDate;
 
     #region LinkedEntities
 
     [ObservableProperty]
     private ObservableCollection<RentalDto> _rentals = new();
+
+    [ObservableProperty]
+    private ObservableCollection<ClientCarDto> _cars = new();
+
+    [ObservableProperty]
+    private ObservableCollection<ClientPaymentDto> _payments = new();
+
+    [ObservableProperty]
+    private ObservableCollection<ClientInsuranceDto> _insurances = new();
 
     [ObservableProperty]
     private BranchDto? _branch;

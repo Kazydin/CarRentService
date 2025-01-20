@@ -2,29 +2,30 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+using System.Linq;
+using System.Threading.Tasks;
 using CarRentService.BLL.Services.Abstract;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;
-using CarRentService.DAL.Abstract.Repositories;
-using CarRentService.DAL.Abstract.Services;
 using CarRentService.DAL.Constants;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
+using CarRentService.DAL.Store;
 using CarRentService.Pages.Rentals.ViewRental.Dialogs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentValidation;
 using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.UI.Xaml;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 
-public partial class ViewRentalViewModel : BaseViewModel, INotifiable
+public partial class ViewRentalViewModel : BaseViewModel
 {
     public RelayCommand DeleteRentalCommand { get; }
 
@@ -66,15 +67,13 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
 
     private readonly INavigationService _navigationService;
 
-    private readonly IRentalRepository _rentalRepository;
-
-    private readonly IRentalService _rentalService;
-
-    private readonly IBranchRepository _branchRepository;
+    private readonly AppDbContext _store;
 
     private readonly INotificationService _notificationService;
 
-    private readonly IMapper _mapper;
+    private readonly IUniversalMapper<RentalDto, Rental> _rentalMapper;
+
+    private readonly IUniversalMapper<BranchDto, Branch> _branchMapper;
 
     private readonly IRentalCostCalculationService _costCalculationService;
 
@@ -84,23 +83,21 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
 
     public ViewRentalViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IRentalRepository rentalRepository,
-        IMapper mapper,
-        IBranchRepository branchRepository,
         IRentalCostCalculationService costCalculationService,
         AddCarDialog addCarContent,
-        IRentalService rentalService)
+        AppDbContext store,
+        IUniversalMapper<RentalDto, Rental> rentalMapper,
+        IUniversalMapper<BranchDto, Branch> branchMapper)
     {
         MinDate = DateTime.Today;
 
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _rentalRepository = rentalRepository;
-        _mapper = mapper;
-        _branchRepository = branchRepository;
         _costCalculationService = costCalculationService;
         _addCarContent = addCarContent;
-        _rentalService = rentalService;
+        _store = store;
+        _rentalMapper = rentalMapper;
+        _branchMapper = branchMapper;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -124,8 +121,6 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
         MoveToCompletedStatusCommand = new RelayCommand(MoveToCompletedStatus, CanMoveToCompletedStatus);
 
         _tariffs = EnumExtensions.GetValues<RentalTariffEnum>().ToObservableCollection();
-
-        _rentalRepository.Subscribe(this);
     }
 
     private async void DeleteInsurance(object? param)
@@ -138,7 +133,15 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
 
             if (result)
             {
-                _rentalService.RemoveInsurance(Rental, record);
+                var rentalForDelete = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == Rental.Id);
+
+                Guard.NotNull(rentalForDelete, "Не найдена аренда для удаления");
+
+                _store.Rentals.Remove(rentalForDelete!);
+
+                await _store.SaveChangesAsync();
+
+                await UpdateState(Rental.Id);
             }
         }
     }
@@ -213,7 +216,21 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
 
             if (result)
             {
-                _rentalService.RemoveCar(Rental, record);
+                var rental = await _store.Rentals
+                    .Include(p => p.Cars)
+                    .FirstOrDefaultAsync(p => p.Id == Rental.Id);
+
+                Guard.NotNull(rental, "Не найдена аренда для обновления");
+
+                var car = rental!.Cars.FirstOrDefault(p => p.Id == record.Id);
+
+                Guard.NotNull(car, "Не найдена машина для удаления");
+
+                rental.Cars.Remove(car!);
+
+                await _store.SaveChangesAsync();
+
+                await UpdateState(Rental.Id);
             }
         }
     }
@@ -227,11 +244,17 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
     {
         try
         {
-            _rentalRepository.Update(_mapper.Map<Rental>(Rental));
+            var rental = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == Rental.Id);
+
+            Guard.NotNull(rental, "Не найдена аренда");
+
+            _rentalMapper.Map(Rental, rental!);
+
+            await _store.SaveChangesAsync();
 
             _notificationService.ShowTip("Обновление аренды", "Сохранено успешно!");
 
-            _navigationService.GoBack();
+            await UpdateState(rental!.Id);
         }
         catch (ValidationException e)
         {
@@ -241,15 +264,18 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
 
     private async void DeleteRental()
     {
-        Guard.NotNull(Rental, "Нельзя удалить аренду, которая еще не сохранена");
-
         var result =
             await _notificationService.ShowConfirmDialogAsync("Удаление аренды",
                 "Вы действительно хотите удалить аренду?");
 
         if (result)
         {
-            _rentalRepository.Remove(Rental.Id!.Value);
+            var rental = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == Rental.Id);
+
+            Guard.NotNull(rental, "Не найдена аренда");
+
+            _store.Rentals.Remove(rental!);
+
             _navigationService.GoBack();
         }
     }
@@ -264,7 +290,7 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
         _navigationService.GoBack();
     }
 
-    public void SetRental(int? entityId = null)
+    public async Task UpdateState(int? entityId = null)
     {
         if (entityId == null)
         {
@@ -272,9 +298,22 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
             return;
         }
 
-        Rental = null!;
-        Rental = _rentalRepository.GetDto(entityId.Value);
-        Branches = _mapper.Map<ObservableCollection<BranchDto>>(_branchRepository.Table);
+        var rental = await _store.Rentals
+            .Include(p => p.Cars)
+            .Include(p => p.Payments)
+            .Include(p => p.Branch)
+            .Include(p => p.Client)
+            .Include(p => p.Insurances)
+            .FirstOrDefaultAsync(p => p.Id == entityId);
+
+        Guard.NotNull(rental, "Аренда не найдена");
+
+        Rental = _rentalMapper.Map(rental!);
+
+        Branches = _store.Branches
+            .Select(p => _branchMapper.Map(p))
+            .ToObservableCollection();
+
         UpdateCost();
     }
 
@@ -320,10 +359,5 @@ public partial class ViewRentalViewModel : BaseViewModel, INotifiable
     public void SetXamlRoot(XamlRoot xamlRoot)
     {
         _xamlRoot = xamlRoot;
-    }
-
-    public void Update(object sender, EventArgs e)
-    {
-        SetRental(Rental.Id);
     }
 }

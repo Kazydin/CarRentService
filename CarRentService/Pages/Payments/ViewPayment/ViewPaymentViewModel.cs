@@ -1,17 +1,19 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentValidation;
 using GuardNet;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentService.Pages.Payments.ViewPayment;
 
@@ -31,39 +33,45 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly IPaymentRepository _paymentRepository;
-
     private readonly INotificationService _notificationService;
 
-    private readonly IMapper _mapper;
+    private readonly IUniversalMapper<PaymentDto, Payment> _paymentMapper;
+
+    private readonly AppDbContext _store;
 
     public ViewPaymentViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IPaymentRepository paymentRepository,
-        IMapper mapper)
+        AppDbContext store)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _paymentRepository = paymentRepository;
-        _mapper = mapper;
+        _store = store;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
         DeletePaymentCommand = new RelayCommand(DeletePayment, CanDeletePayment);
         EditRentalCommand = new RelayCommand(EditRental);
 
-        Methods = typeof(PaymentMethodEnum).GetDescriptions().ToObservableCollection();
+        Methods = typeof(PaymentMethodEnum)
+            .GetDescriptions()
+            .ToObservableCollection();
     }
 
     private async void Save()
     {
         try
         {
-            _paymentRepository.Update(_mapper.Map<Payment>(Payment));
+            var payment = await _store.Payments.FirstOrDefaultAsync(p => p.Id == Payment.Id);
+
+            Guard.NotNull(payment, "Не найден платеж");
+
+            _paymentMapper.Map(Payment, payment!);
+
+            await _store.SaveChangesAsync();
+
+            await UpdateState(payment!.Id);
 
             _notificationService.ShowTip("Обновление платежа", "Сохранено успешно!");
-
-            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {
@@ -71,12 +79,22 @@ public partial class ViewPaymentViewModel : BaseViewModel
         }
     }
 
-    private void DeletePayment()
+    private async void DeletePayment()
     {
-        Guard.NotNull(Payment, "Нельзя удалить платеж, который еще не сохранен");
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Удаление платежа",
+                "Вы действительно хотите удалить платеж");
 
-        _paymentRepository.Remove(Payment.Id!.Value);
-        _navigationService.GoBack();
+        if (result)
+        {
+            var payment = await _store.Payments.FirstOrDefaultAsync(p => p.Id == Payment.Id);
+
+            Guard.NotNull(payment, "Не найден платеж");
+
+            _store.Payments.Remove(payment!);
+
+            _navigationService.GoBack();
+        }
     }
 
     public bool CanDeletePayment()
@@ -91,10 +109,11 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     private void EditRental()
     {
-        _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(Payment.Rental!.Id!.Value));
+        _navigationService.Navigate(PageTypeEnum.EditRental,
+            parameters: new CommonNavigationData(Payment.Rental!.Id!.Value));
     }
 
-    public void SetPayment(int? entityId = null)
+    public async Task UpdateState(int? entityId = null)
     {
         if (entityId == null)
         {
@@ -102,6 +121,12 @@ public partial class ViewPaymentViewModel : BaseViewModel
             return;
         }
 
-        Payment = _paymentRepository.GetDto(entityId.Value);
+        var payment = await _store.Payments
+            .Include(p => p.Rental)
+            .FirstOrDefaultAsync(p => p.Id == entityId);
+
+        Guard.NotNull(payment, "Платеж не найдена");
+
+        Payment = _paymentMapper.Map(payment!);
     }
 }

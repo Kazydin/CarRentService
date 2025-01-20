@@ -14,7 +14,7 @@ public class FullCoverageInsuranceStrategy : IInsurancePricingStrategy
 
         foreach (var insurance in rental.Insurances.Where(p => p.Type == InsuranceTypeEnum.FullCoverage))
         {
-            var car = rental.Cars.FirstOrDefault(p => p.Id == insurance.CarId);
+            var car = rental.Cars.FirstOrDefault(p => p.Id == insurance.Car!.Id);
 
             cost += BasicRate + car!.CarYears * 50 - rental.Client!.DrivingExperienceYears * 10;
         }

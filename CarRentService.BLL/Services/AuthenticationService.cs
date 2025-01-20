@@ -1,24 +1,24 @@
 ﻿using CarRentService.BLL.Services.Abstract;
 using CarRentService.DAL;
-using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Store;
 
 namespace CarRentService.BLL.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IDataStoreContext _store;
+        private readonly AppDbContext _store;
 
         private readonly AppState _state;
 
-        public AuthenticationService(IDataStoreContext store, AppState state)
+        public AuthenticationService(AppState state, AppDbContext store)
         {
-            this._store = store;
             _state = state;
+            _store = store;
         }
 
         public bool Authenticate(string login, string password)
         {
-            var user = _store.Manager
+            var user = _store.Managers
                 .FirstOrDefault(p => p.Login == login
                                      && p.Password == password);
 

@@ -1,29 +1,23 @@
-﻿using System.Collections.ObjectModel;
-using CarRentService.DAL.Enum;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CarRentService.DAL.Enum;
 
 namespace CarRentService.DAL.Entities;
 
-public partial class Manager : Person
+public class Manager : Person
 {
     /// <summary>
     /// Роль
     /// </summary>
-    [ObservableProperty]
-    private ManagerRoleEnum _role;
+    public ManagerRoleEnum Role { get; set; }
 
-    [ObservableProperty]
-    private ObservableCollection<int> _branchIds = new();
+    public List<Branch> Branches { get; set; }
 
     /// <summary>
     /// Логин для авторизации
     /// </summary>
-    [ObservableProperty]
-    private string _login;
+    public string Login { get; set; }
 
     /// <summary>
     /// Пароль для авторизации
     /// </summary>
-    [ObservableProperty]
-    private string _password;
+    public string Password { get; set; }
 }

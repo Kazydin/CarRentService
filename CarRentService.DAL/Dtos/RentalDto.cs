@@ -38,12 +38,6 @@ public partial class RentalDto
 
     [ObservableProperty] private RentalTariffEnum _tariff;
 
-    [ObservableProperty] private ObservableCollection<int> _carIds = new();
-
-    [ObservableProperty] private int? _clientId;
-
-    [ObservableProperty] private int? _branchId;
-
     #region LinkedEntities
 
     [ObservableProperty] private ObservableCollection<CarDto> _cars = new();
@@ -57,16 +51,6 @@ public partial class RentalDto
     [ObservableProperty] private ObservableCollection<InsuranceDto> _insurances = new();
 
     #endregion
-
-    partial void OnCarsChanged(ObservableCollection<CarDto> value)
-    {
-        CarIds = new ObservableCollection<int>(value.Select(p => p.Id!.Value));
-    }
-
-    partial void OnCarsChanged(ObservableCollection<CarDto>? oldValue, ObservableCollection<CarDto> newValue)
-    {
-        CarIds = new ObservableCollection<int>(newValue.Select(p => p.Id!.Value));
-    }
 
     /// <summary>
     /// Стаж водителя в годах.

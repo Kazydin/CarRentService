@@ -48,7 +48,7 @@
                     MappingName="Id" />
                 <dataGrid:GridTextColumn
                     HeaderText="Роль"
-                    MappingName="Role" />
+                    DisplayBinding="{Binding Path=Role, Converter={StaticResource EnumToDescriptionConverter}}"/>
                 <dataGrid:GridTextColumn
                     HeaderText="Фамилия имя отчество"
                     MappingName="Fio" />

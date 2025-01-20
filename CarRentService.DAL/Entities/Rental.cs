@@ -1,49 +1,48 @@
-﻿using System.Collections.ObjectModel;
-using CarRentService.DAL.Abstract;
+﻿using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Enum;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Аренда
 /// </summary>
-[ObservableObject]
-public partial class Rental : IEntity
+public class Rental : IEntity
 {
-    [ObservableProperty] private int _id;
+    public int Id { get; set; }
 
     /// <summary>
     /// Идентификатор арендуемого автомобиля.
     /// </summary>
-    [ObservableProperty] private ObservableCollection<int> _carIds = new();
+    public List<Car> Cars { get; set; }
 
-    /// <summary>
-    /// Идентификатор клиента, который арендует автомобиль.
-    /// </summary>
-    [ObservableProperty] private int _clientId;
+    public Client Client { get; set; }
 
-    [ObservableProperty] private int _branchId;
+    public Branch Branch { get; set; }
 
     /// <summary>
     /// Дата начала аренды.
     /// </summary>
-    [ObservableProperty] private DateTime _startDate;
+    public DateTime StartDate { get; set; }
 
     /// <summary>
     /// Дата окончания аренды.
     /// </summary>
-    [ObservableProperty] private DateTime _endDate;
+    public DateTime EndDate { get; set; }
 
     /// <summary>
     /// Статус аренды.
     /// </summary>
-    [ObservableProperty] private RentalStatusEnum _status;
+    public RentalStatusEnum Status { get; set; }
 
     /// <summary>
     /// Итоговая стоимость аренды
     /// </summary>
-    [ObservableProperty] private double _totalCost;
+    public double TotalCost { get; set; }
 
-    [ObservableProperty] private RentalTariffEnum _tariff;
+    public RentalTariffEnum Tariff { get; set; }
+
+    public List<Insurance> Insurances { get; set; }
+
+    public List<Payment> Payments { get; set; }
+
 }

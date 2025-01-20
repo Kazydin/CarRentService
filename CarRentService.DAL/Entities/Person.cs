@@ -1,32 +1,26 @@
 ﻿using CarRentService.DAL.Abstract;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.DAL.Entities;
 
 /// <summary>
 /// Человек
 /// </summary>
-[ObservableObject]
-public abstract partial class Person : IEntity
+public abstract class Person : IEntity
 {
-    [ObservableProperty]
-    private int _id;
+    public int Id { get; set; }
 
     /// <summary>
     /// ФИО человека.
     /// </summary>
-    [ObservableProperty]
-    private string _fio;
+    public string Fio { get; set; }
 
     /// <summary>
     /// Возраст человека.
     /// </summary>
-    [ObservableProperty]
-    private int _age;
+    public int Age { get; set; }
 
     /// <summary>
     /// Контактный телефон человека.
     /// </summary>
-    [ObservableProperty]
-    private string _phone;
+    public string Phone { get; set; }
 }

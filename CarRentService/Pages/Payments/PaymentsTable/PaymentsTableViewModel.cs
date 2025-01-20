@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Payments.PaymentsTable;
@@ -25,15 +31,19 @@ public partial class PaymentsTableViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<PaymentDto> _payments;
 
-    private readonly IPaymentRepository _paymentRepository;
+    private readonly AppDbContext _store;
 
     private readonly INavigationService _navigationService;
 
-    public PaymentsTableViewModel(IPaymentRepository paymentRepository,
-        INavigationService navigationService)
+    private readonly IUniversalMapper<PaymentDto, Payment> _paymentMapper;
+
+    public PaymentsTableViewModel(INavigationService navigationService,
+        AppDbContext store,
+        IUniversalMapper<PaymentDto, Payment> paymentMapper)
     {
-        _paymentRepository = paymentRepository;
         _navigationService = navigationService;
+        _store = store;
+        _paymentMapper = paymentMapper;
 
         // Настройка команд
         AddPaymentCommand = new RelayCommand(AddPayment);
@@ -45,7 +55,9 @@ public partial class PaymentsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Payments = _paymentRepository.GetDtos();
+        Payments = _store.Payments
+            .Select(p => _paymentMapper.Map(p))
+            .ToObservableCollection();
     }
 
     private void AddPayment()
@@ -71,11 +83,18 @@ public partial class PaymentsTableViewModel : BaseViewModel
         }
     }
 
-    private void DeletePayment(object? param)
+    private async void DeletePayment(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is PaymentDto record)
         {
-            _paymentRepository.Remove(record.Id!.Value);
+            var payment = await _store.Payments.FirstOrDefaultAsync(p => p.Id == record.Id);
+
+            Guard.NotNull(payment, "Не найден платеж");
+
+            _store.Payments.Remove(payment!);
+
+            await _store.SaveChangesAsync();
+
             UpdateState();
         }
     }

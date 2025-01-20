@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 
@@ -15,7 +16,7 @@ public sealed partial class WelcomePage : NavigationPage
         this.InitializeComponent();
     }
 
-    public override void OnNavigatedTo(INavigationData? parameters)
+    public override async Task OnNavigatedTo(INavigationData? parameters)
     {
         _viewModel.UpdateAppState();
     }

@@ -6,6 +6,11 @@ namespace CarRentService.DAL.Dtos;
 [ObservableObject]
 public partial class ClientPaymentDto
 {
+    public ClientPaymentDto()
+    {
+
+    }
+
     public ClientPaymentDto(RentalDto rental, PaymentDto payment)
     {
         Id = payment.Id!.Value;

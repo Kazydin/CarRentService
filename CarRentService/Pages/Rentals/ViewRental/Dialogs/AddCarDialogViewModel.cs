@@ -2,17 +2,21 @@
 using System.Linq;
 using AutoMapper;
 using CarRentService.Common.Abstract;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.Common.Extensions;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GuardNet;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentService.Pages.Rentals.ViewRental.Dialogs;
 
 public partial class AddCarDialogViewModel : IViewModel
 {
-    public RelayCommand AddCarCommand => new(AddCar, CanAddCar);
+    public RelayCommand AddCarCommand { get; }
 
     [ObservableProperty] private ObservableCollection<CarDto> _cars;
 
@@ -22,37 +26,61 @@ public partial class AddCarDialogViewModel : IViewModel
 
     [ObservableProperty] private bool _canExit;
 
-    private readonly ICarRepository _carRepository;
+    private readonly IUniversalMapper<RentalDto, Rental> _rentalMapper;
 
-    private readonly IRentalRepository _rentalRepository;
+    private readonly IUniversalMapper<CarDto, Car> _carMapper;
 
-    private readonly IMapper _mapper;
+    private readonly AppDbContext _store;
 
-    public AddCarDialogViewModel(ICarRepository carRepository,
-        IMapper mapper,
-        IRentalRepository rentalRepository)
+    public AddCarDialogViewModel(AppDbContext store,
+        IUniversalMapper<RentalDto, Rental> rentalMapper,
+        IUniversalMapper<CarDto, Car> carMapper)
     {
-        _carRepository = carRepository;
-        _mapper = mapper;
-        _rentalRepository = rentalRepository;
+        _store = store;
+        _rentalMapper = rentalMapper;
+        _carMapper = carMapper;
+
+        AddCarCommand = new RelayCommand(AddCar, CanAddCar);
     }
 
-    private void AddCar()
+    private async void AddCar()
     {
-        Rental.Cars.Add(Car);
-        Rental.CarIds.Add(Car.Id!.Value);
+        var rental = await _store.Rentals
+            .Include(p => p.Cars)
+            .FirstOrDefaultAsync(p => p.Id == Rental.Id);
 
-        _rentalRepository.Update(_mapper.Map<Rental>(Rental));
+        Guard.NotNull(rental, "Не найдена аренда");
+
+        var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == Car.Id);
+
+        Guard.NotNull(car, "Не найден автомобиль");
+
+        rental!.Cars.Add(car!);
+
+        await _store.SaveChangesAsync();
 
         CanExit = true;
     }
 
-    private bool CanAddCar() => Car != null;
-
-    public void OnShow(RentalDto rental)
+    private bool CanAddCar()
     {
-        Rental = _mapper.Map<RentalDto>(rental);
+        return Car != null;
+    }
 
-        Cars = _mapper.Map<ObservableCollection<CarDto>>(_carRepository.Table.Where(p => !Rental.CarIds.Contains(p.Id)));
+    public void OnShow(int rentalId)
+    {
+        var rental = _store.Rentals
+            .Include(p => p.Cars)
+            .FirstOrDefault(p => p.Id == rentalId);
+
+        Guard.NotNull(rental, "Не найдена аренда");
+
+        Rental = _rentalMapper.Map(rental);
+
+        var cars = _store.Cars.Where(p => !rental!.Cars.Select(r => r.Id).Contains(p.Id));
+
+        Cars = cars
+            .Select(p => _carMapper.Map(p))
+            .ToObservableCollection();
     }
 }

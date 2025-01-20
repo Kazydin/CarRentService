@@ -27,7 +27,7 @@ public class ClientValidator : AbstractValidator<Client>
             .NotEmpty().WithMessage("Номер водительского удостоверения не должен быть пустым.")
             .Matches(@"^\d{2} \d{2} \d{6}$").WithMessage("Номер водительского удостоверения должен быть в формате 'XX XX XXXXXX'.");
 
-        RuleFor(client => client.BranchId)
+        RuleFor(client => client.Branch)
             .NotEmpty().WithMessage("Привязка к филиалу обязательна");
     }
 }

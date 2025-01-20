@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Cars.CarsTable;
@@ -26,15 +32,19 @@ public partial class CarsTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<CarDto> _cars;
 
-    private readonly ICarRepository _carRepository;
-
     private readonly INavigationService _navigationService;
 
-    public CarsTableViewModel(ICarRepository carRepository,
-        INavigationService navigationService)
+    private readonly AppDbContext _store;
+
+    private readonly IUniversalMapper<CarDto, Car> _carMapper;
+
+    public CarsTableViewModel(INavigationService navigationService,
+        AppDbContext store,
+        IUniversalMapper<CarDto, Car> carMapper)
     {
-        _carRepository = carRepository;
         _navigationService = navigationService;
+        _store = store;
+        _carMapper = carMapper;
 
         // Настройка команд
         AddCarCommand = new RelayCommand(AddCar);
@@ -46,7 +56,9 @@ public partial class CarsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Cars = _carRepository.GetDtos();
+        Cars = _store.Cars
+            .Select(p => _carMapper.Map(p))
+            .ToObservableCollection();
     }
 
     private void AddCar()
@@ -70,11 +82,18 @@ public partial class CarsTableViewModel : BaseViewModel
         }
     }
 
-    private void DeleteCar(object? param)
+    private async void DeleteCar(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
-            _carRepository.Remove(record.Id!.Value);
+            var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == record.Id);
+
+            Guard.NotNull(car, "Не найден автомобиль");
+
+            _store.Cars.Remove(car!);
+
+            await _store.SaveChangesAsync();
+
             UpdateState();
         }
     }

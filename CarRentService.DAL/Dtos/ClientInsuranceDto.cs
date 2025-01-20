@@ -6,6 +6,11 @@ namespace CarRentService.DAL.Dtos;
 [ObservableObject]
 public partial class ClientInsuranceDto
 {
+    public ClientInsuranceDto()
+    {
+
+    }
+
     public ClientInsuranceDto(RentalDto rental, InsuranceDto insurance)
     {
         Id = insurance.Id!.Value;

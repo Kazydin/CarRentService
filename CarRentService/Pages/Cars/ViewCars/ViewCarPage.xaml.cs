@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
@@ -16,18 +17,18 @@ public sealed partial class ViewCarPage : NavigationPage
         _viewModel = viewModel;
     }
 
-    public override void OnNavigatedTo(INavigationData? parameters)
+    public override async Task OnNavigatedTo(INavigationData? parameters)
     {
         _viewModel.SetGrids(RentalsDataGrid);
 
         if (parameters is CommonNavigationData data)
         {
-            _viewModel.SetCar(data.EntityId);
+            await _viewModel.UpdateState(data.EntityId);
             Header = $"Редактирование автомобиля № {_viewModel.Car.Id!.Value}";
         }
         else
         {
-            _viewModel.SetCar();
+            await _viewModel.UpdateState();
             Header = "Создание автомобиля";
         }
     }

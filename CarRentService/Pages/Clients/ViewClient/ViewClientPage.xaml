@@ -269,7 +269,7 @@
                     HeaderLinesVisibility="Both"
                     IsGroupDropAreaExpanded="True"
                     ColumnWidthMode="Star"
-                    ItemsSource="{Binding Cars}">
+                    ItemsSource="{Binding Client.Cars}">
 
                     <dataGrid:SfDataGrid.Columns>
                         <dataGrid:GridNumericColumn
@@ -328,7 +328,7 @@
                     HeaderLinesVisibility="Both"
                     IsGroupDropAreaExpanded="True"
                     ColumnWidthMode="Star"
-                    ItemsSource="{Binding Insurances}">
+                    ItemsSource="{Binding Client.Insurances}">
 
                     <dataGrid:SfDataGrid.Columns>
                         <dataGrid:GridNumericColumn
@@ -384,7 +384,7 @@
                     IsGroupDropAreaExpanded="True"
                     MinHeight="400"
                     ColumnWidthMode="Star"
-                    ItemsSource="{Binding Payments}">
+                    ItemsSource="{Binding Client.Payments}">
 
                     <dataGrid:SfDataGrid.Columns>
                         <dataGrid:GridNumericColumn

@@ -62,9 +62,9 @@
             HorizontalAlignment="Stretch"
             Grid.Column="1"
             Margin="5, 10, 5, 0"
-            SelectedItem="{Binding Manager.Role, Converter={StaticResource EnumToDescriptionConverter}, Mode=TwoWay}"
+            SelectedItem="{Binding Manager.Role, Converter={StaticResource EnumToDescriptionConverter}, ConverterParameter='ManagerRoleEnum', Mode=TwoWay}"
             Width="Auto" />
-        <StackPanel Grid.Row="1" Grid.Column="2">
+        <StackPanel Grid.Row="1" Grid.Column="2" Visibility="{Binding IsBranchesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
             <editors:SfComboBox
                 ItemsSource="{Binding Branches, Mode=OneWay}"
                 Header="Филиалы"
@@ -73,7 +73,6 @@
                 DisplayMemberPath="Name"
                 TextMemberPath="Name"
                 SelectionMode="Multiple"
-                IsEnabled="{Binding IsBranchesEnabled}"
                 MultiSelectionDisplayMode="Token"
                 SelectionChangeTrigger="Always"
                 SelectionChanged="ManagerBranches_OnSelectionChanged"

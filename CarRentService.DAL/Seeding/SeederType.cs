@@ -14,5 +14,7 @@ public enum SeederType
 
     Payment,
 
-    Insurance
+    Insurance,
+
+    Main
 }

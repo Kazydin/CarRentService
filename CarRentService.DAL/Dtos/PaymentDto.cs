@@ -27,12 +27,6 @@ public partial class PaymentDto
     [ObservableProperty]
     private PaymentMethodEnum _method;
 
-    /// <summary>
-    /// Аренда, связанная с этим платежом.
-    /// </summary>
-    [ObservableProperty]
-    private int? _rentalId;
-
     #region LinkedEntities
 
     /// <summary>

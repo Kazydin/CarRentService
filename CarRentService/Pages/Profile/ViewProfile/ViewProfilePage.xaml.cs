@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL.Enum;
@@ -20,22 +21,23 @@ public sealed partial class ViewProfilePage : NavigationPage
         DataContext = viewModel;
         _viewModel = viewModel;
 
-        _branchesPage = ProfilePivot.Items.First(p => ((PivotItem)p).Header.ToString() == "Филиалы");
+        _branchesPage = ProfilePivot.Items.Single(p => ((PivotItem)p).Header.ToString() == "Филиалы");
     }
 
-    public override void OnNavigatedTo(INavigationData? parameters)
+    public override async Task OnNavigatedTo(INavigationData? parameters)
     {
-        _viewModel.ReloadState();
+        await _viewModel.UpdateState();
 
-        if (_viewModel.Manager.Role == ManagerRoleEnum.Admin
-            && ProfilePivot.Items.Contains(_branchesPage))
+        switch (_viewModel.Manager.Role)
         {
-            ProfilePivot.Items.Remove(_branchesPage);
-        }
-        else if (_viewModel.Manager.Role == ManagerRoleEnum.BranchManager
-                 && !ProfilePivot.Items.Contains(_branchesPage))
-        {
-            ProfilePivot.Items.Add(_branchesPage);
+            case ManagerRoleEnum.Admin
+                when ProfilePivot.Items.Contains(_branchesPage):
+                ProfilePivot.Items.Remove(_branchesPage);
+                break;
+            case ManagerRoleEnum.BranchManager
+                when !ProfilePivot.Items.Contains(_branchesPage):
+                ProfilePivot.Items.Add(_branchesPage);
+                break;
         }
 
         PasswordBox.Password = _viewModel.Manager.Password;

@@ -13,7 +13,6 @@ public class ClientMappingProfile : Profile
 
         CreateMap<Client, ClientDto>();
 
-        CreateMap<ClientDto, Client>()
-            .ForMember(dest => dest.BranchId, opt => opt.MapFrom(src => src.Branch.Id));
+        CreateMap<ClientDto, Client>();
     }
 }

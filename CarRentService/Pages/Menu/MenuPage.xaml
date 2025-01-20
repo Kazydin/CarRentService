@@ -82,6 +82,7 @@
             </NavigationViewItem>
             <NavigationViewItem
                 Content="Управление персоналом"
+                Visibility="{Binding IsManagerTabVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Tag="{x:Bind common:PageTypeEnum.Managers, Converter={StaticResource EnumToStringConverter}}"
                 Icon="Contact" />
 

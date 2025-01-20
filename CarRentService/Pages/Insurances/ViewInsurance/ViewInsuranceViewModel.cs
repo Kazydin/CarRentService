@@ -1,17 +1,18 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentValidation;
 using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Insurances.ViewInsurance;
@@ -34,21 +35,21 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
     private readonly INavigationService _navigationService;
 
-    private readonly IInsuranceRepository _insuranceRepository;
-
     private readonly INotificationService _notificationService;
 
-    private readonly IMapper _mapper;
+    private readonly IUniversalMapper<InsuranceDto, Insurance> _insuranceMapper;
+
+    private readonly AppDbContext _store;
 
     public ViewInsuranceViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IInsuranceRepository insuranceRepository,
-        IMapper mapper)
+        IUniversalMapper<InsuranceDto, Insurance> insuranceMapper,
+        AppDbContext store)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _insuranceRepository = insuranceRepository;
-        _mapper = mapper;
+        _insuranceMapper = insuranceMapper;
+        _store = store;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -73,11 +74,17 @@ public partial class ViewInsuranceViewModel : BaseViewModel
     {
         try
         {
-            _insuranceRepository.Update(_mapper.Map<Insurance>(Insurance));
+            var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == Insurance.Id);
+
+            Guard.NotNull(insurance, "Не найдена страхование");
+
+            _insuranceMapper.Map(Insurance, insurance!);
+
+            await _store.SaveChangesAsync();
+
+            await UpdateState(insurance!.Id);
 
             _notificationService.ShowTip("Обновление страхования", "Сохранено успешно!");
-
-            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {
@@ -85,12 +92,24 @@ public partial class ViewInsuranceViewModel : BaseViewModel
         }
     }
 
-    private void DeleteInsurance()
+    private async void DeleteInsurance()
     {
-        Guard.NotNull(Insurance, "Нельзя удалить страхование, которое еще не сохранено");
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Удаление страхования",
+                "Вы действительно хотите удалить страхование?");
 
-        _insuranceRepository.Remove(Insurance.Id!.Value);
-        _navigationService.GoBack();
+        if (result)
+        {
+            var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == Insurance.Id);
+
+            Guard.NotNull(insurance, "Не найдено страхование");
+
+            _store.Insurances.Remove(insurance!);
+
+            await _store.SaveChangesAsync();
+
+            _navigationService.GoBack();
+        }
     }
 
     public bool CanDeleteInsurance()
@@ -103,7 +122,7 @@ public partial class ViewInsuranceViewModel : BaseViewModel
         _navigationService.GoBack();
     }
 
-    public void SetInsurance(int? entityId = null)
+    public async Task UpdateState(int? entityId = null)
     {
         if (entityId == null)
         {
@@ -111,6 +130,10 @@ public partial class ViewInsuranceViewModel : BaseViewModel
             return;
         }
 
-        Insurance = _insuranceRepository.GetDto(entityId.Value);
+        var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == entityId);
+
+        Guard.NotNull(insurance, "Страхование не найдено");
+
+        Insurance = _insuranceMapper.Map(insurance!);
     }
 }

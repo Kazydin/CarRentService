@@ -18,10 +18,6 @@ public partial class InsuranceDto
     /// </summary>
     [ObservableProperty] private double _cost;
 
-    [ObservableProperty] private int? _carId;
-
-    [ObservableProperty] private int? _rentalId;
-
     #region LinkedEntities
 
     [ObservableProperty] private RentalDto? _rental;

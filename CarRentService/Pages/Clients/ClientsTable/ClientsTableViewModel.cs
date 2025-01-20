@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract.Repositories;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
+using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GuardNet;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Clients.ClientsTable;
@@ -24,15 +30,19 @@ public partial class ClientsTableViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<ClientDto> _clients;
 
-    private readonly IClientRepository _clientRepository;
-
     private readonly INavigationService _navigationService;
 
-    public ClientsTableViewModel(IClientRepository clientRepository,
-        INavigationService navigationService)
+    private readonly IUniversalMapper<ClientDto, Client> _clientMapper;
+
+    private readonly AppDbContext _store;
+
+    public ClientsTableViewModel(INavigationService navigationService,
+        IUniversalMapper<ClientDto, Client> clientMapper,
+        AppDbContext store)
     {
-        _clientRepository = clientRepository;
         _navigationService = navigationService;
+        _clientMapper = clientMapper;
+        _store = store;
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
@@ -43,7 +53,9 @@ public partial class ClientsTableViewModel : BaseViewModel
 
     public void UpdateState()
     {
-        Clients = _clientRepository.GetDtos();
+        Clients = _store.Clients
+            .Select(p => _clientMapper.Map(p))
+            .ToObservableCollection();
     }
 
     private void AddClient()
@@ -59,11 +71,18 @@ public partial class ClientsTableViewModel : BaseViewModel
         }
     }
 
-    private void DeleteClient(object? param)
+    private async void DeleteClient(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is ClientDto record)
         {
-            _clientRepository.Remove(record.Id!.Value);
+            var client = await _store.Clients.FirstOrDefaultAsync(p => p.Id == record.Id);
+
+            Guard.NotNull(client, "Не найден клиент");
+
+            _store.Clients.Remove(client!);
+
+            await _store.SaveChangesAsync();
+
             UpdateState();
         }
     }

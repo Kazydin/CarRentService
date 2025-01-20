@@ -14,7 +14,7 @@ public class TheftProtectionInsuranceStrategy : IInsurancePricingStrategy
 
         foreach (var insurance in rental.Insurances.Where(p => p.Type == InsuranceTypeEnum.TheftProtection))
         {
-            var car = rental.Cars.FirstOrDefault(p => p.Id == insurance.CarId);
+            var car = rental.Cars.FirstOrDefault(p => p.Id == insurance.Car!.Id);
 
             cost += BasicRate + car!.HorsePower * 0.5 - rental.Client!.Age * 20;
         }

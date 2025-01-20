@@ -1,16 +1,37 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Windows.ApplicationModel.Calls.Background;
+using CarRentService.Common;
+using CarRentService.Common.Abstract;
 using CarRentService.Common.Attributes;
-using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Dtos;
+using CarRentService.DAL.Entities;
 using CarRentService.DAL.Store;
-using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRentService.Extensions;
 
 public static class InjectDIExtensions
 {
+    public static void AdUniversalMappers(this IServiceCollection services)
+    {
+        services.AddTransient<IUniversalMapper<CarDto, Car>, UniversalMapper<CarDto, Car>>();
+        services.AddTransient<IUniversalMapper<ClientDto, Client>, UniversalMapper<ClientDto, Client>>();
+        services.AddTransient<IUniversalMapper<BranchDto, Branch>, UniversalMapper<BranchDto, Branch>>();
+        services.AddTransient<IUniversalMapper<InsuranceDto, Insurance>, UniversalMapper<InsuranceDto, Insurance>>();
+        services.AddTransient<IUniversalMapper<ManagerDto, Manager>, UniversalMapper<ManagerDto, Manager>>();
+        services.AddTransient<IUniversalMapper<PaymentDto, Payment>, UniversalMapper<PaymentDto, Payment>>();
+        services.AddTransient<IUniversalMapper<RentalDto, Rental>, UniversalMapper<RentalDto, Rental>>();
+    }
+
+    public static void AddDbContext(this IServiceCollection services)
+    {
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseInMemoryDatabase("InMemoryDb"));
+    }
+
     public static void AddServicesWithAttribute(this IServiceCollection services, params Assembly[] assemblies)
     {
         foreach (var assembly in assemblies)
@@ -80,19 +101,5 @@ public static class InjectDIExtensions
         {
             services.AddTransient(serviceType, implementationType);
         }
-    }
-
-    public static void AddDataStoreContext(this IServiceCollection services)
-    {
-        services.AddSingleton<IDataStoreContext>(serviceProvider =>
-        {
-            // Инициализируем DataStoreContext
-            var context = new DataStoreContext();
-
-            // Устанавливаем в DataStoreContextProvider
-            DataStoreContextProvider.Init(context);
-
-            return context;
-        });
     }
 }
