@@ -8,6 +8,7 @@ using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -36,13 +37,17 @@ public partial class CarsTableViewModel : BaseViewModel
 
     private readonly IUniversalMapper<CarDto, Car> _carMapper;
 
+    private INotificationService _notificationService;
+
     public CarsTableViewModel(INavigationService navigationService,
         AppDbContext store,
-        IUniversalMapper<CarDto, Car> carMapper)
+        IUniversalMapper<CarDto, Car> carMapper,
+        INotificationService notificationService)
     {
         _navigationService = navigationService;
         _store = store;
         _carMapper = carMapper;
+        _notificationService = notificationService;
 
         // Настройка команд
         AddCarCommand = new RelayCommand(AddCar);
@@ -54,6 +59,8 @@ public partial class CarsTableViewModel : BaseViewModel
     public void UpdateState()
     {
         Cars = _store.Cars
+            .Include(p => p.Rentals)
+            .Include(p => p.Branch)
             .Select(p => _carMapper.Map(p))
             .ToObservableCollection();
     }
@@ -75,15 +82,32 @@ public partial class CarsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
-            var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == record.Id);
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление автомобиля",
+                    "Вы действительно хотите удалить автомобиль?");
 
-            Guard.NotNull(car, "Не найден автомобиль");
+            if (result)
+            {
+                var car = await _store.Cars.SingleAsync(p => p.Id == record.Id);
 
-            _store.Cars.Remove(car!);
+                if (car.Status == CarStatusEnum.Rented)
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "Нельзя удалить арендованный автомобиль");
+                    return;
+                }
 
-            await _store.SaveChangesAsync();
+                if (car.Status == CarStatusEnum.InRepair)
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "Нельзя удалить автомобиль на ремонте");
+                    return;
+                }
 
-            UpdateState();
+                _store.Cars.Remove(car);
+
+                await _store.SaveChangesAsync();
+
+                UpdateState();
+            }
         }
     }
 

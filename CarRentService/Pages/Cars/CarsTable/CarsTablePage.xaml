@@ -51,6 +51,24 @@
                     HeaderText="Статус"
                     DisplayBinding="{Binding Path=Status, Converter={StaticResource EnumToDescriptionConverter}}" />
                 <dataGrid:GridTextColumn
+                    HeaderText="Регистрационный номер"
+                    MappingName="RegistrationNumber" />
+                <dataGrid:GridNumericColumn
+                    HeaderText="ID аренды"
+                    MappingName="CurrentRental.Id" />
+                <dataGrid:GridDateColumn
+                    HeaderText="Дата начала аренды"
+                    MappingName="CurrentRental.StartDate" />
+                <dataGrid:GridDateColumn
+                    HeaderText="Дата конца аренды"
+                    MappingName="CurrentRental.EndDate" />
+                <dataGrid:GridNumericColumn
+                    HeaderText="ID филиала"
+                    MappingName="Branch.Id" />
+                <dataGrid:GridTextColumn
+                    HeaderText="Название филиала"
+                    MappingName="Branch.Name" />
+                <dataGrid:GridTextColumn
                     HeaderText="Марка"
                     MappingName="Make" />
                 <dataGrid:GridTextColumn
@@ -59,6 +77,9 @@
                 <dataGrid:GridNumericColumn
                     MappingName="Year"
                     HeaderText="Год" />
+                <dataGrid:GridNumericColumn
+                    HeaderText="Л.С."
+                    MappingName="HorsePower" />
             </dataGrid:SfDataGrid.Columns>
 
             <dataGrid:SfDataGrid.RecordContextFlyout>

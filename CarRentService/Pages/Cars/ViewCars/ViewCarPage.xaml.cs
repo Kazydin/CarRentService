@@ -24,7 +24,7 @@ public sealed partial class ViewCarPage : NavigationPage
         if (parameters is CommonNavigationData data)
         {
             await _viewModel.UpdateState(data.EntityId);
-            Header = $"Редактирование автомобиля № {_viewModel.Car.Id!.Value}";
+            Header = $"Редактирование автомобиля {_viewModel.Car.Name}";
         }
         else
         {

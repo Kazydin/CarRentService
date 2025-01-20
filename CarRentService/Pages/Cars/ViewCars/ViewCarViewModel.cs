@@ -71,9 +71,15 @@ public partial class ViewCarViewModel : BaseViewModel
         SendToRepairCommand = new RelayCommand(SendToRepair, CanSendToRepair);
         ReturnFromRepairCommand = new RelayCommand(ReturnFromRepair, CanReturnFromRepair);
 
-        AddRentalCommand = new RelayCommand<object>(AddRental);
+        AddRentalCommand = new RelayCommand<object>(AddRental, CanAddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
     }
+
+    private bool CanAddRental(object? obj)
+    {
+        return Car.Id.HasValue;
+    }
+
     private void AddRental(object? obj)
     {
         _navigationService.Navigate(PageTypeEnum.EditRental);
@@ -144,8 +150,6 @@ public partial class ViewCarViewModel : BaseViewModel
             await UpdateState(car.Id);
 
             _notificationService.ShowTip("Обновление автомобиля", "Сохранено успешно!");
-
-            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {
@@ -202,6 +206,8 @@ public partial class ViewCarViewModel : BaseViewModel
         Guard.NotNull(car, "Автомобиль не найден");
 
         Car = _carMapper.Map(car!);
+
+        AddRentalCommand.NotifyCanExecuteChanged();
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid)

@@ -158,8 +158,6 @@ public partial class ViewBranchViewModel : BaseViewModel
             await _store.SaveChangesAsync();
 
             _notificationService.ShowTip("Обновление филиала", "Сохранено успешно!");
-
-            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {

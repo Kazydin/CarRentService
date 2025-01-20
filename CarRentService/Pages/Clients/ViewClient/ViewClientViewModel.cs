@@ -123,8 +123,6 @@ public partial class ViewClientViewModel : BaseViewModel
             _notificationService.ShowTip("Обновление клиента", "Сохранено успешно!");
 
             await UpdateState(client.Id);
-
-            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {

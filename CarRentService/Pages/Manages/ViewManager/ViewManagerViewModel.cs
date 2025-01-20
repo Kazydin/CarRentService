@@ -86,8 +86,6 @@ public partial class ViewManagerViewModel : BaseViewModel
             await _store.SaveChangesAsync();
 
             _notificationService.ShowTip("Обновление менеджера", "Сохранено успешно!");
-
-            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {
