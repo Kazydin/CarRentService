@@ -39,7 +39,10 @@ public partial class ClientDto
     private ObservableCollection<ClientInsuranceDto> _insurances = new();
 
     [ObservableProperty]
-    private BranchDto? _branch;
+    private BranchDto _branch;
+
+    [ObservableProperty]
+    private string _name;
 
     #endregion
 
@@ -52,7 +55,7 @@ public partial class ClientDto
         {
             if (!DriverLicenseIssuedDate.HasValue)
             {
-                throw new ArgumentNullException(nameof(DriverLicenseIssuedDate), "Не заполнена дата получения водительского удостоверения");
+                return 0;
             }
 
             var currentDate = DateTime.Now;
@@ -66,5 +69,36 @@ public partial class ClientDto
 
             return years > 0 ? years : 0;
         }
+    }
+
+    protected bool Equals(ClientDto other)
+    {
+        return _id == other._id && _fio == other._fio && _age == other._age && _phone == other._phone && _driverLicenseNumber == other._driverLicenseNumber && Nullable.Equals(_driverLicenseIssuedDate, other._driverLicenseIssuedDate) && _rentals.Equals(other._rentals) && _cars.Equals(other._cars) && _payments.Equals(other._payments) && _insurances.Equals(other._insurances) && _branch.Equals(other._branch) && _name == other._name;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((ClientDto)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        var hashCode = new HashCode();
+        hashCode.Add(_id);
+        hashCode.Add(_fio);
+        hashCode.Add(_age);
+        hashCode.Add(_phone);
+        hashCode.Add(_driverLicenseNumber);
+        hashCode.Add(_driverLicenseIssuedDate);
+        hashCode.Add(_rentals);
+        hashCode.Add(_cars);
+        hashCode.Add(_payments);
+        hashCode.Add(_insurances);
+        hashCode.Add(_branch);
+        hashCode.Add(_name);
+        return hashCode.ToHashCode();
     }
 }

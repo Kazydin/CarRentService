@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
@@ -20,5 +21,10 @@ public sealed partial class BranchesTablePage : NavigationPage
     {
         ViewModel.UpdateState();
         ViewModel.SetGrids(BranchesDataGrid);
+    }
+
+    public override async Task OnNavigatedTo(INavigationData? parameters)
+    {
+        ViewModel.UpdateState();
     }
 }

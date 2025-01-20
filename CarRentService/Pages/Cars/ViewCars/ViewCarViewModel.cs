@@ -2,12 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
@@ -17,7 +15,6 @@ using CommunityToolkit.Mvvm.Input;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
-using Windows.Media.Protection.PlayReady;
 using FluentValidation;
 
 namespace CarRentService.Pages.Cars.ViewCars;
@@ -122,16 +119,29 @@ public partial class ViewCarViewModel : BaseViewModel
     {
         try
         {
-            var car = await _store.Cars
-                .FirstOrDefaultAsync(p => p.Id == Car.Id);
+            var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == Car.Id) ?? new Car();
 
-            car ??= new Car();
+            _carMapper.Map(Car, car);
 
-            _carMapper.Map(Car, car!);
+            car.Rentals = await _store.Rentals
+                .Where(p => Car.Rentals.Select(r => r.Id).Contains(p.Id))
+                .ToListAsync();
+
+            if (Car.Branch != null)
+            {
+                car.Branch = await _store.Branches.FirstOrDefaultAsync(p => p.Id == Car.Branch!.Id);
+            }
+
+            _carMapper.Validate(car);
+
+            if (car.Id == 0)
+            {
+                _store.Cars.Add(car);
+            }
 
             await _store.SaveChangesAsync();
 
-            await UpdateState(car!.Id);
+            await UpdateState(car.Id);
 
             _notificationService.ShowTip("Обновление автомобиля", "Сохранено успешно!");
         }

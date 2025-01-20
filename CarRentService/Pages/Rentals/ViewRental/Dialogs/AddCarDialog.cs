@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CarRentService.Common.Attributes;
 using CarRentService.DAL.Dtos;
@@ -48,7 +49,7 @@ public partial class AddCarDialog
 
     public async Task ShowAsync(RentalDto rental, XamlRoot xamlRoot)
     {
-        _viewModel.OnShow(rental.Id!.Value);
+        _viewModel.OnShow(rental);
 
         _dialog.XamlRoot = xamlRoot;
         await _dialog.ShowAsync();

@@ -12,7 +12,7 @@
     mc:Ignorable="d">
 
     <StackPanel>
-        <TextBlock Margin="5">Клиент</TextBlock>
+        <TextBlock Margin="5">Автомобиль</TextBlock>
         <editors:SfAutoComplete PlaceholderText="Выберте автомобиль"
                                 ItemsSource="{Binding Cars}"
                                 DisplayMemberPath="Name"

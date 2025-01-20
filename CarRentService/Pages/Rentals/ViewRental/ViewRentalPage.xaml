@@ -98,7 +98,7 @@
                         IsEnabled="False" />
                 </StackPanel>
                 <StackPanel
-                    Margin="5, 10, 0, 10"
+                    Margin="5, 10, 5, 10"
                     Grid.Row="2"
                     Grid.Column="1">
                     <TextBlock
@@ -107,12 +107,24 @@
                     </TextBlock>
                     <TextBox
                         Text="{Binding Rental.TotalPaymentsSum, Mode=OneWay}"
-                        IsEnabled="False"/>
+                        IsEnabled="False" />
                 </StackPanel>
                 <StackPanel
                     Margin="0, 10, 5, 5"
                     Grid.Row="3"
                     Grid.Column="0">
+                    <TextBlock Margin="5">Клиент</TextBlock>
+                    <editors:SfAutoComplete PlaceholderText="Выберте клиента"
+                                            ItemsSource="{Binding Clients}"
+                                            DisplayMemberPath="Name"
+                                            HorizontalAlignment="Stretch"
+                                            SelectedItem="{Binding Client, Mode=TwoWay}"
+                                            MaxDropDownHeight="300" />
+                </StackPanel>
+                <StackPanel
+                    Margin="5, 10, 5, 5"
+                    Grid.Row="3"
+                    Grid.Column="1">
                     <TextBlock
                         Margin="0, 0, 0, 10">
                         Дата начала
@@ -125,7 +137,7 @@
                 <StackPanel
                     Margin="5, 10, 5, 10"
                     Grid.Row="3"
-                    Grid.Column="1">
+                    Grid.Column="2">
                     <TextBlock
                         Margin="0, 0, 0, 10">
                         Дата окончания
@@ -138,18 +150,18 @@
                 <editors:SfComboBox
                     ItemsSource="{Binding Tariffs, Converter={StaticResource EnumCollectionToDescriptionsConverter}, Mode=OneWay}"
                     Header="Тариф"
-                    Grid.Row="3"
-                    Grid.Column="2"
-                    Margin="5, 11, 0, 10"
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Margin="5, 11, 5, 10"
                     HorizontalAlignment="Stretch"
                     SelectedItem="{Binding Rental.Tariff, Converter={StaticResource EnumToDescriptionConverter}, ConverterParameter='RentalTariffEnum', Mode=TwoWay}"
                     Width="Auto" />
                 <editors:SfComboBox
                     ItemsSource="{Binding Branches, Mode=OneWay}"
                     Header="Филиал"
-                    Margin="0, 10, 0, 0"
+                    Margin="5, 10, 0, 0"
                     Grid.Row="4"
-                    Grid.Column="0"
+                    Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     TextMemberPath="Name"
                     DisplayMemberPath="Name"
@@ -184,8 +196,6 @@
                         Height="Auto" />
                     <RowDefinition
                         Height="Auto" />
-                    <RowDefinition
-                        Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition
@@ -197,19 +207,9 @@
                     <ColumnDefinition
                         Width="*" />
                 </Grid.ColumnDefinitions>
-                <CommandBar
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="4"
-                    DefaultLabelPosition="Right">
-                    <AppBarButton
-                        Icon="Clear"
-                        Command="{Binding EditClientCommand}"
-                        Label="Изменить клиента" />
-                </CommandBar>
                 <StackPanel
                     Margin="0, 10, 5, 10"
-                    Grid.Row="1"
+                    Grid.Row="0"
                     Grid.Column="0">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -221,7 +221,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="0, 10, 5, 5"
-                    Grid.Row="2"
+                    Grid.Row="1"
                     Grid.Column="0">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -233,7 +233,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 5, 10"
-                    Grid.Row="2"
+                    Grid.Row="1"
                     Grid.Column="1">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -245,7 +245,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 5, 10"
-                    Grid.Row="2"
+                    Grid.Row="1"
                     Grid.Column="2">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -257,7 +257,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="5, 10, 0, 10"
-                    Grid.Row="2"
+                    Grid.Row="1"
                     Grid.Column="3">
                     <TextBlock
                         Margin="0, 0, 0, 10">
@@ -269,7 +269,7 @@
                 </StackPanel>
                 <StackPanel
                     Margin="0, 10, 0, 0"
-                    Grid.Row="3"
+                    Grid.Row="2"
                     Grid.Column="0">
                     <TextBlock Text="Филиал договора (основной)"
                                Margin="0, 0, 0, 10" />

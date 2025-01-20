@@ -111,6 +111,7 @@
                     Margin="5, 11, 5, 0"
                     TextMemberPath="Name"
                     DisplayMemberPath="Name"
+                    x:Name="ClientBranch"
                     SelectedValuePath="Name"
                     SelectedItem="{Binding Client.Branch, Mode=TwoWay}"
                     Width="Auto"

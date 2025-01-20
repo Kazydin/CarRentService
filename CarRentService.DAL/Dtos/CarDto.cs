@@ -35,7 +35,7 @@ public partial class CarDto
     /// Год выпуска транспортного средства.
     /// </summary>
     [ObservableProperty]
-    private int? _year;
+    private int _year;
 
     [ObservableProperty]
     private int _horsePower;
@@ -74,7 +74,7 @@ public partial class CarDto
         get
         {
             var currentDate = DateTime.Now;
-            return currentDate.Year - Year!.Value;
+            return currentDate.Year - Year;
         }
     }
 

@@ -12,6 +12,8 @@ public class CarMappingProfile : Profile
 
         CreateMap<Car, CarDto>();
 
-        CreateMap<CarDto, Car>();
+        CreateMap<CarDto, Car>()
+            .ForMember(dest => dest.Branch, opt => opt.Ignore())
+            .ForMember(dest => dest.Rentals, opt => opt.Ignore());
     }
 }

@@ -11,7 +11,8 @@ public class ClientMappingProfile : Profile
     {
         CreateMap<Client, Client>();
 
-        CreateMap<Client, ClientDto>();
+        CreateMap<Client, ClientDto>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Fio} ({src.DriverLicenseNumber})"));
 
         CreateMap<ClientDto, Client>()
             .ForMember(dest => dest.Branch, opt => opt.Ignore())

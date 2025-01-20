@@ -30,6 +30,8 @@ public sealed partial class ViewCarPage : NavigationPage
         {
             await _viewModel.UpdateState();
             Header = "Создание автомобиля";
+
+            CarBranch.SelectedIndex = -1;
         }
     }
 }

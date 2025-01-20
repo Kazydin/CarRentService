@@ -30,6 +30,8 @@ public sealed partial class ViewClientPage : NavigationPage
         {
             await _viewModel.UpdateState();
             Header = "Создание клиента";
+
+            ClientBranch.SelectedIndex = -1;
         }
     }
 }

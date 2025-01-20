@@ -35,17 +35,21 @@ public partial class BranchDto
 
     #endregion
 
+    protected bool Equals(BranchDto other)
+    {
+        return _id == other._id && _name == other._name && _address == other._address && numberOfCars == other.numberOfCars && _contactDetails == other._contactDetails && _cars.Equals(other._cars) && _managers.Equals(other._managers) && _clients.Equals(other._clients);
+    }
+
     public override bool Equals(object? obj)
     {
-        return obj is BranchDto other &&
-               Id == other.Id &&
-               Name == other.Name &&
-               Address == other.Address &&
-               ContactDetails == other.ContactDetails;
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((BranchDto)obj);
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Id, Name, Address, ContactDetails);
+        return HashCode.Combine(_id, _name, _address, numberOfCars, _contactDetails, _cars, _managers, _clients);
     }
 }

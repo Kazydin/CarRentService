@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,7 +7,6 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Store;
@@ -49,17 +47,21 @@ public partial class ViewClientViewModel : BaseViewModel
 
     private readonly AppDbContext _store;
 
+    private readonly IMapper _mapper;
+
     public ViewClientViewModel(INavigationService navigationService,
         INotificationService notificationService,
         AppDbContext store,
         IUniversalMapper<ClientDto, Client> clientMapper,
-        IUniversalMapper<BranchDto, Branch> branchMapper)
+        IUniversalMapper<BranchDto, Branch> branchMapper,
+        IMapper mapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
         _store = store;
         _clientMapper = clientMapper;
         _branchMapper = branchMapper;
+        _mapper = mapper;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -94,20 +96,18 @@ public partial class ViewClientViewModel : BaseViewModel
     {
         try
         {
-            var client = await _store.Clients.FirstOrDefaultAsync(p => p.Id == Client.Id);
-
-            if (client == null)
-            {
-                client = new Client();
-
-                _store.Clients.Add(client);
-            }
+            var client = await _store.Clients.FirstOrDefaultAsync(p => p.Id == Client.Id) ?? new Client();
 
             _clientMapper.Map(Client, client);
 
             client.Branch = await _store.Branches.SingleAsync(p => p.Id == Client.Branch!.Id);
 
             _clientMapper.Validate(client);
+
+            if (client.Id == 0)
+            {
+                _store.Clients.Add(client);
+            }
 
             await _store.SaveChangesAsync();
 
@@ -184,5 +184,19 @@ public partial class ViewClientViewModel : BaseViewModel
             { "Insurances", insurancesDataGrid },
             { "Payments", paymentsDataGrid }
         };
+    }
+
+    partial void OnClientChanged(ClientDto value)
+    {
+        if (value != null)
+        {
+            value.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(Client.Branch))
+                {
+                    SaveCommand.NotifyCanExecuteChanged();
+                }
+            };
+        }
     }
 }

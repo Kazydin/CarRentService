@@ -98,11 +98,11 @@ public partial class CarsTableViewModel : BaseViewModel
         }
     }
 
-    public void SetGrids(SfDataGrid clientsDataGrid)
+    public void SetGrids(SfDataGrid carsDataGrid)
     {
         Grids = new Dictionary<string, SfDataGrid>()
         {
-            { "Clients", clientsDataGrid }
+            { "Cars", carsDataGrid }
         };
     }
 }

@@ -26,18 +26,14 @@ public partial class AddCarDialogViewModel : IViewModel
 
     [ObservableProperty] private bool _canExit;
 
-    private readonly IUniversalMapper<RentalDto, Rental> _rentalMapper;
-
     private readonly IUniversalMapper<CarDto, Car> _carMapper;
 
     private readonly AppDbContext _store;
 
     public AddCarDialogViewModel(AppDbContext store,
-        IUniversalMapper<RentalDto, Rental> rentalMapper,
         IUniversalMapper<CarDto, Car> carMapper)
     {
         _store = store;
-        _rentalMapper = rentalMapper;
         _carMapper = carMapper;
 
         AddCarCommand = new RelayCommand(AddCar, CanAddCar);
@@ -67,15 +63,9 @@ public partial class AddCarDialogViewModel : IViewModel
         return Car != null;
     }
 
-    public void OnShow(int rentalId)
+    public void OnShow(RentalDto rental)
     {
-        var rental = _store.Rentals
-            .Include(p => p.Cars)
-            .FirstOrDefault(p => p.Id == rentalId);
-
-        Guard.NotNull(rental, "Не найдена аренда");
-
-        Rental = _rentalMapper.Map(rental);
+        Rental = rental;
 
         var cars = _store.Cars.Where(p => !rental!.Cars.Select(r => r.Id).Contains(p.Id));
 

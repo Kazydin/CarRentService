@@ -22,6 +22,8 @@ using GuardNet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.UI.Xaml;
 using Syncfusion.UI.Xaml.DataGrid;
+using Windows.Media.Protection.PlayReady;
+using AutoMapper;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 
@@ -38,8 +40,6 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     // TODO: редактирование машины в системе
     public RelayCommand<object> EditCarCommand { get; }
-
-    public RelayCommand<object> EditClientCommand { get; }
 
     public RelayCommand<object> AddPaymentCommand { get; }
 
@@ -61,6 +61,10 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<BranchDto> _branches;
 
+    [ObservableProperty] private ObservableCollection<ClientDto> _clients;
+
+    [ObservableProperty] private ClientDto _client;
+
     [ObservableProperty] private ObservableCollection<RentalTariffEnum> _tariffs;
 
     [ObservableProperty] private DateTime _minDate;
@@ -75,6 +79,8 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     private readonly IUniversalMapper<BranchDto, Branch> _branchMapper;
 
+    private readonly IUniversalMapper<ClientDto, Client> _clientMapper;
+
     private readonly IRentalCostCalculationService _costCalculationService;
 
     private readonly AddCarDialog _addCarContent;
@@ -87,7 +93,8 @@ public partial class ViewRentalViewModel : BaseViewModel
         AddCarDialog addCarContent,
         AppDbContext store,
         IUniversalMapper<RentalDto, Rental> rentalMapper,
-        IUniversalMapper<BranchDto, Branch> branchMapper)
+        IUniversalMapper<BranchDto, Branch> branchMapper,
+        IUniversalMapper<ClientDto, Client> clientMapper)
     {
         MinDate = DateTime.Today;
 
@@ -98,8 +105,9 @@ public partial class ViewRentalViewModel : BaseViewModel
         _store = store;
         _rentalMapper = rentalMapper;
         _branchMapper = branchMapper;
+        _clientMapper = clientMapper;
 
-        SaveCommand = new RelayCommand(Save);
+        SaveCommand = new RelayCommand(Save, CanSave);
         CancelEditCommand = new RelayCommand(CancelEdit);
         DeleteRentalCommand = new RelayCommand(DeleteRental, CanDeleteRental);
 
@@ -108,8 +116,6 @@ public partial class ViewRentalViewModel : BaseViewModel
         AddCarCommand = new RelayCommand<object>(AddCar);
         EditCarCommand = new RelayCommand<object>(EditCar);
         DeleteCarCommand = new RelayCommand<object>(DeleteCar);
-
-        EditClientCommand = new RelayCommand<object>(EditClient);
 
         AddPaymentCommand = new RelayCommand<object>(AddPayment);
         DeletePaymentCommand = new RelayCommand<object>(EditPayment);
@@ -195,11 +201,6 @@ public partial class ViewRentalViewModel : BaseViewModel
         throw new System.NotImplementedException();
     }
 
-    private void EditClient(object? obj)
-    {
-        throw new System.NotImplementedException();
-    }
-
     private void EditCar(object? obj)
     {
         // TODO: implement
@@ -240,23 +241,43 @@ public partial class ViewRentalViewModel : BaseViewModel
         await _addCarContent.ShowAsync(Rental, _xamlRoot);
     }
 
+    private bool CanSave()
+    {
+        return Rental.Client != null;
+    }
+
     private async void Save()
     {
         try
         {
-            var rental = await _store.Rentals
-                .Include(p => p.Cars)
-                .FirstOrDefaultAsync(p => p.Id == Rental.Id);
+            var rental = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == Rental.Id);
 
-            rental ??= new Rental();
+            if (rental == null)
+            {
+                rental = new Rental();
 
-            _rentalMapper.Map(Rental, rental!);
+                _store.Rentals.Add(rental);
+            }
+            _rentalMapper.Map(Rental, rental);
+
+            rental.Cars = await _store.Cars
+                .Where(p => Rental.Cars.Select(r => r.Id).Contains(p.Id))
+                .ToListAsync();
+
+            rental.Insurances = await _store.Insurances
+                .Where(p => Rental.Insurances.Select(r => r.Id).Contains(p.Id))
+                .ToListAsync();
+
+            rental.Client = await _store.Clients
+                .SingleAsync(p => p.Id == Rental.Client!.Id);
+
+            _rentalMapper.Validate(rental);
 
             await _store.SaveChangesAsync();
 
             _notificationService.ShowTip("Обновление аренды", "Сохранено успешно!");
 
-            await UpdateState(rental!.Id);
+            await UpdateState(rental.Id);
         }
         catch (ValidationException e)
         {
@@ -294,6 +315,17 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     public async Task UpdateState(int? entityId = null)
     {
+        Branches = _store.Branches
+            .Select(p => _branchMapper.Map(p))
+            .ToObservableCollection();
+
+        Client = null!;
+
+        Clients = _store.Clients
+            .Include(p => p.Branch)
+            .Select(p => _clientMapper.Map(p))
+            .ToObservableCollection();
+
         if (entityId == null)
         {
             Rental = new RentalDto();
@@ -361,5 +393,11 @@ public partial class ViewRentalViewModel : BaseViewModel
     public void SetXamlRoot(XamlRoot xamlRoot)
     {
         _xamlRoot = xamlRoot;
+    }
+
+    partial void OnClientChanged(ClientDto value)
+    {
+        Rental.Client = value;
+        SaveCommand.NotifyCanExecuteChanged();
     }
 }

@@ -14,6 +14,11 @@ public class RentalMappingProfile : Profile
 
         CreateMap<Rental, RentalDto>();
 
-        CreateMap<RentalDto, Rental>();
+        CreateMap<RentalDto, Rental>()
+            .ForMember(dest => dest.Cars, opt => opt.Ignore())
+            .ForMember(dest => dest.Branch, opt => opt.Ignore())
+            .ForMember(dest => dest.Client, opt => opt.Ignore())
+            .ForMember(dest => dest.Insurances, opt => opt.Ignore())
+            .ForMember(dest => dest.Payments, opt => opt.Ignore());
     }
 }
