@@ -8,6 +8,8 @@ public class ManagerConfiguration : IEntityTypeConfiguration<Manager>
 {
     public void Configure(EntityTypeBuilder<Manager> builder)
     {
+        builder.ToTable("Managers");
+
         builder.HasKey(r => r.Id);
 
         builder.HasMany(p => p.Branches)

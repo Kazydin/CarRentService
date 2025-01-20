@@ -7,6 +7,7 @@ public class RentalValidator : AbstractValidator<Rental>
 {
     public RentalValidator()
     {
-
+        ClassLevelCascadeMode = CascadeMode.Stop;
+        RuleLevelCascadeMode = CascadeMode.Stop;
     }
 }

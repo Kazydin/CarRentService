@@ -8,6 +8,8 @@ public class RentalConfiguration : IEntityTypeConfiguration<Rental>
 {
     public void Configure(EntityTypeBuilder<Rental> builder)
     {
+        builder.ToTable("Rentals");
+
         builder.HasKey(x => x.Id);
 
         builder.HasMany(p => p.Cars)

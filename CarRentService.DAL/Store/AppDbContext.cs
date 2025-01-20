@@ -1,5 +1,7 @@
-﻿using CarRentService.DAL.Entities;
+﻿using System.Reflection;
+using CarRentService.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace CarRentService.DAL.Store;
 
@@ -19,13 +21,22 @@ public class AppDbContext : DbContext
 
     public DbSet<Manager> Managers { get; set; }
 
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    public AppDbContext()
+    {
+        
+    }
+
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
     {
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+        => options.UseSqlite("DataSource=app.db");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.Load("CarRentService.DAL"));
 
         base.OnModelCreating(modelBuilder);
     }

@@ -8,6 +8,8 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
 {
     public void Configure(EntityTypeBuilder<Client> builder)
     {
+        builder.ToTable("Clients");
+
         builder.HasKey(p => p.Id);
 
         builder.HasOne(p => p.Branch)

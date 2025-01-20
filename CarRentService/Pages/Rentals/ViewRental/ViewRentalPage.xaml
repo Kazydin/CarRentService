@@ -119,6 +119,7 @@
                     </TextBlock>
                     <editors:SfDatePicker
                         DisplayDateFormat="dd.MM.yyyy"
+                        PlaceholderText="Выберите дату начала"
                         SelectedDate="{Binding Rental.StartDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -131,6 +132,7 @@
                     </TextBlock>
                     <editors:SfDatePicker
                         DisplayDateFormat="dd.MM.yyyy"
+                        PlaceholderText="Выберите дату окончания"
                         SelectedDate="{Binding Rental.EndDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}" />
                 </StackPanel>
                 <editors:SfComboBox

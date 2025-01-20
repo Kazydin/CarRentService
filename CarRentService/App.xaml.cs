@@ -22,9 +22,8 @@ public partial class App : Application
     {
         // Настроим DI контейнер
         var services = new ServiceCollection();
-        ConfigureServices(services);
-
         services.AddDbContext();
+        ConfigureServices(services);
         services.AdUniversalMappers();
 
         ServiceProvider = services.BuildServiceProvider();

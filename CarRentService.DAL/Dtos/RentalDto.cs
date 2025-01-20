@@ -13,12 +13,12 @@ public partial class RentalDto
     /// <summary>
     /// Дата начала аренды.
     /// </summary>
-    [ObservableProperty] private DateTime _startDate;
+    [ObservableProperty] private DateTime? _startDate;
 
     /// <summary>
     /// Дата окончания аренды.
     /// </summary>
-    [ObservableProperty] private DateTime _endDate;
+    [ObservableProperty] private DateTime? _endDate;
 
     /// <summary>
     /// Статус аренды.
@@ -59,17 +59,12 @@ public partial class RentalDto
     {
         get
         {
-            if (StartDate == default || EndDate == default)
+            if (StartDate == null || EndDate == null || EndDate < StartDate)
             {
-                throw new InvalidOperationException("Дата начала или окончания не указаны");
+                return 0;
             }
 
-            if (EndDate < StartDate)
-            {
-                throw new InvalidOperationException("Дата окончания раньше даты начала");
-            }
-
-            return (EndDate - StartDate).Days;
+            return (EndDate - StartDate)!.Value.Days;
         }
     }
 

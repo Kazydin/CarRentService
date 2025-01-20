@@ -16,8 +16,8 @@ public partial class ClientCarDto
         RentalId = rental.Id!.Value;
         RegistrationNumber = car.RegistrationNumber;
         BranchName = car.Branch!.Name;
-        StartDate = rental.StartDate;
-        EndDate = rental.EndDate;
+        StartDate = rental.StartDate!.Value;
+        EndDate = rental.EndDate!.Value;
         Make = car.Make;
         Model = car.Model;
         Year = car.Year;

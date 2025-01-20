@@ -145,7 +145,9 @@ public partial class ViewBranchViewModel : BaseViewModel
                 .Include(p => p.Cars)
                 .Include(p => p.Clients)
                 .Include(p => p.Managers)
-                .SingleAsync(p => p.Id == Branch.Id);
+                .FirstOrDefaultAsync(p => p.Id == Branch.Id);
+
+            branch ??= new Branch();
 
             _branchMapper.Map(Branch, branch);
 

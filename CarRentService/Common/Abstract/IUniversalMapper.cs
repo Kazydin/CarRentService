@@ -9,4 +9,6 @@ public interface IUniversalMapper<TDto, TEntity>
     TDto Map(TEntity entity);
 
     TEntity Map(TDto dto, TEntity entity);
+
+    void Validate(TEntity entity);
 }

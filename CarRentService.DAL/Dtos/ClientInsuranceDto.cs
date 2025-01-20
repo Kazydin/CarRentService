@@ -15,8 +15,8 @@ public partial class ClientInsuranceDto
     {
         Id = insurance.Id!.Value;
         RentalId = rental.Id!.Value;
-        StartDate = rental.StartDate;
-        EndDate = rental.EndDate;
+        StartDate = rental.StartDate!.Value;
+        EndDate = rental.EndDate!.Value;
         CarId = insurance.Car!.Id!.Value;
         CarName = insurance.Car.Name;
         Type = insurance.Type;

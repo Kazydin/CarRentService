@@ -6,7 +6,7 @@ public static class RentalExtensions
 {
     public static double GetSeasonalRate(this RentalDto rental)
     {
-        return rental.StartDate.Month switch
+        return rental.StartDate!.Value.Month switch
         {
             6 or 7 or 8 => 1.1, // Лето (июнь-август): увеличение на 10%
             9 or 10 or 11 => 1.0, // Осень (сентябрь-ноябрь): без надбавки

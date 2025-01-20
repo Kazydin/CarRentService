@@ -4,15 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CarRentService.DAL.Configurations;
 
-public class CarConfiguration : IEntityTypeConfiguration<Car>
+public class BranchConfiguration : IEntityTypeConfiguration<Branch>
 {
-    public void Configure(EntityTypeBuilder<Car> builder)
+    public void Configure(EntityTypeBuilder<Branch> builder)
     {
-        builder.ToTable("Cars");
+        builder.ToTable("Branches");
 
         builder.HasKey(p => p.Id);
-
-        builder.HasOne(p => p.Branch)
-            .WithMany(p => p.Cars);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Windows.ApplicationModel.Calls.Background;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Attributes;
@@ -29,7 +28,7 @@ public static class InjectDIExtensions
     public static void AddDbContext(this IServiceCollection services)
     {
         services.AddDbContext<AppDbContext>(options =>
-            options.UseInMemoryDatabase("InMemoryDb"));
+            options.UseSqlite("Data Source=app.db"));
     }
 
     public static void AddServicesWithAttribute(this IServiceCollection services, params Assembly[] assemblies)

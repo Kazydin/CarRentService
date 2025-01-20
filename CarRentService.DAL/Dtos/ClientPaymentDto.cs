@@ -15,8 +15,8 @@ public partial class ClientPaymentDto
     {
         Id = payment.Id!.Value;
         RentalId = rental.Id!.Value;
-        StartDate = rental.StartDate;
-        EndDate = rental.EndDate;
+        StartDate = rental.StartDate!.Value;
+        EndDate = rental.EndDate!.Value;
         Date = payment.Date;
         Method = payment.Method;
         Amount = payment.Amount;

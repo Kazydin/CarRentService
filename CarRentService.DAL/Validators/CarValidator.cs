@@ -7,6 +7,7 @@ public class CarValidator : AbstractValidator<Car>
 {
     public CarValidator()
     {
-
+        ClassLevelCascadeMode = CascadeMode.Stop;
+        RuleLevelCascadeMode = CascadeMode.Stop;
     }
 }

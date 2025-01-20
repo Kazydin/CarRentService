@@ -13,6 +13,8 @@ public class ClientMappingProfile : Profile
 
         CreateMap<Client, ClientDto>();
 
-        CreateMap<ClientDto, Client>();
+        CreateMap<ClientDto, Client>()
+            .ForMember(dest => dest.Branch, opt => opt.Ignore())
+            .ForMember(dest => dest.Rentals, opt => opt.Ignore());
     }
 }

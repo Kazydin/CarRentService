@@ -244,9 +244,11 @@ public partial class ViewRentalViewModel : BaseViewModel
     {
         try
         {
-            var rental = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == Rental.Id);
+            var rental = await _store.Rentals
+                .Include(p => p.Cars)
+                .FirstOrDefaultAsync(p => p.Id == Rental.Id);
 
-            Guard.NotNull(rental, "Не найдена аренда");
+            rental ??= new Rental();
 
             _rentalMapper.Map(Rental, rental!);
 

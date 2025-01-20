@@ -8,6 +8,8 @@ public class InsuranceConfiguration : IEntityTypeConfiguration<Insurance>
 {
     public void Configure(EntityTypeBuilder<Insurance> builder)
     {
+        builder.ToTable("Insurances");
+
         builder.HasKey(p => p.Id);
 
         builder.HasOne(p => p.Rental)

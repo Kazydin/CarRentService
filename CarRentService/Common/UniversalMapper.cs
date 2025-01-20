@@ -25,16 +25,12 @@ public class UniversalMapper<TDto, TEntity> : IUniversalMapper<TDto, TEntity>
     {
         var entity = _mapper.Map<TEntity>(dto);
 
-        Validate(entity);
-
         return entity;
     }
 
     public TEntity Map(TDto dto, TEntity entity)
     {
         _mapper.Map(dto, entity);
-
-        Validate(entity);
 
         return entity;
     }
@@ -44,7 +40,7 @@ public class UniversalMapper<TDto, TEntity> : IUniversalMapper<TDto, TEntity>
         return entity == null ? throw new ArgumentNullException(nameof(entity)) : _mapper.Map<TDto>(entity);
     }
 
-    private void Validate(TEntity entity)
+    public void Validate(TEntity entity)
     {
         if (entity == null)
         {

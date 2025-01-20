@@ -1,4 +1,6 @@
-﻿using CarRentService.DAL.Abstract;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using CarRentService.DAL.Abstract;
 
 namespace CarRentService.DAL.Entities;
 
@@ -7,6 +9,7 @@ namespace CarRentService.DAL.Entities;
 /// </summary>
 public abstract class Person : IEntity
 {
+
     public int Id { get; set; }
 
     /// <summary>

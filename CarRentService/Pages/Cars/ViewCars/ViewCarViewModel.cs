@@ -122,9 +122,10 @@ public partial class ViewCarViewModel : BaseViewModel
     {
         try
         {
-            var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == Car.Id);
+            var car = await _store.Cars
+                .FirstOrDefaultAsync(p => p.Id == Car.Id);
 
-            Guard.NotNull(car, "Не найден автомобиль");
+            car ??= new Car();
 
             _carMapper.Map(Car, car!);
 

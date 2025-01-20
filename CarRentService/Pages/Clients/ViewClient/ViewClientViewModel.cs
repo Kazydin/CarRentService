@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -50,15 +51,14 @@ public partial class ViewClientViewModel : BaseViewModel
 
     public ViewClientViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        IMapper mapper,
-        IUniversalMapper<ClientDto, Client> clientMapper,
         AppDbContext store,
+        IUniversalMapper<ClientDto, Client> clientMapper,
         IUniversalMapper<BranchDto, Branch> branchMapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _clientMapper = clientMapper;
         _store = store;
+        _clientMapper = clientMapper;
         _branchMapper = branchMapper;
 
         SaveCommand = new RelayCommand(Save);
@@ -96,15 +96,22 @@ public partial class ViewClientViewModel : BaseViewModel
         {
             var client = await _store.Clients.FirstOrDefaultAsync(p => p.Id == Client.Id);
 
-            client ??= new Client();
+            if (client == null)
+            {
+                client = new Client();
 
-            Guard.NotNull(client, "Не найден клиент");
+                _store.Clients.Add(client);
+            }
 
-            _clientMapper.Map(Client, client!);
+            _clientMapper.Map(Client, client);
+
+            client.Branch = await _store.Branches.SingleAsync(p => p.Id == Client.Branch!.Id);
+
+            _clientMapper.Validate(client);
 
             await _store.SaveChangesAsync();
 
-            await UpdateState(client!.Id);
+            await UpdateState(client.Id);
 
             _notificationService.ShowTip("Обновление клиента", "Сохранено успешно!");
         }

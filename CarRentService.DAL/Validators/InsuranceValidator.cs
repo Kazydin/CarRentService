@@ -7,6 +7,7 @@ public class InsuranceValidator : AbstractValidator<Insurance>
 {
     public InsuranceValidator()
     {
-
+        ClassLevelCascadeMode = CascadeMode.Stop;
+        RuleLevelCascadeMode = CascadeMode.Stop;
     }
 }
