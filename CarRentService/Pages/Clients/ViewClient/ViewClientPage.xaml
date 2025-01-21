@@ -39,16 +39,22 @@
                         <ColumnDefinition
                             Width="*" />
                     </Grid.ColumnDefinitions>
-                    <CommandBar
-                        DefaultLabelPosition="Right"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="3">
-                        <AppBarButton
-                            Icon="Delete"
-                            Command="{Binding DeleteClientCommand}"
-                            Label="Удалить клиента" />
-                    </CommandBar>
+                    <Border CornerRadius="8"
+                            Background="#424242"
+                            Margin="0, 10, 0, 20"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3">
+                        <CommandBar
+                            HorizontalAlignment="Left"
+                            DefaultLabelPosition="Right">
+                            <AppBarButton
+                                Icon="Delete"
+                                Command="{Binding DeleteClientCommand}"
+                                Label="Удалить клиента" />
+
+                        </CommandBar>
+                    </Border>
                     <StackPanel
                         Margin="0, 10, 5, 10"
                         Grid.Row="1"
@@ -124,18 +130,23 @@
             <PivotItem
                 Header="Аренды">
                 <StackPanel>
-                    <CommandBar
-                        DefaultLabelPosition="Right">
-                        <AppBarButton
-                            Icon="Add"
-                            Command="{Binding AddRentalCommand}"
-                            Label="Добавить" />
-                        <AppBarButton
-                            Icon="Clear"
-                            Command="{Binding ClearFiltersAndSortCommand}"
-                            CommandParameter="Rentals"
-                            Label="Сбросить группировку, фильтры и сортировку" />
-                    </CommandBar>
+                    <Border CornerRadius="8"
+                            Background="#424242"
+                            Margin="0, 10, 0, 20">
+                        <CommandBar
+                            HorizontalAlignment="Left"
+                            DefaultLabelPosition="Right">
+                            <AppBarButton
+                                Icon="Add"
+                                Command="{Binding AddRentalCommand}"
+                                Label="Добавить" />
+                            <AppBarButton
+                                Icon="Clear"
+                                Command="{Binding ClearFiltersAndSortCommand}"
+                                CommandParameter="Rentals"
+                                Label="Сбросить группировку, фильтры и сортировку" />
+                        </CommandBar>
+                    </Border>
 
                     <dataGrid:SfDataGrid
                         x:Name="RentalsDataGrid"
@@ -234,14 +245,19 @@
             <PivotItem
                 Header="Автомобили">
                 <StackPanel>
-                    <CommandBar
-                        DefaultLabelPosition="Right">
-                        <AppBarButton
-                            Icon="Clear"
-                            Command="{Binding ClearFiltersAndSortCommand}"
-                            CommandParameter="Cars"
-                            Label="Сбросить группировку, фильтры и сортировку" />
-                    </CommandBar>
+                    <Border CornerRadius="8"
+                            Background="#424242"
+                            Margin="0, 10, 0, 20">
+                        <CommandBar
+                            HorizontalAlignment="Left"
+                            DefaultLabelPosition="Right">
+                            <AppBarButton
+                                Icon="Clear"
+                                Command="{Binding ClearFiltersAndSortCommand}"
+                                CommandParameter="Cars"
+                                Label="Сбросить группировку, фильтры и сортировку" />
+                        </CommandBar>
+                    </Border>
 
                     <dataGrid:SfDataGrid
                         x:Name="CarsDataGrid"
@@ -294,14 +310,19 @@
             <PivotItem
                 Header="Страховки">
                 <StackPanel>
-                    <CommandBar
-                        DefaultLabelPosition="Right">
-                        <AppBarButton
-                            Icon="Clear"
-                            Command="{Binding ClearFiltersAndSortCommand}"
-                            CommandParameter="Insurances"
-                            Label="Сбросить группировку, фильтры и сортировку" />
-                    </CommandBar>
+                    <Border CornerRadius="8"
+                            Background="#424242"
+                            Margin="0, 10, 0, 20">
+                        <CommandBar
+                            HorizontalAlignment="Left"
+                            DefaultLabelPosition="Right">
+                            <AppBarButton
+                                Icon="Clear"
+                                Command="{Binding ClearFiltersAndSortCommand}"
+                                CommandParameter="Insurances"
+                                Label="Сбросить группировку, фильтры и сортировку" />
+                        </CommandBar>
+                    </Border>
 
                     <dataGrid:SfDataGrid
                         x:Name="InsurancesDataGrid"
@@ -349,14 +370,19 @@
             <PivotItem
                 Header="Платежи">
                 <StackPanel>
-                    <CommandBar
-                        DefaultLabelPosition="Right">
-                        <AppBarButton
-                            Icon="Clear"
-                            Command="{Binding ClearFiltersAndSortCommand}"
-                            CommandParameter="Insurances"
-                            Label="Сбросить группировку, фильтры и сортировку" />
-                    </CommandBar>
+                    <Border CornerRadius="8"
+                            Background="#424242"
+                            Margin="0, 10, 0, 20">
+                        <CommandBar
+                            HorizontalAlignment="Left"
+                            DefaultLabelPosition="Right">
+                            <AppBarButton
+                                Icon="Clear"
+                                Command="{Binding ClearFiltersAndSortCommand}"
+                                CommandParameter="Insurances"
+                                Label="Сбросить группировку, фильтры и сортировку" />
+                        </CommandBar>
+                    </Border>
 
                     <dataGrid:SfDataGrid
                         x:Name="PaymentsDataGrid"
@@ -401,7 +427,7 @@
             </PivotItem>
         </Pivot>
         <StackPanel
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Left"
             Grid.Row="1"
             Orientation="Horizontal">
             <Button

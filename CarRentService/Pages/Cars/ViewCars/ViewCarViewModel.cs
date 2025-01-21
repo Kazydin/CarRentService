@@ -31,6 +31,8 @@ public partial class ViewCarViewModel : BaseViewModel
 
     public RelayCommand<object> EditRentalCommand { get; }
 
+    public RelayCommand<object> DeleteRentalCommand { get; }
+
     public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
     public RelayCommand SendToRepairCommand { get; }
@@ -73,11 +75,12 @@ public partial class ViewCarViewModel : BaseViewModel
 
         AddRentalCommand = new RelayCommand<object>(AddRental, CanAddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
+        DeleteRentalCommand = new RelayCommand<object>(DeleteRental);
     }
 
     private bool CanAddRental(object? obj)
     {
-        return Car.Id.HasValue;
+        return Car.Id.HasValue && Car.Status == CarStatusEnum.Available;
     }
 
     private void AddRental(object? obj)
@@ -90,6 +93,27 @@ public partial class ViewCarViewModel : BaseViewModel
         if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
         {
             _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id!.Value));
+        }
+    }
+
+    private async void DeleteRental(object? param)
+    {
+        if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
+        {
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление аренды",
+                    "Вы действительно хотите удалить аренду?");
+
+            if (result)
+            {
+                if (record.Status == RentalStatusEnum.Active)
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "Нельзя удалить аренду в статусе \"Активна\"");
+                    return;
+                }
+
+                Car.Rentals.Remove(record);
+            }
         }
     }
 
@@ -114,6 +138,7 @@ public partial class ViewCarViewModel : BaseViewModel
 
         SendToRepairCommand.NotifyCanExecuteChanged();
         ReturnFromRepairCommand.NotifyCanExecuteChanged();
+        DeleteCarCommand.NotifyCanExecuteChanged();
     }
 
     private bool CanReturnFromRepair()
@@ -145,6 +170,11 @@ public partial class ViewCarViewModel : BaseViewModel
                 _store.Cars.Add(car);
             }
 
+            if (car.Status == CarStatusEnum.Rented && car.Rentals.All(p => p.Status != RentalStatusEnum.Active))
+            {
+                car.Status = CarStatusEnum.Available;
+            }
+
             await _store.SaveChangesAsync();
 
             await UpdateState(car.Id);
@@ -165,11 +195,17 @@ public partial class ViewCarViewModel : BaseViewModel
 
         if (result)
         {
-            var car = await _store.Cars.FirstOrDefaultAsync(p => p.Id == Car.Id);
+            var car = await _store.Cars
+                .Include(p => p.Rentals)
+                .SingleAsync(p => p.Id == Car.Id);
 
-            Guard.NotNull(car, "Не найден авьтомобиль");
+            if (car.Rentals.Any(p => p.Status == RentalStatusEnum.Active))
+            {
+                await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "Автомобиль участвует в активной аренде");
+                return;
+            }
 
-            _store.Cars.Remove(car!);
+            _store.Cars.Remove(car);
 
             await _store.SaveChangesAsync();
 
@@ -179,7 +215,7 @@ public partial class ViewCarViewModel : BaseViewModel
 
     public bool CanDeleteCar()
     {
-        return Car.Id.HasValue && Car.ActiveRental == null;
+        return Car.Id.HasValue && Car.Rentals.All(p => p.Status == RentalStatusEnum.Completed) && Car.Status == CarStatusEnum.Available;
     }
 
     private void CancelEdit()
@@ -208,6 +244,9 @@ public partial class ViewCarViewModel : BaseViewModel
         Car = _carMapper.Map(car!);
 
         AddRentalCommand.NotifyCanExecuteChanged();
+        DeleteCarCommand.NotifyCanExecuteChanged();
+        SendToRepairCommand.NotifyCanExecuteChanged();
+        ReturnFromRepairCommand.NotifyCanExecuteChanged();
     }
 
     public void SetGrids(SfDataGrid rentalsDataGrid)

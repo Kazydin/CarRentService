@@ -5,9 +5,11 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
+using CarRentService.Common.Services;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -27,8 +29,7 @@ public partial class ClientsTableViewModel : BaseViewModel
 
     public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
 
-    [ObservableProperty]
-    private ObservableCollection<ClientDto> _clients;
+    [ObservableProperty] private ObservableCollection<ClientDto> _clients;
 
     private readonly INavigationService _navigationService;
 
@@ -36,13 +37,17 @@ public partial class ClientsTableViewModel : BaseViewModel
 
     private readonly AppDbContext _store;
 
+    private readonly INotificationService _notificationService;
+
     public ClientsTableViewModel(INavigationService navigationService,
         IUniversalMapper<ClientDto, Client> clientMapper,
-        AppDbContext store)
+        AppDbContext store,
+        INotificationService notificationService)
     {
         _navigationService = navigationService;
         _clientMapper = clientMapper;
         _store = store;
+        _notificationService = notificationService;
 
         // Настройка команд
         AddClientCommand = new RelayCommand(AddClient);
@@ -68,7 +73,8 @@ public partial class ClientsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is ClientDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id!.Value));
+            _navigationService.Navigate(PageTypeEnum.EditClient,
+                parameters: new CommonNavigationData(record.Id!.Value));
         }
     }
 
@@ -76,15 +82,29 @@ public partial class ClientsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is ClientDto record)
         {
-            var client = await _store.Clients.FirstOrDefaultAsync(p => p.Id == record.Id);
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление клиента",
+                    "Вы действительно хотите удалить клиента?");
 
-            Guard.NotNull(client, "Не найден клиент");
+            if (result)
+            {
+                var client = await _store.Clients
+                    .Include(p => p.Rentals)
+                    .SingleAsync(p => p.Id == record.Id);
 
-            _store.Clients.Remove(client!);
+                if (client.Rentals.Any(p => p.Status != RentalStatusEnum.Completed))
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления",
+                        "У клиента есть незавршенные аренды");
+                    return;
+                }
 
-            await _store.SaveChangesAsync();
+                _store.Clients.Remove(client!);
 
-            UpdateState();
+                await _store.SaveChangesAsync();
+
+                UpdateState();
+            }
         }
     }
 

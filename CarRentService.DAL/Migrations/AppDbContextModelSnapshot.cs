@@ -29,7 +29,7 @@ namespace CarRentService.DAL.Migrations
 
                     b.HasIndex("ManagersId");
 
-                    b.ToTable("BranchManager");
+                    b.ToTable("BranchManager", (string)null);
                 });
 
             modelBuilder.Entity("CarRentService.DAL.Entities.Branch", b =>
@@ -259,7 +259,7 @@ namespace CarRentService.DAL.Migrations
 
                     b.HasIndex("RentalsId");
 
-                    b.ToTable("CarRental");
+                    b.ToTable("CarRental", (string)null);
                 });
 
             modelBuilder.Entity("BranchManager", b =>

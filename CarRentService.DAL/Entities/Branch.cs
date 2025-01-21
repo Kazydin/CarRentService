@@ -28,5 +28,7 @@ public class Branch : IEntity
 
     public List<Client> Clients { get; set; }
 
+    public List<Rental> Rentals { get; set; }
+
     public List<Car> Cars { get; set; }
 }

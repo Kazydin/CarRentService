@@ -5,14 +5,12 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GuardNet;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
@@ -88,7 +86,9 @@ public partial class CarsTableViewModel : BaseViewModel
 
             if (result)
             {
-                var car = await _store.Cars.SingleAsync(p => p.Id == record.Id);
+                var car = await _store.Cars
+                    .Include(p => p.Rentals)
+                    .SingleAsync(p => p.Id == record.Id);
 
                 if (car.Status == CarStatusEnum.Rented)
                 {
@@ -99,6 +99,12 @@ public partial class CarsTableViewModel : BaseViewModel
                 if (car.Status == CarStatusEnum.InRepair)
                 {
                     await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "Нельзя удалить автомобиль на ремонте");
+                    return;
+                }
+
+                if (car.Rentals.Any(p => p.Status == RentalStatusEnum.Active))
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "Автомобиль участвует в активной аренде");
                     return;
                 }
 

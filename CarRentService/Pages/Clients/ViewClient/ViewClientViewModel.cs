@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Threading.Tasks;
 using AutoMapper;
 using CarRentService.Common;
@@ -9,6 +10,7 @@ using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -30,6 +32,8 @@ public partial class ViewClientViewModel : BaseViewModel
     public RelayCommand<object> AddRentalCommand { get; }
 
     public RelayCommand<object> EditRentalCommand { get; }
+
+    public RelayCommand<object> DeleteRentalCommand { get; }
 
     public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
@@ -77,6 +81,7 @@ public partial class ViewClientViewModel : BaseViewModel
 
         AddRentalCommand = new RelayCommand<object>(AddRental, CanAddRental);
         EditRentalCommand = new RelayCommand<object>(EditRental);
+        DeleteRentalCommand = new RelayCommand<object>(DeleteRental);
     }
 
     private bool CanAddRental(object? obj)
@@ -84,18 +89,32 @@ public partial class ViewClientViewModel : BaseViewModel
         return Client.Id.HasValue;
     }
 
-    private void EditRental(object? param)
+    private async void EditRental(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditRental,
-                parameters: new CommonNavigationData(record.Id!.Value));
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Редактирование аренды",
+                    "Несохраненные изменения будут потеряны. Продолжить?");
+
+            if (result)
+            {
+                _navigationService.Navigate(PageTypeEnum.EditRental,
+                    parameters: new CommonNavigationData(record.Id!.Value));
+            }
         }
     }
 
-    private void AddRental(object? obj)
+    private async void AddRental(object? obj)
     {
-        _navigationService.Navigate(PageTypeEnum.EditRental);
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Добавление аренды",
+                "Несохраненные изменения будут потеряны. Продолжить?");
+
+        if (result)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditRental);
+        }
     }
 
     private async void Save()
@@ -110,6 +129,10 @@ public partial class ViewClientViewModel : BaseViewModel
             {
                 client.Branch = await _store.Branches.SingleAsync(p => p.Id == Client.Branch!.Id);
             }
+
+            client.Rentals = await _store.Rentals
+                .Where(p => Client.Rentals.Select(r => r.Id).Contains(p.Id))
+                .ToListAsync();
 
             _clientMapper.Validate(client);
 
@@ -130,6 +153,28 @@ public partial class ViewClientViewModel : BaseViewModel
         }
     }
 
+    private async void DeleteRental(object? param)
+    {
+        if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
+        {
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление аренды",
+                    "Вы действительно хотите удалить аренду?");
+
+            if (result)
+            {
+                if (record.Status == RentalStatusEnum.Active)
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления",
+                        "Нельзя удалить аренду в статусе \"Активна\"");
+                    return;
+                }
+
+                Client.Rentals.Remove(record);
+            }
+        }
+    }
+
     private async void DeleteClient()
     {
         var result =
@@ -138,9 +183,15 @@ public partial class ViewClientViewModel : BaseViewModel
 
         if (result)
         {
-            var client = await _store.Clients.FirstOrDefaultAsync(p => p.Id == Client.Id);
+            var client = await _store.Clients
+                .Include(p => p.Rentals)
+                .SingleAsync(p => p.Id == Client.Id);
 
-            Guard.NotNull(client, "Не найден клиент");
+            if (client.Rentals.Any(p => p.Status == RentalStatusEnum.Active))
+            {
+                await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У клиента есть активные аренды");
+                return;
+            }
 
             _store.Clients.Remove(client!);
 

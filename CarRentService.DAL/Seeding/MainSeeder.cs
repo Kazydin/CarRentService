@@ -143,7 +143,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             Model = "Elantra",
             Year = 2019,
             RegistrationNumber = "B456DE99",
-            Status = CarStatusEnum.InRepair,
+            Status = CarStatusEnum.Rented,
             Branch = branch2,
             HorsePower = 120,
             Mileage = 98765
@@ -156,7 +156,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             Model = "Focus",
             Year = 2018,
             RegistrationNumber = "C789FG55",
-            Status = CarStatusEnum.Available,
+            Status = CarStatusEnum.InRepair,
             Branch = branch2,
             HorsePower = 190,
             Mileage = 234560
@@ -169,7 +169,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             Model = "Rio",
             Year = 2021,
             RegistrationNumber = "D321HI33",
-            Status = CarStatusEnum.Available,
+            Status = CarStatusEnum.Rented,
             Branch = branch2,
             HorsePower = 130,
             Mileage = 35689
@@ -253,7 +253,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             Client = client2,
             StartDate = new DateTime(2024, 9, 1),
             EndDate = new DateTime(2024, 9, 15),
-            Status = RentalStatusEnum.Completed,
+            Status = RentalStatusEnum.Active,
             TotalCost = 10000,
             Tariff = RentalTariffEnum.Basic,
             Branch = branch3

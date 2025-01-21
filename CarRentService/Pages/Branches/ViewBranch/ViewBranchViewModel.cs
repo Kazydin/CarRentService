@@ -165,6 +165,7 @@ public partial class ViewBranchViewModel : BaseViewModel
                 .Include(p => p.Cars)
                 .Include(p => p.Clients)
                 .Include(p => p.Managers)
+                .Include(p => p.Rentals)
                 .SingleAsync(p => p.Id == Branch.Id);
 
             if (branch.Cars.Any())
@@ -183,6 +184,11 @@ public partial class ViewBranchViewModel : BaseViewModel
             {
                 await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У филиала есть менеджеры");
                 return;
+            }
+
+            if (branch.Rentals.Any(p => p.Status != RentalStatusEnum.Completed))
+            {
+                await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У филиала есть незавершенные аренды");
             }
 
             _store.Branches.Remove(branch!);

@@ -15,7 +15,8 @@ public class RentalConfiguration : IEntityTypeConfiguration<Rental>
         builder.HasMany(p => p.Cars)
             .WithMany(p => p.Rentals);
 
-        builder.HasOne(p => p.Branch);
+        builder.HasOne(p => p.Branch)
+            .WithMany(p => p.Rentals);
 
         builder.HasOne(p => p.Client)
             .WithMany(p => p.Rentals);
