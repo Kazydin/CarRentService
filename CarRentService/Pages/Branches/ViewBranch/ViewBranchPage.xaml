@@ -39,18 +39,22 @@
                         <ColumnDefinition
                             Width="*" />
                     </Grid.ColumnDefinitions>
-                    <CommandBar
-                        DefaultLabelPosition="Right"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="3">
-                        <AppBarButton
-                            Icon="Delete"
-                            Command="{Binding DeleteBranchCommand}"
-                            Label="Удалить филиал" />
-                    </CommandBar>
+                    <Border CornerRadius="8" Background="#424242"
+                            Margin="0, 10, 0, 20"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3">
+                        <CommandBar
+                            HorizontalAlignment="Left"
+                            DefaultLabelPosition="Right">
+                            <AppBarButton
+                                Icon="Delete"
+                                Command="{Binding DeleteBranchCommand}"
+                                Label="Удалить филиал" />
+                        </CommandBar>
+                    </Border>
                     <StackPanel
-                        Margin="0, 10, 5, 10"
+                        Margin="0, 0, 5, 10"
                         Grid.Row="1"
                         Grid.Column="0">
                         <TextBlock
@@ -99,18 +103,22 @@
             <PivotItem
                 Header="Автомобили">
                 <StackPanel>
-                    <CommandBar
-                        DefaultLabelPosition="Right">
-                        <AppBarButton
-                            Icon="Add"
-                            Command="{Binding AddCarCommand}"
-                            Label="Добавить" />
-                        <AppBarButton
-                            Icon="Clear"
-                            Command="{Binding ClearFiltersAndSortCommand}"
-                            CommandParameter="Cars"
-                            Label="Сбросить группировку, фильтры и сортировку" />
-                    </CommandBar>
+                    <Border CornerRadius="8" Background="#424242"
+                            Margin="0, 10, 0, 20">
+                        <CommandBar
+                            HorizontalAlignment="Left"
+                            DefaultLabelPosition="Right">
+                            <AppBarButton
+                                Icon="Add"
+                                Command="{Binding AddCarCommand}"
+                                Label="Добавить" />
+                            <AppBarButton
+                                Icon="Clear"
+                                Command="{Binding ClearFiltersAndSortCommand}"
+                                CommandParameter="Cars"
+                                Label="Сбросить группировку, фильтры и сортировку" />
+                        </CommandBar>
+                    </Border>
 
                     <dataGrid:SfDataGrid
                         x:Name="CarsDataGrid"
@@ -133,7 +141,13 @@
                                 MappingName="Id" />
                             <dataGrid:GridTextColumn
                                 HeaderText="ID аренды"
-                                MappingName="RentalId" />
+                                MappingName="CurrentRental.Id" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата начала аренды"
+                                MappingName="CurrentRental.StartDate" />
+                            <dataGrid:GridDateColumn
+                                HeaderText="Дата конца аренды"
+                                MappingName="CurrentRental.EndDate" />
                             <dataGrid:GridTextColumn
                                 HeaderText="Марка"
                                 MappingName="Make" />
@@ -143,6 +157,12 @@
                             <dataGrid:GridNumericColumn
                                 MappingName="Year"
                                 HeaderText="Год" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="Л.С."
+                                MappingName="HorsePower" />
+                            <dataGrid:GridNumericColumn
+                                HeaderText="Пробег"
+                                MappingName="Mileage" />
                         </dataGrid:SfDataGrid.Columns>
 
                         <dataGrid:SfDataGrid.RecordContextFlyout>
@@ -150,10 +170,6 @@
                                 <MenuFlyoutItem
                                     Text="Изменить"
                                     Command="{Binding Path=DataGrid.DataContext.EditCarCommand}"
-                                    CommandParameter="{Binding}" />
-                                <MenuFlyoutItem
-                                    Text="Удалить"
-                                    Command="{Binding Path=DataGrid.DataContext.DeleteCarCommand}"
                                     CommandParameter="{Binding}" />
                             </MenuFlyout>
                         </dataGrid:SfDataGrid.RecordContextFlyout>
@@ -164,18 +180,22 @@
             <PivotItem
                 Header="Клиенты">
                 <StackPanel>
-                    <CommandBar
-                        DefaultLabelPosition="Right">
-                        <AppBarButton
-                            Icon="Add"
-                            Command="{Binding AddClientCommand}"
-                            Label="Добавить" />
-                        <AppBarButton
-                            Icon="Clear"
-                            Command="{Binding ClearFiltersAndSortCommand}"
-                            CommandParameter="Clients"
-                            Label="Сбросить группировку, фильтры и сортировку" />
-                    </CommandBar>
+                    <Border CornerRadius="8" Background="#424242"
+                            Margin="0, 10, 0, 20">
+                        <CommandBar
+                            DefaultLabelPosition="Right"
+                            HorizontalAlignment="Left">
+                            <AppBarButton
+                                Icon="Add"
+                                Command="{Binding AddClientCommand}"
+                                Label="Добавить" />
+                            <AppBarButton
+                                Icon="Clear"
+                                Command="{Binding ClearFiltersAndSortCommand}"
+                                CommandParameter="Clients"
+                                Label="Сбросить группировку, фильтры и сортировку" />
+                        </CommandBar>
+                    </Border>
 
                     <dataGrid:SfDataGrid
                         x:Name="ClientsDataGrid"
@@ -216,10 +236,6 @@
                                     Text="Изменить"
                                     Command="{Binding Path=DataGrid.DataContext.EditClientCommand}"
                                     CommandParameter="{Binding}" />
-                                <MenuFlyoutItem
-                                    Text="Удалить"
-                                    Command="{Binding Path=DataGrid.DataContext.DeleteClientCommand}"
-                                    CommandParameter="{Binding}" />
                             </MenuFlyout>
                         </dataGrid:SfDataGrid.RecordContextFlyout>
                     </dataGrid:SfDataGrid>
@@ -228,18 +244,22 @@
             <PivotItem
                 Header="Менеджеры">
                 <StackPanel>
-                    <CommandBar
-                        DefaultLabelPosition="Right">
-                        <AppBarButton
-                            Icon="Add"
-                            Command="{Binding AddManagerCommand}"
-                            Label="Добавить" />
-                        <AppBarButton
-                            Icon="Clear"
-                            Command="{Binding ClearFiltersAndSortCommand}"
-                            CommandParameter="Managers"
-                            Label="Сбросить группировку, фильтры и сортировку" />
-                    </CommandBar>
+                    <Border CornerRadius="8" Background="#424242"
+                            Margin="0, 10, 0, 20">
+                        <CommandBar
+                            HorizontalAlignment="Left"
+                            DefaultLabelPosition="Right">
+                            <AppBarButton
+                                Icon="Add"
+                                Command="{Binding AddManagerCommand}"
+                                Label="Добавить" />
+                            <AppBarButton
+                                Icon="Clear"
+                                Command="{Binding ClearFiltersAndSortCommand}"
+                                CommandParameter="Managers"
+                                Label="Сбросить группировку, фильтры и сортировку" />
+                        </CommandBar>
+                    </Border>
 
                     <dataGrid:SfDataGrid
                         x:Name="ManagersDataGrid"
@@ -275,10 +295,6 @@
                                     Text="Изменить"
                                     Command="{Binding Path=DataGrid.DataContext.EditManagerCommand}"
                                     CommandParameter="{Binding}" />
-                                <MenuFlyoutItem
-                                    Text="Удалить"
-                                    Command="{Binding Path=DataGrid.DataContext.DeleteManagerCommand}"
-                                    CommandParameter="{Binding}" />
                             </MenuFlyout>
                         </dataGrid:SfDataGrid.RecordContextFlyout>
                     </dataGrid:SfDataGrid>
@@ -286,7 +302,7 @@
             </PivotItem>
         </Pivot>
         <StackPanel
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Left"
             Grid.Row="1"
             Orientation="Horizontal">
             <Button

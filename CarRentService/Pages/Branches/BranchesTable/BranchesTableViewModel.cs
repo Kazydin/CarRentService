@@ -60,13 +60,16 @@ public partial class BranchesTableViewModel : BaseViewModel
     public void UpdateState()
     {
         Branches = _store.Branches
+            .Include(p => p.Cars)
+            .Include(p => p.Clients)
+            .Include(p => p.Managers)
             .Select(p => _branchMapper.Map(p))
             .ToObservableCollection();
     }
 
     private void AddBranch()
     {
-        _navigationService.Navigate(PageTypeEnum.EditBranch);
+        _navigationService.Navigate(PageTypeEnum.EditBranch, false);
     }
 
     private void EditBranch(object? param)
@@ -86,9 +89,29 @@ public partial class BranchesTableViewModel : BaseViewModel
 
             if (result)
             {
-                var branch = await _store.Branches.FirstOrDefaultAsync(p => p.Id == record.Id);
+                var branch = await _store.Branches
+                    .Include(p => p.Cars)
+                    .Include(p => p.Clients)
+                    .Include(p => p.Managers)
+                    .SingleAsync(p => p.Id == record.Id);
 
-                Guard.NotNull(branch, "Не найден филиал");
+                if (branch.Cars.Any())
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У филиала есть автомобили");
+                    return;
+                }
+
+                if (branch.Clients.Any())
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У филиала есть клиенты");
+                    return;
+                }
+
+                if (branch.Managers.Any())
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У филиала есть менеджеры");
+                    return;
+                }
 
                 _store.Branches.Remove(branch!);
                 await _store.SaveChangesAsync();

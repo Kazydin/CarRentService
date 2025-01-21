@@ -20,6 +20,10 @@ public partial class BranchDto
 
     [ObservableProperty] private int numberOfCars;
 
+    [ObservableProperty] private int numberOfClients;
+
+    [ObservableProperty] private int numberOfManagers;
+
     /// <summary>
     /// Контактные данные филиала.
     /// </summary>

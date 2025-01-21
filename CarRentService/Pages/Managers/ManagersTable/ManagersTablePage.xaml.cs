@@ -2,7 +2,7 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
 
-namespace CarRentService.Pages.Manages.ManagersTable;
+namespace CarRentService.Pages.Managers.ManagersTable;
 
 public sealed partial class ManagersTablePage : NavigationPage
 {

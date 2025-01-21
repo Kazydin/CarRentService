@@ -14,7 +14,6 @@ using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
-using Syncfusion.UI.Xaml.Data;
 using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Branches.ViewBranch;
@@ -38,8 +37,6 @@ public partial class ViewBranchViewModel : BaseViewModel
     public RelayCommand AddManagerCommand { get; }
 
     public RelayCommand<object> EditManagerCommand { get; }
-
-    public RelayCommand<object> DeleteManagerCommand { get; }
 
     public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
@@ -81,7 +78,6 @@ public partial class ViewBranchViewModel : BaseViewModel
 
         AddManagerCommand = new RelayCommand(AddManager, CanAddManager);
         EditManagerCommand = new RelayCommand<object>(EditManager);
-        DeleteManagerCommand = new RelayCommand<object>(DeleteManager);
     }
 
     private void AddCar()
@@ -104,9 +100,9 @@ public partial class ViewBranchViewModel : BaseViewModel
 
     private void EditClient(object? param)
     {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is Client record)
+        if ((param as GridRecordContextFlyoutInfo)?.Record is ClientDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id));
+            _navigationService.Navigate(PageTypeEnum.EditClient, parameters: new CommonNavigationData(record.Id!.Value));
         }
     }
 
@@ -126,14 +122,6 @@ public partial class ViewBranchViewModel : BaseViewModel
         {
             _navigationService.Navigate(PageTypeEnum.EditManager,
                 parameters: new CommonNavigationData(record.Id!.Value));
-        }
-    }
-
-    private async void DeleteManager(object? param)
-    {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is ManagerDto record)
-        {
-            Branch.Managers.Remove(record);
         }
     }
 
@@ -173,9 +161,29 @@ public partial class ViewBranchViewModel : BaseViewModel
 
         if (result)
         {
-            var branch = await _store.Branches.FirstOrDefaultAsync(p => p.Id == Branch.Id);
+            var branch = await _store.Branches
+                .Include(p => p.Cars)
+                .Include(p => p.Clients)
+                .Include(p => p.Managers)
+                .SingleAsync(p => p.Id == Branch.Id);
 
-            Guard.NotNull(branch, "Не найден филиал");
+            if (branch.Cars.Any())
+            {
+                await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У филиала есть автомобили");
+                return;
+            }
+
+            if (branch.Clients.Any())
+            {
+                await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У филиала есть клиенты");
+                return;
+            }
+
+            if (branch.Managers.Any())
+            {
+                await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "У филиала есть менеджеры");
+                return;
+            }
 
             _store.Branches.Remove(branch!);
 
@@ -203,6 +211,7 @@ public partial class ViewBranchViewModel : BaseViewModel
 
         var branch = await _store.Branches
             .Include(p => p.Cars)
+            .ThenInclude(p => p.Rentals)
             .Include(p => p.Managers)
             .Include(p => p.Clients)
             .FirstOrDefaultAsync(p => p.Id == entityId);

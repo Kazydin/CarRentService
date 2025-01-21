@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
+using CarRentService.DAL;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
@@ -15,7 +16,7 @@ using FluentValidation;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarRentService.Pages.Manages.ViewManager;
+namespace CarRentService.Pages.Managers.ViewManager;
 
 public partial class ViewManagerViewModel : BaseViewModel
 {
@@ -72,20 +73,31 @@ public partial class ViewManagerViewModel : BaseViewModel
         try
         {
             var manager = await _store.Managers
-                .Include(p => p.Branches)
-                .SingleAsync(p => p.Id == Manager.Id);
+                .FirstOrDefaultAsync(p => p.Id == Manager.Id) ?? new Manager();
+
+            _managerMapper.Map(Manager, manager);
 
             Manager.Branches = SelectedBranches;
 
-            _managerMapper.Map(Manager, manager!);
+            manager.Branches = await _store.Branches
+                .Where(p => Manager.Branches.Select(r => r.Id).Contains(p.Id))
+                .ToListAsync();
 
-            manager.Branches = _store.Branches
-                .Where(p => SelectedBranches.Select(r => r.Id).Contains(p.Id))
-                .ToList();
+            _store.Branches.AttachRange(manager.Branches);
+
+            _managerMapper.Validate(manager);
+
+            if (manager.Id == 0)
+            {
+                _store.Managers.Add(manager);
+            }
 
             await _store.SaveChangesAsync();
 
             _notificationService.ShowTip("Обновление менеджера", "Сохранено успешно!");
+
+            await UpdateState(manager.Id, _selectedBranchesComboBox);
+
         }
         catch (ValidationException e)
         {
@@ -103,11 +115,9 @@ public partial class ViewManagerViewModel : BaseViewModel
         {
             var manager = await _store.Managers
                 .Include(p => p.Branches)
-                .FirstOrDefaultAsync(p => p.Id == Manager.Id);
+                .SingleAsync(p => p.Id == Manager.Id);
 
-            Guard.NotNull(manager, "Не найден менеджер");
-
-            _store.Managers.Remove(manager!);
+            _store.Managers.Remove(manager);
 
             await _store.SaveChangesAsync();
 

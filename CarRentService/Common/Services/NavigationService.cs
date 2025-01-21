@@ -22,7 +22,7 @@ public class NavigationService : INavigationService
 
     private ImmutableArray<PageDto> _pages;
 
-    private readonly Stack<PageTypeEnum> _backStack = new();
+    private readonly Stack<NavigationPage> _backStack = new();
 
     private readonly IServiceProvider _serviceProvider;
 
@@ -72,12 +72,12 @@ public class NavigationService : INavigationService
         Guard.NotNull(pageDto, nameof(pageDto), $"Страница {pageTypeEnum.GetDescription()} не найдена");
 
         // Добавляем текущую страницу в BackStack
-        if (addToBackStack && _frame.Content is NavigationPage currentPage)
+        if (addToBackStack && _frame.Content is NavigationPage currentPage && currentPage.Type != PageTypeEnum.Welcome)
         {
-            _backStack.Push(currentPage.Type);
+            _backStack.Push(currentPage);
         }
 
-        pageDto!.Page.OnNavigatedTo(parameters);
+        pageDto!.Page.OnNavigatedToInternal(parameters);
 
         _frame.Content = pageDto!.Page;
 
@@ -92,8 +92,8 @@ public class NavigationService : INavigationService
 
         if (CanGoBack())
         {
-            var previousPageType = _backStack.Pop();
-            Navigate(previousPageType, false);
+            var previousPage = _backStack.Pop();
+            Navigate(previousPage.Type, false, previousPage.PreviousParameters);
 
             CanGoBackChanged?.Invoke(CanGoBack());
         }

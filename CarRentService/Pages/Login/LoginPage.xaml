@@ -16,7 +16,7 @@
     Loaded="LoginPage_OnLoaded">
 
     <core:SfShadow OffsetX="10" OffsetY="10">
-        <Border BorderBrush="Gray" Background="#202020" BorderThickness="2" Width="350" Height="210" Padding="15" CornerRadius="6">
+        <Border BorderBrush="Gray" Background="#202020" BorderThickness="2" Width="350" Height="230" Padding="15" CornerRadius="6">
             <Grid x:Name="LoginGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition
@@ -27,9 +27,7 @@
                         Height="Auto" />
                     <RowDefinition
                         Height="Auto" />
-                    <RowDefinition />
-                    <RowDefinition
-                        Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <TextBlock

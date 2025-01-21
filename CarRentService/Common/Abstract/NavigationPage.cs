@@ -10,6 +10,23 @@ public abstract class NavigationPage : BasePage
 
     public string? Header { get; set; } = null;
 
+    public INavigationData? PreviousParameters = null;
+
+    public Task OnNavigatedToInternal(INavigationData? parameters)
+    {
+        if (parameters == null)
+        {
+            parameters = PreviousParameters;
+            PreviousParameters = null;
+        }
+        else if (PreviousParameters == null)
+        {
+            PreviousParameters = parameters;
+        }
+
+        return OnNavigatedTo(parameters);
+    }
+
     public virtual Task OnNavigatedTo(INavigationData? parameters)
     {
         return Task.CompletedTask;

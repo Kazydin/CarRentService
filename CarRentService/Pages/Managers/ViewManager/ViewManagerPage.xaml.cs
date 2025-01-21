@@ -5,9 +5,10 @@ using CarRentService.Common.Models;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Syncfusion.UI.Xaml.Editors;
 
-namespace CarRentService.Pages.Manages.ViewManager;
+namespace CarRentService.Pages.Managers.ViewManager;
 
 public sealed partial class ViewManagerPage : NavigationPage
 {

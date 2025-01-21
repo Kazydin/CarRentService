@@ -57,7 +57,7 @@ public sealed partial class MenuPage : BasePage
 
         _notificationService.Init(ContentFrame);
 
-        _navigationService.Navigate(PageTypeEnum.Welcome);
+        _navigationService.Navigate(PageTypeEnum.Welcome, false);
     }
 
     private void Navi_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

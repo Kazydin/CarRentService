@@ -13,9 +13,9 @@ public sealed partial class ViewBranchPage : NavigationPage
 {
     private readonly ViewBranchViewModel _viewModel;
 
-    private AppState _appState;
+    private readonly AppState _appState;
 
-    private object _managersPage;
+    private readonly object _managersPage;
 
     public ViewBranchPage(ViewBranchViewModel viewModel, AppState appState) : base(PageTypeEnum.EditBranch)
     {

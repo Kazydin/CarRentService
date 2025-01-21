@@ -5,6 +5,7 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
+using CarRentService.DAL;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
@@ -15,7 +16,7 @@ using GuardNet;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 
-namespace CarRentService.Pages.Manages.ManagersTable;
+namespace CarRentService.Pages.Managers.ManagersTable;
 
 public partial class ManagersTableViewModel : BaseViewModel
 {
@@ -27,8 +28,7 @@ public partial class ManagersTableViewModel : BaseViewModel
 
     public RelayCommand<object?> ClearFiltersAndSortCommand { get; }
 
-    [ObservableProperty]
-    private ObservableCollection<ManagerDto> _managers;
+    [ObservableProperty] private ObservableCollection<ManagerDto> _managers;
 
     private readonly INavigationService _navigationService;
 
@@ -36,13 +36,21 @@ public partial class ManagersTableViewModel : BaseViewModel
 
     private readonly IUniversalMapper<ManagerDto, Manager> _managerMapper;
 
+    private readonly AppState _appState;
+
+    private readonly INotificationService _notificationService;
+
     public ManagersTableViewModel(INavigationService navigationService,
         AppDbContext store,
-        IUniversalMapper<ManagerDto, Manager> managerMapper)
+        IUniversalMapper<ManagerDto, Manager> managerMapper,
+        AppState appState,
+        INotificationService notificationService)
     {
         _navigationService = navigationService;
         _store = store;
         _managerMapper = managerMapper;
+        _appState = appState;
+        _notificationService = notificationService;
 
         // Настройка команд
         AddManagerCommand = new RelayCommand(AddManager);
@@ -54,6 +62,7 @@ public partial class ManagersTableViewModel : BaseViewModel
     public void UpdateState()
     {
         Managers = _store.Managers
+            .Where(p => _appState.CurrentUser!.Id != p.Id)
             .Select(p => _managerMapper.Map(p))
             .ToObservableCollection();
     }
@@ -67,7 +76,8 @@ public partial class ManagersTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is ManagerDto record)
         {
-            _navigationService.Navigate(PageTypeEnum.EditManager, parameters: new CommonNavigationData(record.Id!.Value));
+            _navigationService.Navigate(PageTypeEnum.EditManager,
+                parameters: new CommonNavigationData(record.Id!.Value));
         }
     }
 
@@ -75,15 +85,20 @@ public partial class ManagersTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is ManagerDto record)
         {
-            var manager = await _store.Managers.FirstOrDefaultAsync(p => p.Id == record.Id);
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление менеджера",
+                    "Вы действительно хотите удалить менеджера?");
 
-            Guard.NotNull(manager, "Не найден менеджер");
+            if (result)
+            {
+                var manager = await _store.Managers.SingleAsync(p => p.Id == record.Id);
 
-            _store.Managers.Remove(manager!);
+                _store.Managers.Remove(manager!);
 
-            await _store.SaveChangesAsync();
+                await _store.SaveChangesAsync();
 
-            UpdateState();
+                UpdateState();
+            }
         }
     }
 
