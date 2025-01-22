@@ -28,7 +28,7 @@ public partial class App : Application
 
         ServiceProvider = services.BuildServiceProvider();
 
-        SeedData();
+        //SeedData();
 
         var windowManager = ServiceProvider.GetRequiredService<IWindowManager>();
         windowManager.Init();
