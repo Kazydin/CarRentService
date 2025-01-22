@@ -53,8 +53,6 @@ public class MainSeeder(AppDbContext store) : ISeeder
 
         store.Branches.AddRange(branch1, branch2, branch3, branch4, branch5);
 
-        store.SaveChanges();
-
         var manager1 = new Manager
         {
             Role = ManagerRoleEnum.Admin,
@@ -198,7 +196,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             StartDate = new DateTime(2024, 10, 1),
             EndDate = new DateTime(2024, 10, 10),
             Status = RentalStatusEnum.Completed,
-            TotalCost = 5000,
+            TotalCost = 0,
             Tariff = RentalTariffEnum.Basic,
             Branch = branch1
         };
@@ -212,7 +210,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             StartDate = new DateTime(2024, 11, 1),
             EndDate = new DateTime(2024, 11, 15),
             Status = RentalStatusEnum.Active,
-            TotalCost = 7000,
+            TotalCost = 0,
             Tariff = RentalTariffEnum.Seasonal,
             Branch = branch1
         };
@@ -226,7 +224,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             StartDate = new DateTime(2024, 12, 1),
             EndDate = new DateTime(2024, 12, 5),
             Status = RentalStatusEnum.Completed,
-            TotalCost = 3000,
+            TotalCost = 0,
             Tariff = RentalTariffEnum.Vip,
             Branch = branch1
         };
@@ -240,7 +238,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             StartDate = new DateTime(2024, 12, 10),
             EndDate = new DateTime(2024, 12, 20),
             Status = RentalStatusEnum.Active,
-            TotalCost = 8000,
+            TotalCost = 0,
             Tariff = RentalTariffEnum.Hybrid,
             Branch = branch2
         };
@@ -254,7 +252,7 @@ public class MainSeeder(AppDbContext store) : ISeeder
             StartDate = new DateTime(2024, 9, 1),
             EndDate = new DateTime(2024, 9, 15),
             Status = RentalStatusEnum.Active,
-            TotalCost = 10000,
+            TotalCost = 0,
             Tariff = RentalTariffEnum.Basic,
             Branch = branch3
         };

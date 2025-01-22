@@ -1,3 +1,5 @@
+using System.Data;
+using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using Microsoft.UI.Xaml;
@@ -20,5 +22,10 @@ public sealed partial class PaymentsTablePage : NavigationPage
     {
         ViewModel.UpdateState();
         ViewModel.SetGrids(PaymentsDataGrid);
+    }
+
+    public override async Task OnNavigatedTo(INavigationData? parameters)
+    {
+        ViewModel.UpdateState();
     }
 }

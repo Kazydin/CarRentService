@@ -49,7 +49,10 @@
                     MappingName="Id" />
                 <dataGrid:GridNumericColumn
                     HeaderText="ID аренды"
-                    MappingName="RentalId" />
+                    MappingName="Rental.Id" />
+                <dataGrid:GridTextColumn
+                    HeaderText="Аренда"
+                    MappingName="Rental.Name" />
                 <dataGrid:GridDateColumn
                     HeaderText="Дата"
                     MappingName="Date" />

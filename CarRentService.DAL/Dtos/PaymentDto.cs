@@ -10,19 +10,19 @@ public partial class PaymentDto
     private int? _id;
 
     /// <summary>
-    /// Сумма платежа.
+    /// Сумма платежа
     /// </summary>
     [ObservableProperty]
     private double _amount;
 
     /// <summary>
-    /// Дата платежа.
+    /// Дата платежа
     /// </summary>
     [ObservableProperty]
     private DateTime _date;
 
     /// <summary>
-    /// Метод оплаты (например, наличные, карта).
+    /// Метод оплаты (например, наличные, карта)
     /// </summary>
     [ObservableProperty]
     private PaymentMethodEnum _method;
@@ -30,10 +30,10 @@ public partial class PaymentDto
     #region LinkedEntities
 
     /// <summary>
-    /// Аренда, связанная с этим платежом.
+    /// Аренда, связанная с этим платежом
     /// </summary>
     [ObservableProperty]
-    private RentalDto? _rental;
+    private RentalDto _rental;
 
     #endregion
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
@@ -14,6 +16,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
+using Windows.Media.Protection.PlayReady;
 
 namespace CarRentService.Pages.Payments.ViewPayment;
 
@@ -37,15 +40,21 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     private readonly IUniversalMapper<PaymentDto, Payment> _paymentMapper;
 
+    private readonly IUniversalMapper<RentalDto, Rental> _rentalMapper;
+
     private readonly AppDbContext _store;
 
     public ViewPaymentViewModel(INavigationService navigationService,
         INotificationService notificationService,
-        AppDbContext store)
+        AppDbContext store,
+        IUniversalMapper<PaymentDto, Payment> paymentMapper,
+        IUniversalMapper<RentalDto, Rental> rentalMapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
         _store = store;
+        _paymentMapper = paymentMapper;
+        _rentalMapper = rentalMapper;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -61,19 +70,28 @@ public partial class ViewPaymentViewModel : BaseViewModel
     {
         try
         {
-            var payment = await _store.Payments.FirstOrDefaultAsync(p => p.Id == Payment.Id);
+            var payment = await _store.Payments.FirstOrDefaultAsync(p => p.Id == Payment.Id) ?? new Payment();
 
-            Guard.NotNull(payment, "Не найден платеж");
+            _paymentMapper.Map(Payment, payment);
 
-            _paymentMapper.Map(Payment, payment!);
+            payment.Rental = await _store.Rentals.SingleAsync(p => p.Id == Payment.Rental.Id);
+
+            _paymentMapper.Validate(payment);
+
+            if (payment.Id == 0)
+            {
+                _store.Payments.Add(payment);
+            }
 
             await _store.SaveChangesAsync();
 
-            await UpdateState(payment!.Id);
+            var d = await _store.Payments.ToListAsync();
+            
+            await UpdateState(payment.Id);
 
             _notificationService.ShowTip("Обновление платежа", "Сохранено успешно!");
         }
-        catch (ValidationException e)
+        catch (Exception e)
         {
             await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", e.Message);
         }
@@ -87,11 +105,11 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
         if (result)
         {
-            var payment = await _store.Payments.FirstOrDefaultAsync(p => p.Id == Payment.Id);
+            var payment = await _store.Payments.SingleAsync(p => p.Id == Payment.Id);
 
-            Guard.NotNull(payment, "Не найден платеж");
+            _store.Payments.Remove(payment);
 
-            _store.Payments.Remove(payment!);
+            await _store.SaveChangesAsync();
 
             _navigationService.GoBack();
         }
@@ -113,11 +131,26 @@ public partial class ViewPaymentViewModel : BaseViewModel
             parameters: new CommonNavigationData(Payment.Rental!.Id!.Value));
     }
 
+    public async Task InitForRental(int rentalId)
+    {
+        Payment = new PaymentDto
+        {
+            Date = DateTime.Now
+        };
+
+        var rental = await _store.Rentals.SingleAsync(p => p.Id == rentalId);
+
+        Payment.Rental = _rentalMapper.Map(rental);
+    }
+
     public async Task UpdateState(int? entityId = null)
     {
         if (entityId == null)
         {
-            Payment = new PaymentDto();
+            Payment = new PaymentDto
+            {
+                Date = DateTime.Now
+            };
             return;
         }
 

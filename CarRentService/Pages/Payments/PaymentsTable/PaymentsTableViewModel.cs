@@ -56,6 +56,8 @@ public partial class PaymentsTableViewModel : BaseViewModel
     public void UpdateState()
     {
         Payments = _store.Payments
+            .Include(p => p.Rental)
+            .ThenInclude(p => p.Client)
             .Select(p => _paymentMapper.Map(p))
             .ToObservableCollection();
     }

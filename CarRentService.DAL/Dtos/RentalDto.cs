@@ -42,18 +42,20 @@ public partial class RentalDto
 
     [ObservableProperty] private ObservableCollection<CarDto> _cars = new();
 
-    [ObservableProperty] private BranchDto? _branch;
+    [ObservableProperty] private BranchDto _branch;
 
-    [ObservableProperty] private ClientDto? _client;
+    [ObservableProperty] private ClientDto _client;
 
     [ObservableProperty] private ObservableCollection<PaymentDto> _payments = new();
 
     [ObservableProperty] private ObservableCollection<InsuranceDto> _insurances = new();
 
+    [ObservableProperty] private string _name;
+
     #endregion
 
     /// <summary>
-    /// Стаж водителя в годах.
+    /// Дней аренды
     /// </summary>
     public int RentalDays
     {

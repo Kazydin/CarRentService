@@ -12,9 +12,19 @@ public class FullCoverageInsuranceStrategy : IInsurancePricingStrategy
     {
         double cost = 0;
 
+        var carDictionary = rental.Cars.ToDictionary(c => c.Id);
+
         foreach (var insurance in rental.Insurances.Where(p => p.Type == InsuranceTypeEnum.FullCoverage))
         {
-            var car = rental.Cars.FirstOrDefault(p => p.Id == insurance.Car!.Id);
+            if (!carDictionary.TryGetValue(insurance?.Car?.Id, out CarDto car))
+            {
+                continue;
+            }
+
+            if (rental.Client == null)
+            {
+                continue;
+            }
 
             cost += BasicRate + car!.CarYears * 50 - rental.Client!.DrivingExperienceYears * 10;
         }

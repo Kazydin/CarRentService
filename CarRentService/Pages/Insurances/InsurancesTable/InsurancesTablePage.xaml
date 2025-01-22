@@ -48,7 +48,13 @@
                     MappingName="Id" />
                 <dataGrid:GridTextColumn
                     HeaderText="ID аренды"
+                    MappingName="Rental.Id" />
+                <dataGrid:GridTextColumn
+                    HeaderText="Аренда"
                     MappingName="Rental.Name" />
+                <dataGrid:GridTextColumn
+                    HeaderText="Тип страховки"
+                    DisplayBinding="{Binding Path=Type, Converter={StaticResource EnumToDescriptionConverter}}" />
                 <dataGrid:GridNumericColumn
                     HeaderText="Стоимость"
                     MappingName="Cost" />

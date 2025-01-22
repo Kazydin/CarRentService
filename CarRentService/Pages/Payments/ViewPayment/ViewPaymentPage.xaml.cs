@@ -23,11 +23,18 @@ public sealed partial class ViewPaymentPage : NavigationPage
         {
             await _viewModel.UpdateState(data.EntityId);
             Header = $"Редактирование платежа № {_viewModel.Payment.Id!.Value}";
+            return;
+        }
+
+        if (parameters is AddRentalPartsNavigationData partsData)
+        {
+            await _viewModel.InitForRental(partsData.RentalId);
         }
         else
         {
             await _viewModel.UpdateState();
-            Header = "Создание платежа";
         }
+
+        Header = "Создание платежа";
     }
 }

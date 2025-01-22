@@ -217,6 +217,11 @@ public partial class ViewClientViewModel : BaseViewModel
             .Select(p => _branchMapper.Map(p))
             .ToObservableCollection();
 
+        Client = null;
+        Cars = null;
+        Insurances = null;
+        Payments = null;
+
         if (entityId == null)
         {
             Client = new ClientDto();

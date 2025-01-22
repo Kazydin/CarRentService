@@ -11,8 +11,5 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.ToTable("Payments");
 
         builder.HasKey(p => p.Id);
-
-        builder.HasOne(p => p.Rental)
-            .WithMany(p => p.Payments);
     }
 }

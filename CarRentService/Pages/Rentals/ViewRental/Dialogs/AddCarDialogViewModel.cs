@@ -18,8 +18,6 @@ public partial class AddCarDialogViewModel : IViewModel
 
     [ObservableProperty] private CarDto _car;
 
-    [ObservableProperty] private RentalDto _rental;
-
     [ObservableProperty] private bool _canExit;
 
     private readonly IUniversalMapper<CarDto, Car> _carMapper;
@@ -37,8 +35,6 @@ public partial class AddCarDialogViewModel : IViewModel
 
     private void AddCar()
     {
-        Rental.Cars.Add(Car);
-
         CanExit = true;
     }
 
@@ -49,8 +45,6 @@ public partial class AddCarDialogViewModel : IViewModel
 
     public void OnShow(RentalDto rental)
     {
-        Rental = rental;
-
         var cars = _store.Cars.Where(p => !rental!.Cars.Select(r => r.Id).Contains(p.Id));
 
         Cars = cars

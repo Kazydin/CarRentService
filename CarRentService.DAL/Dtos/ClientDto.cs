@@ -22,7 +22,7 @@ public partial class ClientDto
     private string _driverLicenseNumber;
 
     [ObservableProperty]
-    private DateTime? _driverLicenseIssuedDate;
+    private DateTime _driverLicenseIssuedDate;
 
     #region LinkedEntities
 
@@ -53,16 +53,11 @@ public partial class ClientDto
     {
         get
         {
-            if (!DriverLicenseIssuedDate.HasValue)
-            {
-                return 0;
-            }
-
             var currentDate = DateTime.Now;
-            var years = currentDate.Year - DriverLicenseIssuedDate.Value.Year;
+            var years = currentDate.Year - DriverLicenseIssuedDate.Year;
 
             // Проверяем, был ли день рождения уже в этом году
-            if (DriverLicenseIssuedDate.Value.Date > currentDate.AddYears(-years))
+            if (DriverLicenseIssuedDate.Date > currentDate.AddYears(-years))
             {
                 years--;
             }
@@ -71,34 +66,13 @@ public partial class ClientDto
         }
     }
 
-    protected bool Equals(ClientDto other)
-    {
-        return _id == other._id && _fio == other._fio && _age == other._age && _phone == other._phone && _driverLicenseNumber == other._driverLicenseNumber && Nullable.Equals(_driverLicenseIssuedDate, other._driverLicenseIssuedDate) && _rentals.Equals(other._rentals) && _cars.Equals(other._cars) && _payments.Equals(other._payments) && _insurances.Equals(other._insurances) && _branch.Equals(other._branch) && _name == other._name;
-    }
-
     public override bool Equals(object? obj)
     {
-        if (obj is null) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != GetType()) return false;
-        return Equals((ClientDto)obj);
+        return obj is ClientDto other && Id == other.Id;
     }
 
     public override int GetHashCode()
     {
-        var hashCode = new HashCode();
-        hashCode.Add(_id);
-        hashCode.Add(_fio);
-        hashCode.Add(_age);
-        hashCode.Add(_phone);
-        hashCode.Add(_driverLicenseNumber);
-        hashCode.Add(_driverLicenseIssuedDate);
-        hashCode.Add(_rentals);
-        hashCode.Add(_cars);
-        hashCode.Add(_payments);
-        hashCode.Add(_insurances);
-        hashCode.Add(_branch);
-        hashCode.Add(_name);
-        return hashCode.ToHashCode();
+        return Id.GetHashCode();
     }
 }

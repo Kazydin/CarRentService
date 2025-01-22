@@ -15,5 +15,5 @@ public class Client : Person
     public List<Rental> Rentals { get; set; }
 
 
-    public DateTime DriverLicenseIssuedDate;
+    public DateTime DriverLicenseIssuedDate { get; set; }
 }

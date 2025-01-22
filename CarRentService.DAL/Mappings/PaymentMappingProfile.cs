@@ -12,6 +12,7 @@ public class PaymentMappingProfile : Profile
 
         CreateMap<Payment, PaymentDto>();
 
-        CreateMap<PaymentDto, Payment>();
+        CreateMap<PaymentDto, Payment>()
+            .ForMember(dest => dest.Rental, opt => opt.Ignore());
     }
 }

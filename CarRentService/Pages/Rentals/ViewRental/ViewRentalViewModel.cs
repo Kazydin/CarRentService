@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Devices.HumanInterfaceDevice;
 using CarRentService.BLL.Services.Abstract;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Constants;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
@@ -22,8 +22,8 @@ using GuardNet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.UI.Xaml;
 using Syncfusion.UI.Xaml.DataGrid;
-using Windows.Media.Protection.PlayReady;
-using AutoMapper;
+using CarRentService.Common.Models;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 
@@ -35,19 +35,21 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     public RelayCommand SaveCommand { get; }
 
-    // TODO: здесь добавление в бронь, а не в систему
     public RelayCommand<object> AddCarCommand { get; }
 
-    // TODO: редактирование машины в системе
     public RelayCommand<object> EditCarCommand { get; }
-
-    public RelayCommand<object> AddPaymentCommand { get; }
-
-    public RelayCommand<object> DeletePaymentCommand { get; }
 
     public RelayCommand<object> DeleteCarCommand { get; }
 
-    public RelayCommand<object> AddInsuranceCommand { get; }
+    public RelayCommand<object> AddPaymentCommand { get; }
+
+    public RelayCommand<object> EditPaymentCommand { get; }
+
+    public RelayCommand<object> DeletePaymentCommand { get; }
+
+    public RelayCommand AddInsuranceCommand { get; }
+
+    public RelayCommand<object> EditInsuranceCommand { get; }
 
     public RelayCommand<object> DeleteInsuranceCommand { get; }
 
@@ -113,14 +115,16 @@ public partial class ViewRentalViewModel : BaseViewModel
 
         ClearFiltersAndSortCommand = new RelayCommand<object>(ClearFiltersAndSort);
 
-        AddCarCommand = new RelayCommand<object>(AddCar);
+        AddCarCommand = new RelayCommand<object>(AddCar, CanAddAdditionalObjects);
         EditCarCommand = new RelayCommand<object>(EditCar);
         DeleteCarCommand = new RelayCommand<object>(DeleteCar);
 
-        AddPaymentCommand = new RelayCommand<object>(AddPayment);
-        DeletePaymentCommand = new RelayCommand<object>(EditPayment);
+        AddPaymentCommand = new RelayCommand<object>(AddPayment, CanAddAdditionalObjects);
+        EditPaymentCommand = new RelayCommand<object>(EditPayment);
+        DeletePaymentCommand = new RelayCommand<object>(DeletePayment);
 
-        AddInsuranceCommand = new RelayCommand<object>(AddInsurance);
+        AddInsuranceCommand = new RelayCommand(AddInsurance, CanAddAdditionalObjects);
+        EditInsuranceCommand = new RelayCommand<object>(EditInsurance);
         DeleteInsuranceCommand = new RelayCommand<object>(DeleteInsurance);
 
         MoveToActiveStatusCommand = new RelayCommand(MoveToActiveStatus, CanMoveToActiveStatus);
@@ -129,25 +133,28 @@ public partial class ViewRentalViewModel : BaseViewModel
         _tariffs = EnumExtensions.GetValues<RentalTariffEnum>().ToObservableCollection();
     }
 
+    private bool CanAddAdditionalObjects()
+    {
+        return Rental.Id != null;
+    }
+
+    private bool CanAddAdditionalObjects(object? obj)
+    {
+        return Rental.Id != null;
+    }
+
     private async void DeleteInsurance(object? param)
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is InsuranceDto record)
         {
             var result =
-                await _notificationService.ShowConfirmDialogAsync("Удаление страховки",
-                    "Вы действительно хотите удалить страховку?");
+                await _notificationService.ShowConfirmDialogAsync("Удаление страхование",
+                    "Вы действительно хотите удалить страхование?");
 
             if (result)
             {
-                var rentalForDelete = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == Rental.Id);
-
-                Guard.NotNull(rentalForDelete, "Не найдена аренда для удаления");
-
-                _store.Rentals.Remove(rentalForDelete!);
-
-                await _store.SaveChangesAsync();
-
-                await UpdateState(Rental.Id);
+                Rental.Insurances.Remove(record);
+                UpdateCost();
             }
         }
     }
@@ -181,30 +188,92 @@ public partial class ViewRentalViewModel : BaseViewModel
         ChangeRentalStatus(RentalStatusEnum.Active);
     }
 
-    private void AddInsurance(object? obj)
+    private async void AddInsurance()
     {
-        _navigationService.Navigate(PageTypeEnum.EditInsurance);
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Добавление страхования",
+                "Несохраненные изменения будут потеряны. Продолжить?");
+
+        if (result)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditPayment, parameters: new AddRentalPartsNavigationData(Rental.Id!.Value));
+        }
     }
 
-    private void EditInsurance(object? obj)
+    private async void EditInsurance(object? param)
     {
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is InsuranceDto record)
+        {
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Редактирование страхования",
+                    "Несохраненные изменения будут потеряны. Продолжить?");
+
+            if (result)
+            {
+                _navigationService.Navigate(PageTypeEnum.EditInsurance,
+                    parameters: new CommonNavigationData(record.Id!.Value));
+            }
+        }
     }
 
-    private void AddPayment(object? obj)
+    private async void AddPayment(object? obj)
     {
-        _navigationService.Navigate(PageTypeEnum.EditPayment);
+        var result =
+            await _notificationService.ShowConfirmDialogAsync("Добавление платежа",
+                "Несохраненные изменения будут потеряны. Продолжить?");
+
+        if (result)
+        {
+            _navigationService.Navigate(PageTypeEnum.EditPayment, parameters: new AddRentalPartsNavigationData(Rental.Id!.Value));
+        }
     }
 
-    private void EditPayment(object? obj)
+    private async void EditPayment(object? param)
     {
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is PaymentDto record)
+        {
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Редактирование платежа",
+                    "Несохраненные изменения будут потеряны. Продолжить?");
+
+            if (result)
+            {
+                _navigationService.Navigate(PageTypeEnum.EditPayment,
+                    parameters: new CommonNavigationData(record.Id!.Value));
+            }
+        }
     }
 
-    private void EditCar(object? obj)
+    private async void DeletePayment(object? param)
     {
-        // TODO: implement
-        throw new System.NotImplementedException();
+        if ((param as GridRecordContextFlyoutInfo)?.Record is PaymentDto record)
+        {
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление платежа",
+                    "Вы действительно хотите удалить платеж?");
+
+            if (result)
+            {
+                Rental.Payments.Remove(record);
+                UpdateCost();
+            }
+        }
+    }
+
+    private async void EditCar(object? param)
+    {
+        if ((param as GridRecordContextFlyoutInfo)?.Record is CarDto record)
+        {
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Редактирование автомобиля",
+                    "Несохраненные изменения будут потеряны. Продолжить?");
+
+            if (result)
+            {
+                _navigationService.Navigate(PageTypeEnum.EditCar,
+                    parameters: new CommonNavigationData(record.Id!.Value));
+            }
+        }
     }
 
     private async void DeleteCar(object? param)
@@ -217,33 +286,31 @@ public partial class ViewRentalViewModel : BaseViewModel
 
             if (result)
             {
-                var rental = await _store.Rentals
-                    .Include(p => p.Cars)
-                    .FirstOrDefaultAsync(p => p.Id == Rental.Id);
-
-                Guard.NotNull(rental, "Не найдена аренда для обновления");
-
-                var car = rental!.Cars.FirstOrDefault(p => p.Id == record.Id);
-
-                Guard.NotNull(car, "Не найдена машина для удаления");
-
-                rental.Cars.Remove(car!);
-
-                await _store.SaveChangesAsync();
-
-                await UpdateState(Rental.Id);
+                Rental.Cars.Remove(record);
+                UpdateCost();
             }
         }
     }
 
     private async void AddCar(object? obj)
     {
-        await _addCarContent.ShowAsync(Rental, _xamlRoot);
+        var car = await _addCarContent.ShowAsync(Rental, _xamlRoot);
+
+        if (car == null)
+        {
+            return;
+        }
+
+        Rental.Cars.Add(car);
+        UpdateCost();
     }
 
     private bool CanSave()
     {
-        return Rental.Client != null;
+        return Rental != null
+               && Rental.Client != null
+               && Rental.Cars.Any()
+               && Rental.TotalCost - Rental.TotalPaymentsSum <= 0;
     }
 
     private async void Save()
@@ -308,7 +375,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     public bool CanDeleteRental()
     {
-        return Rental.Id != null;
+        return Rental.Id != null && Rental.Status != RentalStatusEnum.Active;
     }
 
     private void CancelEdit()
@@ -322,7 +389,7 @@ public partial class ViewRentalViewModel : BaseViewModel
             .Select(p => _branchMapper.Map(p))
             .ToObservableCollection();
 
-        Client = null!;
+        Rental = null;
 
         Clients = _store.Clients
             .Include(p => p.Branch)
@@ -346,12 +413,16 @@ public partial class ViewRentalViewModel : BaseViewModel
         Guard.NotNull(rental, "Аренда не найдена");
 
         Rental = _rentalMapper.Map(rental!);
+        Client = Rental.Client;
 
         Branches = _store.Branches
             .Select(p => _branchMapper.Map(p))
             .ToObservableCollection();
 
         UpdateCost();
+        AddCarCommand.NotifyCanExecuteChanged();
+        AddInsuranceCommand.NotifyCanExecuteChanged();
+        AddPaymentCommand.NotifyCanExecuteChanged();
     }
 
     public void SetGrids(SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,
@@ -391,6 +462,8 @@ public partial class ViewRentalViewModel : BaseViewModel
     private void UpdateCost()
     {
         Rental.TotalCost = _costCalculationService.CalculateTotalRentalCost(Rental);
+        Rental.TotalPaymentsSum = Rental.Payments.Sum(p => p.Amount);
+        SaveCommand.NotifyCanExecuteChanged();
     }
 
     public void SetXamlRoot(XamlRoot xamlRoot)
@@ -400,7 +473,11 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     partial void OnClientChanged(ClientDto value)
     {
-        Rental.Client = value;
+        if (value != null)
+        {
+            Rental.Client = value;
+        }
+
         SaveCommand.NotifyCanExecuteChanged();
     }
 }

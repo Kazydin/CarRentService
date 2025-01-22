@@ -57,6 +57,8 @@ public partial class RentalsTableViewModel : BaseViewModel
     public void UpdateState()
     {
         Rentals = _store.Rentals
+            .Include(p => p.Client)
+            .Include(p => p.Branch)
             .Select(p => _rentalMapper.Map(p))
             .ToObservableCollection();
     }

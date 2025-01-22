@@ -12,7 +12,8 @@ public class RentalMappingProfile : Profile
 
         CreateMap<RentalDto, RentalDto>();
 
-        CreateMap<Rental, RentalDto>();
+        CreateMap<Rental, RentalDto>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"№{src.Id} {src.Client.Fio} от {src.StartDate:dd.MM.yyyy}"));
 
         CreateMap<RentalDto, Rental>()
             .ForMember(dest => dest.Cars, opt => opt.Ignore())

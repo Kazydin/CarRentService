@@ -54,6 +54,7 @@ public partial class InsurancesTableViewModel : BaseViewModel
     public void UpdateState()
     {
         Insurances = _store.Insurances
+            .Include(p => p.Rental)
             .Select(p => _insuranceMapper.Map(p))
             .ToObservableCollection();
     }
