@@ -68,7 +68,7 @@
                     Margin="0, 0, 0, 10">
                     Аренда
                 </TextBlock>
-                <editors:SfAutoComplete PlaceholderText="Выберте аренду"
+                <editors:SfAutoComplete PlaceholderText="Выберите аренду"
                                         ItemsSource="{Binding Rentals}"
                                         DisplayMemberPath="Name"
                                         TextSearchMode="Contains"
@@ -78,7 +78,7 @@
                                         MaxDropDownHeight="300" />
             </StackPanel>
             <editors:SfComboBox
-                ItemsSource="{Binding Methods, Mode=OneWay}"
+                ItemsSource="{Binding Methods, Converter={StaticResource EnumCollectionToDescriptionsConverter}, Mode=OneWay}"
                 Header="Метод"
                 Margin="5, 11, 5, 10"
                 Grid.Row="2"
@@ -86,7 +86,7 @@
                 HorizontalAlignment="Stretch"
                 Width="Auto"
                 Grid.Column="1"
-                SelectedItem="{Binding Payment.Method, Converter={StaticResource EnumToDescriptionConverter}, Mode=TwoWay}" />
+                SelectedItem="{Binding Payment.Method, Converter={StaticResource EnumToDescriptionConverter}, ConverterParameter='PaymentMethodEnum', Mode=TwoWay}" />
             <StackPanel
                 Margin="0, 10, 5, 10"
                 Grid.Row="3"

@@ -33,7 +33,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<RentalDto> _rentals;
 
-    [ObservableProperty] private ObservableCollection<string> _methods;
+    [ObservableProperty] private ObservableCollection<PaymentMethodEnum> _methods;
 
     private readonly INavigationService _navigationService;
 
@@ -61,9 +61,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
         CancelEditCommand = new RelayCommand(CancelEdit);
         DeletePaymentCommand = new RelayCommand(DeletePayment, CanDeletePayment);
 
-        Methods = typeof(PaymentMethodEnum)
-            .GetDescriptions()
-            .ToObservableCollection();
+        Methods = EnumExtensions.GetValues<PaymentMethodEnum>().ToObservableCollection();
     }
 
     private async void Save()
@@ -74,7 +72,10 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
             _paymentMapper.Map(Payment, payment);
 
-            payment.Rental = await _store.Rentals.SingleAsync(p => p.Id == Payment.Rental.Id);
+            if (Payment.Rental != null)
+            {
+                payment.Rental = await _store.Rentals.SingleAsync(p => p.Id == Payment.Rental.Id);
+            }
 
             _paymentMapper.Validate(payment);
 

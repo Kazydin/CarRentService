@@ -1,9 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
-using CarRentService.Common.Models;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
@@ -13,7 +12,6 @@ using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
-using Syncfusion.UI.Xaml.DataGrid;
 
 namespace CarRentService.Pages.Insurances.ViewInsurance;
 
@@ -76,7 +74,7 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
             _navigationService.GoBack();
         }
-        catch (ValidationException e)
+        catch (Exception e)
         {
             await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", e.Message);
         }

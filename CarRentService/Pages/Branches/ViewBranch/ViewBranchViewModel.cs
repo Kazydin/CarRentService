@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CarRentService.Common;
@@ -147,7 +148,7 @@ public partial class ViewBranchViewModel : BaseViewModel
 
             _notificationService.ShowTip("Обновление филиала", "Сохранено успешно!");
         }
-        catch (ValidationException e)
+        catch (Exception e)
         {
             await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", e.Message);
         }
