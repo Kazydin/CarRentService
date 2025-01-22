@@ -3,7 +3,6 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
 using CarRentService.DAL.Dtos;
-using CarRentService.DAL.Entities;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Syncfusion.UI.Xaml.Editors;

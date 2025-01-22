@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
@@ -9,7 +10,6 @@ using CarRentService.DAL.Enum;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentValidation;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,23 +29,29 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
     [ObservableProperty] private ObservableCollection<InsuranceTypeEnum> _types;
 
+    [ObservableProperty] private ObservableCollection<RentalDto> _rentals;
+
     private readonly INavigationService _navigationService;
 
     private readonly INotificationService _notificationService;
 
     private readonly IUniversalMapper<InsuranceDto, Insurance> _insuranceMapper;
 
+    private readonly IUniversalMapper<RentalDto, Rental> _rentalMapper;
+
     private readonly AppDbContext _store;
 
     public ViewInsuranceViewModel(INavigationService navigationService,
         INotificationService notificationService,
         IUniversalMapper<InsuranceDto, Insurance> insuranceMapper,
-        AppDbContext store)
+        AppDbContext store,
+        IUniversalMapper<RentalDto, Rental> rentalMapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;
         _insuranceMapper = insuranceMapper;
         _store = store;
+        _rentalMapper = rentalMapper;
 
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
@@ -60,15 +66,25 @@ public partial class ViewInsuranceViewModel : BaseViewModel
     {
         try
         {
-            var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == Insurance.Id);
+            var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == Insurance.Id) ?? new Insurance();
 
-            Guard.NotNull(insurance, "Не найдена страхование");
+            _insuranceMapper.Map(Insurance, insurance);
 
-            _insuranceMapper.Map(Insurance, insurance!);
+            if (Insurance.Rental != null)
+            {
+                insurance.Rental = await _store.Rentals.SingleAsync(p => p.Id == Insurance.Rental.Id);
+            }
+
+            _insuranceMapper.Validate(insurance);
+
+            if (insurance.Id == 0)
+            {
+                _store.Insurances.Add(insurance);
+            }
 
             await _store.SaveChangesAsync();
 
-            await UpdateState(insurance!.Id);
+            await UpdateState(insurance.Id);
 
             _notificationService.ShowTip("Обновление страхования", "Сохранено успешно!");
 
@@ -88,11 +104,9 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
         if (result)
         {
-            var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == Insurance.Id);
+            var insurance = await _store.Insurances.SingleAsync(p => p.Id == Insurance.Id);
 
-            Guard.NotNull(insurance, "Не найдено страхование");
-
-            _store.Insurances.Remove(insurance!);
+            _store.Insurances.Remove(insurance);
 
             await _store.SaveChangesAsync();
 
@@ -110,8 +124,33 @@ public partial class ViewInsuranceViewModel : BaseViewModel
         _navigationService.GoBack();
     }
 
+    public async Task InitForRental(int rentalId)
+    {
+        Insurance = null;
+
+        SetRentals();
+
+        Insurance = new InsuranceDto();
+
+        var rental = await _store.Rentals.SingleAsync(p => p.Id == rentalId);
+
+        Insurance.Rental = _rentalMapper.Map(rental);
+    }
+
+    private void SetRentals()
+    {
+        Rentals = _store.Rentals
+            .Where(p => p.Status == RentalStatusEnum.Created)
+            .Include(p => p.Client)
+            .Select(p => _rentalMapper.Map(p))
+            .ToObservableCollection();
+    }
+
     public async Task UpdateState(int? entityId = null)
     {
+        Insurance = null;
+        SetRentals();
+
         if (entityId == null)
         {
             Insurance = new InsuranceDto();

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
 using CarRentService.DAL;
 using CarRentService.DAL.Dtos;
@@ -6,7 +7,6 @@ using CarRentService.DAL.Entities;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentValidation;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,7 +57,7 @@ public partial class ViewProfileViewModel : BaseViewModel
 
             _notificationService.ShowTip("Обновление профиля", "Сохранено успешно!");
         }
-        catch (ValidationException e)
+        catch (Exception e)
         {
             await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", e.Message);
         }

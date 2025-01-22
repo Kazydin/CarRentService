@@ -6,13 +6,11 @@ using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
 using CarRentService.DAL;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GuardNet;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
 

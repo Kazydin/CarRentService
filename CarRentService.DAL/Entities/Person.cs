@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using CarRentService.DAL.Abstract;
+﻿using CarRentService.DAL.Abstract;
 
 namespace CarRentService.DAL.Entities;
 

@@ -4,12 +4,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Devices.HumanInterfaceDevice;
 using CarRentService.BLL.Services.Abstract;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL.Constants;
+using CarRentService.Common.Models;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
@@ -22,8 +21,6 @@ using GuardNet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.UI.Xaml;
 using Syncfusion.UI.Xaml.DataGrid;
-using CarRentService.Common.Models;
-using Microsoft.UI.Xaml.Controls.Primitives;
 
 namespace CarRentService.Pages.Rentals.ViewRental;
 
@@ -213,7 +210,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
         if (result)
         {
-            _navigationService.Navigate(PageTypeEnum.EditPayment, parameters: new AddRentalPartsNavigationData(Rental.Id!.Value));
+            _navigationService.Navigate(PageTypeEnum.EditInsurance, parameters: new AddRentalPartsNavigationData(Rental.Id!.Value));
         }
     }
 
@@ -363,7 +360,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
             await UpdateState(rental.Id);
         }
-        catch (ValidationException e)
+        catch (Exception e)
         {
             await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", e.Message);
         }

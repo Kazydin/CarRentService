@@ -13,10 +13,10 @@ using CarRentService.DAL.Enum;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentValidation;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.DataGrid;
-using FluentValidation;
 
 namespace CarRentService.Pages.Cars.ViewCars;
 
@@ -57,7 +57,7 @@ public partial class ViewCarViewModel : BaseViewModel
     public ViewCarViewModel(INavigationService navigationService,
         INotificationService notificationService,
         IUniversalMapper<CarDto, Car> carMapper,
-        AppDbContext store,IUniversalMapper<BranchDto, Branch> branchMapper)
+        AppDbContext store, IUniversalMapper<BranchDto, Branch> branchMapper)
     {
         _navigationService = navigationService;
         _notificationService = notificationService;

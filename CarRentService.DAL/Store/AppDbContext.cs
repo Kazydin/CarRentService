@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using CarRentService.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace CarRentService.DAL.Store;
 
@@ -23,7 +22,7 @@ public class AppDbContext : DbContext
 
     public AppDbContext()
     {
-        
+
     }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)

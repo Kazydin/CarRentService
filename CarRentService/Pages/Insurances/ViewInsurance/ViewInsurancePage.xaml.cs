@@ -22,12 +22,19 @@ public sealed partial class ViewInsurancePage : NavigationPage
         if (parameters is CommonNavigationData data)
         {
             await _viewModel.UpdateState(data.EntityId);
-            Header = $"Редактирование страховки № {_viewModel.Insurance.Id}";
+            Header = $"Редактирование страховки № {_viewModel.Insurance.Id!.Value}";
+            return;
+        }
+
+        if (parameters is AddRentalPartsNavigationData partsData)
+        {
+            await _viewModel.InitForRental(partsData.RentalId);
         }
         else
         {
             await _viewModel.UpdateState();
-            Header = "Создание страховки";
         }
+
+        Header = "Создание страховки";
     }
 }

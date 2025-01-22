@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
-using CarRentService.DAL;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
@@ -13,7 +13,6 @@ using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
-using GuardNet;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRentService.Pages.Managers.ViewManager;
@@ -99,7 +98,7 @@ public partial class ViewManagerViewModel : BaseViewModel
             await UpdateState(manager.Id, _selectedBranchesComboBox);
 
         }
-        catch (ValidationException e)
+        catch (Exception e)
         {
             await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", e.Message);
         }

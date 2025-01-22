@@ -1,9 +1,8 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CarRentService.Common.Abstract;
-using FluentValidation;
-using System;
-using CarRentService.Common.Attributes;
 using CarRentService.DAL.Extensions;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace CarRentService.Common;

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Intrinsics.Arm;
 using System.Threading.Tasks;
 using AutoMapper;
 using CarRentService.Common;
@@ -147,7 +147,7 @@ public partial class ViewClientViewModel : BaseViewModel
 
             await UpdateState(client.Id);
         }
-        catch (ValidationException e)
+        catch (Exception e)
         {
             await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", e.Message);
         }

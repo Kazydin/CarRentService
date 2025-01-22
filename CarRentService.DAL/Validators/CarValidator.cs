@@ -14,8 +14,8 @@ public class CarValidator : AbstractValidator<Car>
         RuleFor(car => car.RegistrationNumber)
             .NotEmpty()
             .WithMessage("Регистрационный номер обязателен.");
-            // .Length(6, 10)
-            // .WithMessage("Регистрационный номер должен содержать от 6 до 10 символов.");
+        // .Length(6, 10)
+        // .WithMessage("Регистрационный номер должен содержать от 6 до 10 символов.");
 
         // Статус автомобиля
         RuleFor(car => car.Status)
@@ -38,8 +38,8 @@ public class CarValidator : AbstractValidator<Car>
         RuleFor(car => car.Mileage)
             .GreaterThanOrEqualTo(0)
             .WithMessage("Пробег автомобиля не может быть отрицательным.");
-            // .LessThanOrEqualTo(1_000_000)
-            // .WithMessage("Пробег автомобиля не может превышать 1 000 000 км.");
+        // .LessThanOrEqualTo(1_000_000)
+        // .WithMessage("Пробег автомобиля не может превышать 1 000 000 км.");
 
         // Марка и модель: обязательные поля
         RuleFor(car => car.Make)

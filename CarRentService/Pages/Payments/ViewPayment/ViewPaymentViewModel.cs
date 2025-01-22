@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
-using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
-using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
@@ -17,7 +13,6 @@ using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
 using GuardNet;
 using Microsoft.EntityFrameworkCore;
-using Windows.Media.Protection.PlayReady;
 
 namespace CarRentService.Pages.Payments.ViewPayment;
 
@@ -85,7 +80,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
             }
 
             await _store.SaveChangesAsync();
-            
+
             await UpdateState(payment.Id);
 
             _notificationService.ShowTip("Обновление платежа", "Сохранено успешно!");
@@ -130,10 +125,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
     {
         Payment = null;
 
-        Rentals = _store.Rentals
-            .Include(p => p.Client)
-            .Select(p => _rentalMapper.Map(p))
-            .ToObservableCollection();
+        SetRentals();
 
         Payment = new PaymentDto
         {
@@ -145,14 +137,20 @@ public partial class ViewPaymentViewModel : BaseViewModel
         Payment.Rental = _rentalMapper.Map(rental);
     }
 
+    private void SetRentals()
+    {
+        Rentals = _store.Rentals
+            .Where(p => p.Status == RentalStatusEnum.Created)
+            .Include(p => p.Client)
+            .Select(p => _rentalMapper.Map(p))
+            .ToObservableCollection();
+    }
+
     public async Task UpdateState(int? entityId = null)
     {
         Payment = null;
 
-        Rentals = _store.Rentals
-            .Include(p => p.Client)
-            .Select(p => _rentalMapper.Map(p))
-            .ToObservableCollection();
+        SetRentals();
 
         if (entityId == null)
         {

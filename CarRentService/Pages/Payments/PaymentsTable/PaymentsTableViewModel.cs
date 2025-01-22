@@ -5,7 +5,6 @@ using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Models;
-using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Store;

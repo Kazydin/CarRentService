@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace CarRentService.DAL.Abstract;
+﻿namespace CarRentService.DAL.Abstract;
 
 public interface IEntity
 {

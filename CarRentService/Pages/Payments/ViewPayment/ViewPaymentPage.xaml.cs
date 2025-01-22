@@ -19,7 +19,6 @@ public sealed partial class ViewPaymentPage : NavigationPage
 
     public override async Task OnNavigatedTo(INavigationData? parameters)
     {
-
         if (parameters is CommonNavigationData data)
         {
             await _viewModel.UpdateState(data.EntityId);
