@@ -68,6 +68,8 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     [ObservableProperty] private DateTime _minDate;
 
+    [ObservableProperty] private bool _isRentalEditable;
+
     private readonly INavigationService _navigationService;
 
     private readonly AppDbContext _store;
@@ -112,7 +114,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
         ClearFiltersAndSortCommand = new RelayCommand<object>(ClearFiltersAndSort);
 
-        AddCarCommand = new RelayCommand<object>(AddCar);
+        AddCarCommand = new RelayCommand<object>(AddCar, CanAddCar);
         EditCarCommand = new RelayCommand<object>(EditCar);
         DeleteCarCommand = new RelayCommand<object>(DeleteCar);
 
@@ -132,12 +134,17 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     private bool CanAddAdditionalObjects()
     {
-        return Rental.Id != null;
+        return Rental.Id != null && Rental.Status != RentalStatusEnum.Completed;
+    }
+
+    private bool CanAddCar(object? obj)
+    {
+        return Rental.Status != RentalStatusEnum.Completed;
     }
 
     private bool CanAddAdditionalObjects(object? obj)
     {
-        return Rental.Id != null;
+        return Rental.Id != null && Rental.Status != RentalStatusEnum.Completed;
     }
 
     private async void DeleteInsurance(object? param)
@@ -431,6 +438,8 @@ public partial class ViewRentalViewModel : BaseViewModel
 
         Rental = _rentalMapper.Map(rental!);
         Client = Rental.Client;
+
+        IsRentalEditable = Rental.Status != RentalStatusEnum.Completed;
 
         UpdateCost();
         AddCarCommand.NotifyCanExecuteChanged();

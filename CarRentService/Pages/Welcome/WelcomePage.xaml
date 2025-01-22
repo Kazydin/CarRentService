@@ -13,6 +13,6 @@
     <StackPanel Margin="47, 20, 47, 20">
         <TextBlock FontSize="70">Добро пожаловать,</TextBlock>
         <TextBlock
-            FontSize="35" Text="{Binding UserName}" />
+            FontSize="35" Text="{Binding UserName}"/>
     </StackPanel>
 </abstract:NavigationPage>

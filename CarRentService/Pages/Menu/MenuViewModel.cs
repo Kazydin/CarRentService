@@ -1,9 +1,11 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.Common.Services;
 using CarRentService.DAL;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Enum;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,13 +13,11 @@ using Microsoft.UI.Xaml;
 
 namespace CarRentService.Pages.Menu;
 
-public partial class MenuViewModel : IViewModel
+public partial class MenuViewModel : IViewModel, INotifiable
 {
     public ICommand NavigateCommand { get; }
 
     public XamlRoot XamlRoot = null!;
-
-    public bool CanGoBack => _navigationService.CanGoBack();
 
     private readonly INavigationService _navigationService;
 
@@ -31,6 +31,10 @@ public partial class MenuViewModel : IViewModel
     {
         _navigationService = navigationService;
         _appState = appState;
+
+        UpdateState();
+        appState.Subscribe(this);
+
         NavigateCommand = new RelayCommand<string>(Navigate);
     }
 
@@ -43,10 +47,14 @@ public partial class MenuViewModel : IViewModel
         _navigationService.Navigate(pageEnum!.Value);
     }
 
-    public void UpdateState()
+    private void UpdateState()
     {
-        CurrentUserFio = _appState?.CurrentUser?.Fio ?? string.Empty;
-
+        CurrentUserFio = _appState.CurrentUser?.Fio ?? string.Empty;
         IsManagerTabVisible = _appState?.CurrentUser?.Role == ManagerRoleEnum.Admin;
+    }
+
+    public void Update(object sender, EventArgs e)
+    {
+        UpdateState();
     }
 }

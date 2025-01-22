@@ -124,6 +124,7 @@
                                                 ItemsSource="{Binding Clients}"
                                                 DisplayMemberPath="Name"
                                                 TextSearchMode="Contains"
+                                                IsEnabled="{Binding IsRentalEditable}"
                                                 HorizontalAlignment="Stretch"
                                                 SelectedItem="{Binding Client, Mode=TwoWay}"
                                                 MaxDropDownHeight="300" />
@@ -139,6 +140,7 @@
                         <editors:SfDatePicker
                             DisplayDateFormat="dd.MM.yyyy"
                             PlaceholderText="Выберите дату начала"
+                            IsEnabled="{Binding IsRentalEditable}"
                             SelectedDate="{Binding Rental.StartDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}" />
                     </StackPanel>
                     <StackPanel
@@ -152,6 +154,7 @@
                         <editors:SfDatePicker
                             DisplayDateFormat="dd.MM.yyyy"
                             PlaceholderText="Выберите дату окончания"
+                            IsEnabled="{Binding IsRentalEditable}"
                             SelectedDate="{Binding Rental.EndDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}" />
                     </StackPanel>
                     <editors:SfComboBox
@@ -162,6 +165,7 @@
                         Margin="0, 11, 5, 10"
                         HorizontalAlignment="Stretch"
                         TextSearchMode="Contains"
+                        IsEnabled="{Binding IsRentalEditable}"
                         SelectedItem="{Binding Rental.Tariff, Converter={StaticResource EnumToDescriptionConverter}, ConverterParameter='RentalTariffEnum', Mode=TwoWay}"
                         Width="Auto" />
                     <editors:SfComboBox
@@ -172,6 +176,7 @@
                         Grid.Column="1"
                         x:Name="RentalBranch"
                         HorizontalAlignment="Stretch"
+                        IsEnabled="{Binding IsRentalEditable}"
                         TextMemberPath="Name"
                         DisplayMemberPath="Name"
                         SelectedItem="{Binding Rental.Branch, Mode=TwoWay}"
@@ -457,6 +462,7 @@
             Orientation="Horizontal">
             <Button
                 Margin="0, 0, 10, 0"
+                IsEnabled="{Binding IsRentalEditable}"
                 Command="{Binding SaveCommand}">
                 Сохранить
             </Button>

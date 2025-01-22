@@ -17,14 +17,18 @@ public class UniversalMapper<TDto, TEntity> : IUniversalMapper<TDto, TEntity>
     public UniversalMapper(IMapper mapper, IValidator<TEntity> validator)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+    }
+
+    public TEntity Copy(TEntity entity)
+    {
+        return _mapper.Map<TEntity>(entity);
     }
 
     public TEntity Map(TDto dto)
     {
-        var entity = _mapper.Map<TEntity>(dto);
-
-        return entity;
+        return _mapper.Map<TEntity>(dto);
     }
 
     public TEntity Map(TDto dto, TEntity entity)

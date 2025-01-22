@@ -1,6 +1,7 @@
 ﻿using CarRentService.BLL.Services.Abstract;
 using CarRentService.DAL;
 using CarRentService.DAL.Store;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentService.BLL.Services
 {
@@ -19,6 +20,7 @@ namespace CarRentService.BLL.Services
         public bool Authenticate(string login, string password)
         {
             var user = _store.Managers
+                // .AsNoTracking()
                 .FirstOrDefault(p => p.Login == login
                                      && p.Password == password);
 

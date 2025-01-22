@@ -1,10 +1,12 @@
-﻿using CarRentService.Common.Abstract;
+﻿using System;
+using CarRentService.Common.Abstract;
 using CarRentService.DAL;
+using CarRentService.DAL.Abstract;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CarRentService.Pages.Welcome;
 
-public partial class WelcomeViewModel : IViewModel
+public partial class WelcomeViewModel : IViewModel, INotifiable
 {
     [ObservableProperty]
     private AppState _appState;
@@ -14,11 +16,12 @@ public partial class WelcomeViewModel : IViewModel
 
     public WelcomeViewModel(AppState appState)
     {
-        _appState = appState;
+        AppState = appState;
+        AppState.Subscribe(this);
     }
 
-    public void UpdateAppState()
+    public void Update(object sender, EventArgs e)
     {
-        UserName = _appState?.CurrentUser?.Fio;
+        UserName = AppState.CurrentUser?.Fio;
     }
 }

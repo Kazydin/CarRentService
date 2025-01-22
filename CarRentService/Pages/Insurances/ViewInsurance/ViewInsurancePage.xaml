@@ -10,7 +10,6 @@
     xmlns:editors="using:Syncfusion.UI.Xaml.Editors"
     mc:Ignorable="d">
 
-
     <Grid Margin="47, 20, 47, 47">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -18,6 +17,8 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
                 <RowDefinition
                     Height="Auto" />
                 <RowDefinition
@@ -62,9 +63,9 @@
                     IsEnabled="False" />
             </StackPanel>
             <StackPanel
-                Margin="5, 10, 5, 10"
-                Grid.Row="1"
-                Grid.Column="2">
+                Margin="0, 10, 5, 10"
+                Grid.Row="2"
+                Grid.Column="0">
                 <TextBlock
                     Margin="0, 0, 0, 10">
                     Аренда
@@ -72,6 +73,7 @@
                 <editors:SfAutoComplete PlaceholderText="Выберите аренду"
                                         ItemsSource="{Binding Rentals}"
                                         DisplayMemberPath="Name"
+                                        x:Name="InsuranceRental"
                                         TextSearchMode="Contains"
                                         HorizontalAlignment="Stretch"
                                         TextHighlightMode="Matched"
@@ -80,38 +82,33 @@
             </StackPanel>
             <StackPanel
                 Margin="5, 10, 5, 10"
-                Grid.Row="1"
+                Grid.Row="2"
                 Grid.Column="1">
                 <TextBlock
-                    Margin="0, 0, 0, 10">
-                    Клиент
+                    Margin="5, 0, 5, 10">
+                    Автомобиль
                 </TextBlock>
-                <TextBox
-                    Text="{Binding Insurance.Rental.Client.Fio, Mode=OneWay}"
-                    IsEnabled="False" />
+                <editors:SfAutoComplete PlaceholderText="Выберте автомобиль"
+                                        ItemsSource="{Binding Insurance.Rental.Cars}"
+                                        DisplayMemberPath="Name"
+                                        x:Name="InsuranceCar"
+                                        TextSearchMode="Contains"
+                                        HorizontalAlignment="Stretch"
+                                        TextHighlightMode="Matched"
+                                        SelectedItem="{Binding Insurance.Car, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        MaxDropDownHeight="300" />
             </StackPanel>
             <editors:SfComboBox
                 ItemsSource="{Binding Types, Converter={StaticResource EnumCollectionToDescriptionsConverter}, Mode=OneWay}"
                 Header="Тип"
-                Margin="0, 11, 5, 10"
+                Margin="5, 11, 5, 10"
                 Grid.Row="2"
                 HorizontalAlignment="Stretch"
                 Width="Auto"
-                Grid.Column="0"
+                Grid.Column="2"
                 SelectedItem="{Binding Insurance.Type, Converter={StaticResource EnumToDescriptionConverter}, Mode=TwoWay}" />
             <StackPanel
-                Margin="5, 10, 5, 10"
-                Grid.Row="2"
-                Grid.Column="1">
-                <TextBlock
-                    Margin="0, 0, 0, 10">
-                    Сумма покрытия страховки
-                </TextBlock>
-                <TextBox
-                    Text="{Binding Insurance.Cost, Mode=TwoWay}" />
-            </StackPanel>
-            <StackPanel
-                Grid.Row="3"
+                Grid.Row="4"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Margin="0, 15, 0, 0"

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
+using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
 using CarRentService.DAL.Enum;
@@ -140,7 +142,7 @@ public partial class ViewInsuranceViewModel : BaseViewModel
     private void SetRentals()
     {
         Rentals = _store.Rentals
-            .Where(p => p.Status == RentalStatusEnum.Created)
+            .Where(p => p.Status != RentalStatusEnum.Completed)
             .Include(p => p.Client)
             .Select(p => _rentalMapper.Map(p))
             .ToObservableCollection();
@@ -157,7 +159,11 @@ public partial class ViewInsuranceViewModel : BaseViewModel
             return;
         }
 
-        var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == entityId);
+        var insurance = await _store.Insurances
+            .Include(p => p.Car)
+            .Include(p => p.Rental)
+            .ThenInclude(p => p.Cars)
+            .FirstOrDefaultAsync(p => p.Id == entityId);
 
         Guard.NotNull(insurance, "Страхование не найдено");
 

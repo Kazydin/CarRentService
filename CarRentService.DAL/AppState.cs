@@ -1,4 +1,5 @@
 ﻿using CarRentService.Common.Attributes;
+using CarRentService.Common.Extensions;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Entities;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,8 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CarRentService.DAL;
 
 [InjectDI(ServiceLifetime.Singleton)]
-public class AppState : BaseSubject
+public class AppState : ISubject
 {
+    private readonly List<INotifiable> _observers = new();
+
     private Manager? _currentUser;
 
     public Manager? CurrentUser
@@ -15,11 +18,29 @@ public class AppState : BaseSubject
         get => _currentUser;
         set
         {
-            if (_currentUser != value)
-            {
-                _currentUser = value;
-                Notify();
-            }
+            _currentUser = value.DeepClone();
+            Notify();
+        }
+    }
+
+    public void Subscribe(INotifiable observer)
+    {
+        if (!_observers.Contains(observer))
+        {
+            _observers.Add(observer);
+        }
+    }
+
+    public void Unsubscribe(INotifiable observer)
+    {
+        _observers.Remove(observer);
+    }
+
+    public void Notify()
+    {
+        foreach (var observer in _observers)
+        {
+            observer.Update(this, EventArgs.Empty);
         }
     }
 }

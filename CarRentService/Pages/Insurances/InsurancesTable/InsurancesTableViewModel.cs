@@ -54,6 +54,7 @@ public partial class InsurancesTableViewModel : BaseViewModel
     {
         Insurances = _store.Insurances
             .Include(p => p.Rental)
+            .ThenInclude(p => p.Client)
             .Select(p => _insuranceMapper.Map(p))
             .ToObservableCollection();
     }

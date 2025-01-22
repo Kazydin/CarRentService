@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CarRentService.Common.Abstract;
+using CarRentService.Common.Extensions;
 using CarRentService.DAL;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
@@ -43,15 +44,14 @@ public partial class ViewProfileViewModel : BaseViewModel
     {
         try
         {
-            var manager = await _store.Managers.FirstOrDefaultAsync(p => p.Id == Manager.Id);
+            var manager = await _store.Managers
+                .SingleAsync(p => p.Id == Manager.Id);
 
             Guard.NotNull(manager, "Не найден менеджер");
 
-            _managerMapper.Map(Manager, manager!);
+            _managerMapper.Map(Manager, manager);
 
             await _store.SaveChangesAsync();
-
-            await UpdateState();
 
             _appState.CurrentUser = manager;
 

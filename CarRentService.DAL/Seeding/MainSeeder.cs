@@ -49,8 +49,6 @@ public class MainSeeder(AppDbContext store) : ISeeder
             ContactDetails = "+7 (423) 999-88-77",
         };
 
-        store.Database.EnsureCreated();
-
         store.Branches.AddRange(branch1, branch2, branch3, branch4, branch5);
 
         var manager1 = new Manager

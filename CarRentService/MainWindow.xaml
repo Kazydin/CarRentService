@@ -8,6 +8,5 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:abstract="using:CarRentService.Common.Abstract"
     mc:Ignorable="d"
-    Title="Сервис аренды авто"
-    Activated="MainWindow_OnActivated">
+    Title="Сервис аренды авто">
 </abstract:InjectedWindow>

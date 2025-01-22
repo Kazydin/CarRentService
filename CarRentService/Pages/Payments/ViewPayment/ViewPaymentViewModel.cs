@@ -140,7 +140,7 @@ public partial class ViewPaymentViewModel : BaseViewModel
     private void SetRentals()
     {
         Rentals = _store.Rentals
-            .Where(p => p.Status == RentalStatusEnum.Created)
+            .Where(p => p.Status != RentalStatusEnum.Completed)
             .Include(p => p.Client)
             .Select(p => _rentalMapper.Map(p))
             .ToObservableCollection();

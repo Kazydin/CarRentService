@@ -6,18 +6,10 @@ namespace CarRentService.Pages.Welcome;
 
 public sealed partial class WelcomePage : NavigationPage
 {
-    private readonly WelcomeViewModel _viewModel;
-
     public WelcomePage(WelcomeViewModel viewModel) : base(PageTypeEnum.Welcome)
     {
-        _viewModel = viewModel;
         DataContext = viewModel;
 
         this.InitializeComponent();
-    }
-
-    public override async Task OnNavigatedTo(INavigationData? parameters)
-    {
-        _viewModel.UpdateAppState();
     }
 }

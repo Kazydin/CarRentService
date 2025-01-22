@@ -20,9 +20,9 @@ public partial class InsuranceDto
 
     #region LinkedEntities
 
-    [ObservableProperty] private RentalDto? _rental;
+    [ObservableProperty] private RentalDto _rental;
 
-    [ObservableProperty] private CarDto? _car;
+    [ObservableProperty] private CarDto _car;
 
     #endregion
 }

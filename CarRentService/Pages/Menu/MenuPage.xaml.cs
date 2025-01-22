@@ -67,9 +67,4 @@ public sealed partial class MenuPage : BasePage
             _viewModel.NavigateCommand.Execute(selectedItem.Tag.ToString());
         }
     }
-
-    public void UpdateState()
-    {
-        _viewModel.UpdateState();
-    }
 }

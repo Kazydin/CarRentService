@@ -100,4 +100,14 @@ public partial class CarDto
     {
         UpdateName();
     }
+
+    // public override bool Equals(object? obj)
+    // {
+    //     return obj is BranchDto other && Id == other.Id;
+    // }
+    //
+    // public override int GetHashCode()
+    // {
+    //     return Id.GetHashCode();
+    // }
 }

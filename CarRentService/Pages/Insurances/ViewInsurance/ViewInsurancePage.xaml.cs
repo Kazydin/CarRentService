@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
 using CarRentService.Common.Models;
+using CarRentService.DAL.Abstract;
+using CarRentService.DAL.Dtos;
 
 namespace CarRentService.Pages.Insurances.ViewInsurance;
 
