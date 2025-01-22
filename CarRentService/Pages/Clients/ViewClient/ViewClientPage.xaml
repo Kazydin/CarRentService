@@ -124,7 +124,19 @@
                         SelectedItem="{Binding Client.Branch, Mode=TwoWay}"
                         Width="Auto"
                         HorizontalAlignment="Stretch" />
-
+                    <StackPanel
+                        Margin="5, 10, 5, 10"
+                        Grid.Row="2"
+                        Grid.Column="2">
+                        <TextBlock
+                            Margin="0, 0, 0, 10">
+                            Дата выдачи ВУ
+                        </TextBlock>
+                        <editors:SfDatePicker
+                            DisplayDateFormat="dd.MM.yyyy"
+                            PlaceholderText="Выберите дату выдачи ВУ"
+                            SelectedDate="{Binding Rental.DriverLicenseIssuedDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}" />
+                    </StackPanel>
                 </Grid>
             </PivotItem>
             <PivotItem

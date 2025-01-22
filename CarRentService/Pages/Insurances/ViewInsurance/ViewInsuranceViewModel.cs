@@ -71,7 +71,12 @@ public partial class ViewInsuranceViewModel : BaseViewModel
             var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == Insurance.Id) ?? new Insurance();
 
             _insuranceMapper.Map(Insurance, insurance);
-
+            
+            if (Insurance.Car != null)
+            {
+                insurance.Car = await _store.Cars.SingleAsync(p => p.Id == Insurance.Car.Id);
+            }
+ 
             if (Insurance.Rental != null)
             {
                 insurance.Rental = await _store.Rentals.SingleAsync(p => p.Id == Insurance.Rental.Id);

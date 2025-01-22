@@ -409,6 +409,8 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     public async Task UpdateState(int? entityId = null)
     {
+        IsRentalEditable = true;
+
         Branches = _store.Branches
             .Select(p => _branchMapper.Map(p))
             .ToObservableCollection();

@@ -15,9 +15,9 @@ namespace CarRentService.Pages.Login
             DataContext = _viewModel;
 
             Login.Text = "admin";
-            PasswordBox.Password = "Admin123!";
+            PasswordBox.Password = "Admin1";
             _viewModel.Login = "admin";
-            _viewModel.Password = "Admin123!";
+            _viewModel.Password = "Admin1";
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

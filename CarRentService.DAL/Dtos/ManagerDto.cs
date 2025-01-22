@@ -20,7 +20,7 @@ public partial class ManagerDto
     /// Возраст человека.
     /// </summary>
     [ObservableProperty]
-    private int? _age;
+    private int _age;
 
     /// <summary>
     /// Контактный телефон человека.

@@ -12,6 +12,9 @@ public class InsuranceMappingProfile : Profile
 
         CreateMap<Insurance, InsuranceDto>();
 
-        CreateMap<InsuranceDto, Insurance>();
+        CreateMap<InsuranceDto, Insurance>()
+            .ForMember(dest => dest.Car, opt => opt.Ignore())
+            .ForMember(dest => dest.Rental, opt => opt.Ignore());
+
     }
 }
