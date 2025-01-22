@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 using CarRentService.Common;
@@ -26,11 +27,11 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     public RelayCommand CancelEditCommand { get; }
 
-    public RelayCommand EditRentalCommand { get; }
-
     public RelayCommand SaveCommand { get; }
 
     [ObservableProperty] private PaymentDto _payment;
+
+    [ObservableProperty] private ObservableCollection<RentalDto> _rentals;
 
     [ObservableProperty] private ObservableCollection<string> _methods;
 
@@ -59,7 +60,6 @@ public partial class ViewPaymentViewModel : BaseViewModel
         SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
         DeletePaymentCommand = new RelayCommand(DeletePayment, CanDeletePayment);
-        EditRentalCommand = new RelayCommand(EditRental);
 
         Methods = typeof(PaymentMethodEnum)
             .GetDescriptions()
@@ -84,12 +84,12 @@ public partial class ViewPaymentViewModel : BaseViewModel
             }
 
             await _store.SaveChangesAsync();
-
-            var d = await _store.Payments.ToListAsync();
             
             await UpdateState(payment.Id);
 
             _notificationService.ShowTip("Обновление платежа", "Сохранено успешно!");
+
+            _navigationService.GoBack();
         }
         catch (Exception e)
         {
@@ -125,12 +125,6 @@ public partial class ViewPaymentViewModel : BaseViewModel
         _navigationService.GoBack();
     }
 
-    private void EditRental()
-    {
-        _navigationService.Navigate(PageTypeEnum.EditRental,
-            parameters: new CommonNavigationData(Payment.Rental!.Id!.Value));
-    }
-
     public async Task InitForRental(int rentalId)
     {
         Payment = new PaymentDto
@@ -145,6 +139,13 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     public async Task UpdateState(int? entityId = null)
     {
+        Payment = null;
+
+        Rentals = _store.Rentals
+            .Include(p => p.Client)
+            .Select(p => _rentalMapper.Map(p))
+            .ToObservableCollection();
+
         if (entityId == null)
         {
             Payment = new PaymentDto

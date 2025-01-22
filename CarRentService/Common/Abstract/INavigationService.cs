@@ -20,7 +20,7 @@ public interface INavigationService
 
     void Init();
 
-    void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, INavigationData? parameters = null);
+    void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, INavigationData? parameters = null, bool restoreParameters = false);
 
     void GoBack();
     void ResetNavigation();

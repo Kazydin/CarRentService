@@ -57,7 +57,7 @@ public class NavigationService : INavigationService
         }
     }
 
-    public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, INavigationData? parameters = null)
+    public void Navigate(PageTypeEnum pageTypeEnum, bool addToBackStack = true, INavigationData? parameters = null, bool restoreParameters = false)
     {
         if (_pageWithActions.TryGetValue(pageTypeEnum, out var action))
         {
@@ -77,7 +77,14 @@ public class NavigationService : INavigationService
             _backStack.Push(currentPage);
         }
 
-        pageDto!.Page.OnNavigatedToInternal(parameters);
+        if (restoreParameters)
+        {
+            pageDto!.Page.OnNavigatedTo(parameters);
+        }
+        else
+        {
+            pageDto!.Page.OnNavigatedToWithState(parameters);
+        }
 
         _frame.Content = pageDto!.Page;
 
@@ -93,7 +100,7 @@ public class NavigationService : INavigationService
         if (CanGoBack())
         {
             var previousPage = _backStack.Pop();
-            Navigate(previousPage.Type, false, previousPage.PreviousParameters);
+            Navigate(previousPage.Type, false, previousPage.PreviousParameters, restoreParameters: true);
 
             CanGoBackChanged?.Invoke(CanGoBack());
         }

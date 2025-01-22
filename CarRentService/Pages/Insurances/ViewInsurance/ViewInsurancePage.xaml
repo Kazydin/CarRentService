@@ -37,10 +37,6 @@
             Grid.ColumnSpan="3">
             <AppBarButton
                 Icon="Delete"
-                Command="{Binding EditRentalCommand}"
-                Label="Изменить аренду" />
-            <AppBarButton
-                Icon="Delete"
                 Command="{Binding DeleteInsuranceCommand}"
                 Label="Удалить страховку" />
         </CommandBar>

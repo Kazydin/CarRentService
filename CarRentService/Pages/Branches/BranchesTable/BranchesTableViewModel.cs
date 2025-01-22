@@ -65,7 +65,7 @@ public partial class BranchesTableViewModel : BaseViewModel
 
     private void AddBranch()
     {
-        _navigationService.Navigate(PageTypeEnum.EditBranch, false);
+        _navigationService.Navigate(PageTypeEnum.EditBranch);
     }
 
     private void EditBranch(object? param)

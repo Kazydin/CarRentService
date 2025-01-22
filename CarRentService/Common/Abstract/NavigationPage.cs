@@ -12,17 +12,18 @@ public abstract class NavigationPage : BasePage
 
     public INavigationData? PreviousParameters = null;
 
-    public Task OnNavigatedToInternal(INavigationData? parameters)
+    public Task OnNavigatedToWithState(INavigationData? parameters)
     {
-        if (parameters == null)
-        {
-            parameters = PreviousParameters;
-            PreviousParameters = null;
-        }
-        else if (PreviousParameters == null)
-        {
-            PreviousParameters = parameters;
-        }
+        // if (parameters == null)
+        // {
+        //     parameters = PreviousParameters;
+        //     PreviousParameters = null;
+        // }
+        // else
+        // {
+        //     PreviousParameters = parameters;
+        // }
+        PreviousParameters = parameters;
 
         return OnNavigatedTo(parameters);
     }

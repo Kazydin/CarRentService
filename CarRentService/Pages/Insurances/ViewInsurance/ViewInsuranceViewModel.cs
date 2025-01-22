@@ -25,8 +25,6 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
     public RelayCommand SaveCommand { get; }
 
-    public RelayCommand<object> EditRentalCommand { get; }
-
     public RelayCommand<object> ClearFiltersAndSortCommand { get; }
 
     [ObservableProperty] private InsuranceDto _insurance;
@@ -57,17 +55,7 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
         ClearFiltersAndSortCommand = new RelayCommand<object>(ClearFiltersAndSort);
 
-        EditRentalCommand = new RelayCommand<object>(EditRental);
-
         Types = EnumExtensions.GetValues<InsuranceTypeEnum>().ToObservableCollection();
-    }
-
-    private void EditRental(object? param)
-    {
-        if ((param as GridRecordContextFlyoutInfo)?.Record is InsuranceDto record)
-        {
-            _navigationService.Navigate(PageTypeEnum.EditRental, parameters: new CommonNavigationData(record.Id!.Value));
-        }
     }
 
     private async void Save()
@@ -85,6 +73,8 @@ public partial class ViewInsuranceViewModel : BaseViewModel
             await UpdateState(insurance!.Id);
 
             _notificationService.ShowTip("Обновление страхования", "Сохранено успешно!");
+
+            _navigationService.GoBack();
         }
         catch (ValidationException e)
         {
