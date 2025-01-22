@@ -123,6 +123,7 @@
                         <editors:SfAutoComplete PlaceholderText="Выберте клиента"
                                                 ItemsSource="{Binding Clients}"
                                                 DisplayMemberPath="Name"
+                                                TextSearchMode="Contains"
                                                 HorizontalAlignment="Stretch"
                                                 SelectedItem="{Binding Client, Mode=TwoWay}"
                                                 MaxDropDownHeight="300" />
@@ -158,8 +159,9 @@
                         Header="Тариф"
                         Grid.Row="4"
                         Grid.Column="0"
-                        Margin="5, 11, 5, 10"
+                        Margin="0, 11, 5, 10"
                         HorizontalAlignment="Stretch"
+                        TextSearchMode="Contains"
                         SelectedItem="{Binding Rental.Tariff, Converter={StaticResource EnumToDescriptionConverter}, ConverterParameter='RentalTariffEnum', Mode=TwoWay}"
                         Width="Auto" />
                     <editors:SfComboBox

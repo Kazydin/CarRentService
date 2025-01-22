@@ -10,20 +10,23 @@ public class RentalValidator : AbstractValidator<Rental>
         ClassLevelCascadeMode = CascadeMode.Stop;
         RuleLevelCascadeMode = CascadeMode.Stop;
 
-        RuleFor(r => r.Cars)
-            .NotEmpty().WithMessage("Должен быть выбран хотя бы один автомобиль.");
-
         RuleFor(r => r.Client)
             .NotNull().WithMessage("Клиент обязателен.");
 
         RuleFor(r => r.Branch)
             .NotNull().WithMessage("Филиал обязателен.");
 
+        RuleFor(r => r.Cars)
+            .NotEmpty().WithMessage("Должен быть выбран хотя бы один автомобиль.");
+
         RuleFor(r => r.StartDate)
+            .NotEmpty().WithMessage("Дата начала аренды обязательная")
+            .GreaterThan(DateTime.Now).WithMessage("Дата начала аренды должна быть в будущем")
             .LessThan(r => r.EndDate)
             .WithMessage("Дата начала аренды должна быть раньше даты окончания.");
 
         RuleFor(r => r.EndDate)
+            .NotEmpty().WithMessage("Дата окончания обязательная")
             .GreaterThan(DateTime.Now)
             .WithMessage("Дата окончания аренды должна быть в будущем.");
 

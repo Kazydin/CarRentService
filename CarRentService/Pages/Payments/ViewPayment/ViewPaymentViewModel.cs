@@ -127,6 +127,13 @@ public partial class ViewPaymentViewModel : BaseViewModel
 
     public async Task InitForRental(int rentalId)
     {
+        Payment = null;
+
+        Rentals = _store.Rentals
+            .Include(p => p.Client)
+            .Select(p => _rentalMapper.Map(p))
+            .ToObservableCollection();
+
         Payment = new PaymentDto
         {
             Date = DateTime.Now

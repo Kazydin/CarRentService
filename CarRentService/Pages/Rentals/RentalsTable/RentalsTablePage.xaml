@@ -67,6 +67,9 @@
                 <dataGrid:GridNumericColumn
                     HeaderText="Стоимость"
                     MappingName="TotalCost" />
+                <dataGrid:GridNumericColumn
+                    HeaderText="Внесено платежей"
+                    MappingName="TotalPaymentsSum" />
             </dataGrid:SfDataGrid.Columns>
             <dataGrid:SfDataGrid.RecordContextFlyout>
                 <MenuFlyout>

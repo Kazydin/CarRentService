@@ -109,13 +109,13 @@ public partial class ViewRentalViewModel : BaseViewModel
         _branchMapper = branchMapper;
         _clientMapper = clientMapper;
 
-        SaveCommand = new RelayCommand(Save, CanSave);
+        SaveCommand = new RelayCommand(Save);
         CancelEditCommand = new RelayCommand(CancelEdit);
         DeleteRentalCommand = new RelayCommand(DeleteRental, CanDeleteRental);
 
         ClearFiltersAndSortCommand = new RelayCommand<object>(ClearFiltersAndSort);
 
-        AddCarCommand = new RelayCommand<object>(AddCar, CanAddAdditionalObjects);
+        AddCarCommand = new RelayCommand<object>(AddCar);
         EditCarCommand = new RelayCommand<object>(EditCar);
         DeleteCarCommand = new RelayCommand<object>(DeleteCar);
 
@@ -166,8 +166,7 @@ public partial class ViewRentalViewModel : BaseViewModel
 
     private bool CanMoveToActiveStatus()
     {
-        return Rental.Status == RentalStatusEnum.Created &&
-               Math.Abs(Rental.TotalCost - Rental.TotalPaymentsSum) < MainConstants.DOUBLE_TOLERANCE;
+        return Rental.Status == RentalStatusEnum.Created;
     }
 
     private void ChangeRentalStatus(RentalStatusEnum status)
@@ -183,8 +182,26 @@ public partial class ViewRentalViewModel : BaseViewModel
         ChangeRentalStatus(RentalStatusEnum.Completed);
     }
 
-    private void MoveToActiveStatus()
+    private async void MoveToActiveStatus()
     {
+        if (Rental.Client == null)
+        {
+            await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", "Укажите клиента");
+            return;
+        }
+
+        if (!Rental.Cars.Any())
+        {
+            await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", "Добавьте хотя бы одну машину");
+            return;
+        }
+
+        if (Rental.TotalCost - Rental.TotalPaymentsSum > 0)
+        {
+            await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", "Сумма платежей должна покрывать стоимость аренды");
+            return;
+        }
+
         ChangeRentalStatus(RentalStatusEnum.Active);
     }
 
@@ -305,14 +322,6 @@ public partial class ViewRentalViewModel : BaseViewModel
         UpdateCost();
     }
 
-    private bool CanSave()
-    {
-        return Rental != null
-               && Rental.Client != null
-               && Rental.Cars.Any()
-               && Rental.TotalCost - Rental.TotalPaymentsSum <= 0;
-    }
-
     private async void Save()
     {
         try
@@ -329,8 +338,17 @@ public partial class ViewRentalViewModel : BaseViewModel
                 .Where(p => Rental.Insurances.Select(r => r.Id).Contains(p.Id))
                 .ToListAsync();
 
-            rental.Client = await _store.Clients
-                .SingleAsync(p => p.Id == Rental.Client!.Id);
+            if (Rental.Client != null)
+            {
+                rental.Client = await _store.Clients
+                    .SingleAsync(p => p.Id == Rental.Client.Id);
+            }
+
+            if (Rental.Branch != null)
+            {
+                rental.Branch = await _store.Branches
+                    .SingleAsync(p => p.Id == Rental.Branch.Id);
+            }
 
             _rentalMapper.Validate(rental);
 
@@ -368,6 +386,8 @@ public partial class ViewRentalViewModel : BaseViewModel
             }
 
             _store.Rentals.Remove(rental);
+
+            await _store.SaveChangesAsync();
 
             _navigationService.GoBack();
         }
@@ -415,10 +435,6 @@ public partial class ViewRentalViewModel : BaseViewModel
         Rental = _rentalMapper.Map(rental!);
         Client = Rental.Client;
 
-        Branches = _store.Branches
-            .Select(p => _branchMapper.Map(p))
-            .ToObservableCollection();
-
         UpdateCost();
         AddCarCommand.NotifyCanExecuteChanged();
         AddInsuranceCommand.NotifyCanExecuteChanged();
@@ -463,7 +479,6 @@ public partial class ViewRentalViewModel : BaseViewModel
     {
         Rental.TotalCost = _costCalculationService.CalculateTotalRentalCost(Rental);
         Rental.TotalPaymentsSum = Rental.Payments.Sum(p => p.Amount);
-        SaveCommand.NotifyCanExecuteChanged();
     }
 
     public void SetXamlRoot(XamlRoot xamlRoot)

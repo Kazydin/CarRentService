@@ -8,6 +8,7 @@ using CarRentService.Common.Models;
 using CarRentService.DAL.Abstract;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -59,6 +60,7 @@ public partial class RentalsTableViewModel : BaseViewModel
         Rentals = _store.Rentals
             .Include(p => p.Client)
             .Include(p => p.Branch)
+            .Include(p => p.Payments)
             .Select(p => _rentalMapper.Map(p))
             .ToObservableCollection();
     }
@@ -81,16 +83,23 @@ public partial class RentalsTableViewModel : BaseViewModel
     {
         if ((param as GridRecordContextFlyoutInfo)?.Record is RentalDto record)
         {
-            var result = await _notificationService.ShowConfirmDialogAsync("Удаление аренды",
-                "Вы действительно хотите удалить аренду?");
+            var result =
+                await _notificationService.ShowConfirmDialogAsync("Удаление аренды",
+                    "Вы действительно хотите удалить аренду?");
 
             if (result)
             {
-                var rental = await _store.Rentals.FirstOrDefaultAsync(p => p.Id == record.Id);
+                var rental = await _store.Rentals.SingleAsync(p => p.Id == record.Id);
 
-                Guard.NotNull(rental, "Не найдена аренда");
+                if (rental.Status == RentalStatusEnum.Active)
+                {
+                    await _notificationService.ShowErrorDialogAsync("Ошибка удаления",
+                        "Нельзя удалить аренду в статусе \"Активна\"");
+                    return;
+                }
 
-                _store.Rentals.Remove(rental!);
+                _store.Rentals.Remove(rental);
+
                 await _store.SaveChangesAsync();
 
                 UpdateState();

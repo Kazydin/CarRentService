@@ -20,6 +20,7 @@ public sealed partial class ViewRentalPage : NavigationPage
 
     public override async Task OnNavigatedTo(INavigationData? parameters)
     {
+        RentalBranch.SelectedIndex = -1;
         _viewModel.SetGrids(CarsDataGrid, InsurancesDataGrid, PaymentsDataGrid);
 
         if (parameters is CommonNavigationData data)
@@ -31,8 +32,6 @@ public sealed partial class ViewRentalPage : NavigationPage
         {
             await _viewModel.UpdateState();
             Header = "Создание аренды";
-
-            RentalBranch.SelectedIndex = -1;
         }
     }
 
