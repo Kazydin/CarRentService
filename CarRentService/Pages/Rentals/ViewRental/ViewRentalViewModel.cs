@@ -370,6 +370,11 @@ public partial class ViewRentalViewModel : BaseViewModel
                 _store.Rentals.Add(rental);
             }
 
+            foreach (var car in rental.Cars)
+            {
+                car.Status = rental.Status == RentalStatusEnum.Completed ? CarStatusEnum.Available : CarStatusEnum.Rented;
+            }
+
             await _store.SaveChangesAsync();
 
             _notificationService.ShowTip("Обновление аренды", "Сохранено успешно!");
@@ -390,12 +395,19 @@ public partial class ViewRentalViewModel : BaseViewModel
 
         if (result)
         {
-            var rental = await _store.Rentals.SingleAsync(p => p.Id == Rental.Id);
+            var rental = await _store.Rentals
+                .Include(p => p.Cars)
+                .SingleAsync(p => p.Id == Rental.Id);
 
             if (rental.Status == RentalStatusEnum.Active)
             {
                 await _notificationService.ShowErrorDialogAsync("Ошибка удаления", "Нельзя удалить аренду в статусе \"Активна\"");
                 return;
+            }
+
+            foreach (var car in rental.Cars)
+            {
+                car.Status = CarStatusEnum.Available;
             }
 
             _store.Rentals.Remove(rental);
