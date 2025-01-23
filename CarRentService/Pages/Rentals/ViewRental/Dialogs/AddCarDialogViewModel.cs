@@ -4,6 +4,7 @@ using CarRentService.Common.Abstract;
 using CarRentService.Common.Extensions;
 using CarRentService.DAL.Dtos;
 using CarRentService.DAL.Entities;
+using CarRentService.DAL.Enum;
 using CarRentService.DAL.Store;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -45,7 +46,7 @@ public partial class AddCarDialogViewModel : IViewModel
 
     public void OnShow(RentalDto rental)
     {
-        var cars = _store.Cars.Where(p => !rental!.Cars.Select(r => r.Id).Contains(p.Id));
+        var cars = _store.Cars.Where(p => p.Status == CarStatusEnum.Available && !rental!.Cars.Select(r => r.Id).Contains(p.Id));
 
         Cars = cars
             .Select(p => _carMapper.Map(p))
