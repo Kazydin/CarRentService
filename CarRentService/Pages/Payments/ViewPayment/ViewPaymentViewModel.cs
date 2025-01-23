@@ -72,6 +72,12 @@ public partial class ViewPaymentViewModel : BaseViewModel
                 payment.Rental = await _store.Rentals.SingleAsync(p => p.Id == Payment.Rental.Id);
             }
 
+            // if (Payment.Rental.TotalCost > Payment.Rental.Payments.Sum(p => p.Amount) + Payment.Amount)
+            // {
+            //     await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", "Нельзя внести средств больше чем стоимость аренды");
+            //     return;
+            // }
+
             _paymentMapper.Validate(payment);
 
             if (payment.Id == 0)

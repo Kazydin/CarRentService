@@ -440,8 +440,14 @@
                                 HeaderText="ID страховки"
                                 MappingName="Id" />
                             <dataGrid:GridNumericColumn
-                                HeaderText="Стоимость"
-                                MappingName="Cost" />
+                                HeaderText="ID автомобиля"
+                                MappingName="Car.Id" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Автомобиль"
+                                MappingName="Car.Name" />
+                            <dataGrid:GridTextColumn
+                                HeaderText="Тип"
+                                DisplayBinding="{Binding Path=Type, Converter={StaticResource EnumToDescriptionConverter}}"/>
                         </dataGrid:SfDataGrid.Columns>
 
                         <dataGrid:SfDataGrid.RecordContextFlyout>

@@ -25,8 +25,6 @@
                     Height="Auto" />
                 <RowDefinition
                     Height="Auto" />
-                <RowDefinition
-                    Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
@@ -106,24 +104,7 @@
                 HorizontalAlignment="Stretch"
                 Width="Auto"
                 Grid.Column="2"
-                SelectedItem="{Binding Insurance.Type, Converter={StaticResource EnumToDescriptionConverter}, Mode=TwoWay}" />
-            <StackPanel
-                Grid.Row="4"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Margin="0, 15, 0, 0"
-                HorizontalAlignment="Right"
-                Orientation="Horizontal">
-                <Button
-                    Margin="0, 0, 10, 0"
-                    Command="{Binding SaveCommand}">
-                    Сохранить
-                </Button>
-                <Button
-                    Command="{Binding CancelEditCommand}">
-                    Отмена
-                </Button>
-            </StackPanel>
+                SelectedItem="{Binding Insurance.Type, Converter={StaticResource EnumToDescriptionConverter}, ConverterParameter='InsuranceTypeEnum', Mode=TwoWay}" />
         </Grid>
         <StackPanel
             HorizontalAlignment="Left"

@@ -68,6 +68,12 @@ public partial class ViewInsuranceViewModel : BaseViewModel
     {
         try
         {
+            if (Insurance.Rental.Insurances.Any(p => p.Car.Id == Insurance.Car.Id && p.Type == Insurance.Type))
+            {
+                await _notificationService.ShowErrorDialogAsync("Ошибка сохранения", "Данный тип страховки уже добавлен для этого автомбиля");
+                return;
+            }
+
             var insurance = await _store.Insurances.FirstOrDefaultAsync(p => p.Id == Insurance.Id) ?? new Insurance();
 
             _insuranceMapper.Map(Insurance, insurance);
@@ -139,7 +145,10 @@ public partial class ViewInsuranceViewModel : BaseViewModel
 
         Insurance = new InsuranceDto();
 
-        var rental = await _store.Rentals.SingleAsync(p => p.Id == rentalId);
+        var rental = await _store.Rentals
+            .Include(p => p.Insurances)
+            .ThenInclude(p => p.Car)
+            .SingleAsync(p => p.Id == rentalId);
 
         Insurance.Rental = _rentalMapper.Map(rental);
     }

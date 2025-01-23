@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using ABI.Windows.ApplicationModel.Activation;
 using CarRentService.BLL.Services.Abstract;
 using CarRentService.Common;
 using CarRentService.Common.Abstract;
@@ -115,12 +116,12 @@ public partial class ViewRentalViewModel : BaseViewModel
         ClearFiltersAndSortCommand = new RelayCommand<object>(ClearFiltersAndSort);
 
         AddCarCommand = new RelayCommand<object>(AddCar, CanAddCar);
-        EditCarCommand = new RelayCommand<object>(EditCar);
-        DeleteCarCommand = new RelayCommand<object>(DeleteCar);
+        EditCarCommand = new RelayCommand<object>(EditCar, CanAddAdditionalObjects);
+        DeleteCarCommand = new RelayCommand<object>(DeleteCar, CanAddAdditionalObjects);
 
         AddPaymentCommand = new RelayCommand<object>(AddPayment, CanAddAdditionalObjects);
-        EditPaymentCommand = new RelayCommand<object>(EditPayment);
-        DeletePaymentCommand = new RelayCommand<object>(DeletePayment);
+        EditPaymentCommand = new RelayCommand<object>(EditPayment, CanAddAdditionalObjects);
+        DeletePaymentCommand = new RelayCommand<object>(DeletePayment, CanAddAdditionalObjects);
 
         AddInsuranceCommand = new RelayCommand(AddInsurance, CanAddAdditionalObjects);
         EditInsuranceCommand = new RelayCommand<object>(EditInsurance);
@@ -129,7 +130,7 @@ public partial class ViewRentalViewModel : BaseViewModel
         MoveToActiveStatusCommand = new RelayCommand(MoveToActiveStatus, CanMoveToActiveStatus);
         MoveToCompletedStatusCommand = new RelayCommand(MoveToCompletedStatus, CanMoveToCompletedStatus);
 
-        _tariffs = EnumExtensions.GetValues<RentalTariffEnum>().ToObservableCollection();
+        Tariffs = EnumExtensions.GetValues<RentalTariffEnum>().ToObservableCollection();
     }
 
     private bool CanAddAdditionalObjects()
@@ -157,8 +158,12 @@ public partial class ViewRentalViewModel : BaseViewModel
 
             if (result)
             {
-                Rental.Insurances.Remove(record);
-                UpdateCost();
+                var insurance = await _store.Insurances.SingleAsync(p => p.Id == record.Id);
+
+                _store.Insurances.Remove(insurance);
+                await _store.SaveChangesAsync();
+
+                await UpdateState(Rental.Id);
             }
         }
     }
@@ -275,8 +280,12 @@ public partial class ViewRentalViewModel : BaseViewModel
 
             if (result)
             {
-                Rental.Payments.Remove(record);
-                UpdateCost();
+                var payment = await _store.Payments.SingleAsync(p => p.Id == record.Id);
+
+                _store.Payments.Remove(payment);
+                await _store.SaveChangesAsync();
+
+                await UpdateState(Rental.Id);
             }
         }
     }
@@ -434,6 +443,7 @@ public partial class ViewRentalViewModel : BaseViewModel
             .Include(p => p.Branch)
             .Include(p => p.Client)
             .Include(p => p.Insurances)
+            .ThenInclude(p => p.Car)
             .FirstOrDefaultAsync(p => p.Id == entityId);
 
         Guard.NotNull(rental, "Аренда не найдена");
@@ -447,6 +457,7 @@ public partial class ViewRentalViewModel : BaseViewModel
         AddCarCommand.NotifyCanExecuteChanged();
         AddInsuranceCommand.NotifyCanExecuteChanged();
         AddPaymentCommand.NotifyCanExecuteChanged();
+        DeleteRentalCommand.NotifyCanExecuteChanged();
     }
 
     public void SetGrids(SfDataGrid carsDataGrid, SfDataGrid insurancesDataGrid,

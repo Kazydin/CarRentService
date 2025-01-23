@@ -1,4 +1,6 @@
-﻿using CarRentService.Common.Abstract;
+﻿using System.Collections.ObjectModel;
+using CarRentService.Common.Abstract;
+using CarRentService.DAL.Dtos;
 
 namespace CarRentService.Common.Models;
 
