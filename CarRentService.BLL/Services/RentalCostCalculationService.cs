@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using CarRentService.BLL.Factory;
+﻿using CarRentService.BLL.Factory;
 using CarRentService.BLL.Services.Abstract;
 using CarRentService.DAL.Dtos;
 
@@ -13,12 +12,11 @@ public class RentalCostCalculationService : IRentalCostCalculationService
 
         var calculatedCost = tariffStrategy.CalculateCost(rental);
 
-        var insuranceTypes = rental.Insurances.Select(p => p.Type).Distinct().ToImmutableArray();
-
-        foreach (var insuranceTypeEnum in insuranceTypes)
+        foreach (var insurance in rental.Insurances)
         {
-            var insuranceStrategy = InsuranceStrategyFactory.GetStrategy(insuranceTypeEnum);
-            calculatedCost += insuranceStrategy.CalculateCost(rental);
+            var insuranceStrategy = InsuranceStrategyFactory.GetStrategy(insurance.Type);
+            insurance.Cost = insuranceStrategy.CalculateCost(rental);
+            calculatedCost += insurance.Cost;
         }
 
         return calculatedCost;
